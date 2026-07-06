@@ -1,0 +1,30 @@
+{
+  "centerName": "Center for Clinical Excellence and Simulation",
+  "agendaTitle": "This Week",
+  "rows": [
+    {
+      "day": "Tuesday",
+      "time": "0745 - 1700",
+      "event": "GME Internal Medicine and Transition Year ICU Bootcamp",
+      "location": "Auditorium Room 115"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0745 - 1600",
+      "event": "Clinical Orientation",
+      "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Thursday",
+      "time": "0745 - 1600",
+      "event": "Nursing Orientation",
+      "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Friday",
+      "time": "0745 - 1600",
+      "event": "Nursing Orientation",
+      "location": "Classroom 121"
+    }
+  ]
+}
