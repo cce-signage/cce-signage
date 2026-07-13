@@ -4,21 +4,15 @@
   "rows": [
     {
       "day": "Tuesday",
-      "time": "0800 - 1400",
-      "event": "GME Emergency Medicine Didactic Course",
-      "location": "Auditorium Room 115"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1400",
-      "event": "GME Emergency Medicine eFAST Training",
-      "location": "Auditorium Room 115"
-    },
-    {
-      "day": "Tuesday",
       "time": "0745 - 1600",
       "event": "Clinical Orientation",
       "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1400",
+      "event": "GME Emergency Medicine Didactic Course",
+      "location": "Auditorium Room 115"
     },
     {
       "day": "Wednesday",
@@ -31,6 +25,12 @@
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
       "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1400",
+      "event": "GME Emergency Medicine eFAST Training",
+      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 107, Debrief Room 113"
     }
   ]
 }
