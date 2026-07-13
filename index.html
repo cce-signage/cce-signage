@@ -661,34 +661,9 @@
   </style>
   <script>
     const defaultAgendaData = {
-      centerName: "Center of Clinical Excellence and Simulation",
+      centerName: "Center for Clinical Excellence and Simulation",
       agendaTitle: "Upcoming",
-      rows: [
-        {
-          day: "Tuesday",
-          time: "0745 - 1700",
-          event: "GME Internal Medicine and Transition Year ICU Bootcamp",
-          location: "Auditorium Room 115"
-        },
-        {
-          day: "Wednesday",
-          time: "0745 - 1600",
-          event: "Clinical Orientation",
-          location: "Auditorium Room 134"
-        },
-        {
-          day: "Thursday",
-          time: "0745 - 1600",
-          event: "Nursing Orientation",
-          location: "Auditorium Room 134"
-        },
-        {
-          day: "Thursday",
-          time: "0745 - 1600",
-          event: "Nursing Orientation",
-          location: "Classroom 121"
-        }
-      ]
+      rows: []
     };
 
     const storageKey = "cce-simulation-weekly-agenda-v1";
@@ -718,18 +693,47 @@
       return knownAliases[value] || value;
     }
 
+    const configUrl = "config.json";
+    let remoteAgendaData = null;
+
+    function sanitizeAgendaData(parsed) {
+      return {
+        centerName: String(parsed.centerName || defaultAgendaData.centerName).replace(/[.]+$/, ""),
+        agendaTitle: parsed.agendaTitle || defaultAgendaData.agendaTitle,
+        rows: (Array.isArray(parsed.rows) ? parsed.rows : defaultAgendaData.rows)
+          .map(row => ({ ...row, location: normalizeLocation(row.location) }))
+      };
+    }
+
+    async function loadRemoteAgendaData() {
+      try {
+        // Cache-busting query param: GitHub Pages' CDN caches config.json for
+        // up to 10 minutes; a unique URL guarantees each poll sees fresh data.
+        const response = await fetch(`${configUrl}?t=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error("Config request failed.");
+        const parsed = await response.json();
+        if (!Array.isArray(parsed.rows)) throw new Error("Invalid config file.");
+        const next = sanitizeAgendaData(parsed);
+        if (JSON.stringify(next) !== JSON.stringify(remoteAgendaData)) {
+          remoteAgendaData = next;
+          // Cache the last good remote agenda so a sign that reboots while
+          // offline keeps showing it (getAgendaData falls back to localStorage).
+          saveAgendaData(next);
+          renderAgenda();
+        }
+      } catch {
+        // config.json missing or unreachable: keep showing the current agenda.
+      }
+    }
+
     function getAgendaData() {
+      if (remoteAgendaData) return structuredClone(remoteAgendaData);
+
       const saved = localStorage.getItem(storageKey);
       if (!saved) return structuredClone(defaultAgendaData);
 
       try {
-        const parsed = JSON.parse(saved);
-        return {
-          centerName: String(parsed.centerName || defaultAgendaData.centerName).replace(/[.]+$/, ""),
-          agendaTitle: parsed.agendaTitle || defaultAgendaData.agendaTitle,
-          rows: (Array.isArray(parsed.rows) && parsed.rows.length ? parsed.rows : defaultAgendaData.rows)
-            .map(row => ({ ...row, location: normalizeLocation(row.location) }))
-        };
+        return sanitizeAgendaData(JSON.parse(saved));
       } catch {
         return structuredClone(defaultAgendaData);
       }
@@ -1320,9 +1324,10 @@
     function saveEditorChanges() {
       const data = collectEditorData();
       saveAgendaData(data);
+      if (remoteAgendaData) remoteAgendaData = structuredClone(data);
       renderAgenda();
-      document.getElementById("save-status").textContent = "Saved on this device.";
-      setTimeout(closeEditor, 450);
+      document.getElementById("save-status").textContent = "Saved on this device. To update every sign, use Download JSON and upload the file to GitHub as config.json.";
+      setTimeout(closeEditor, 1500);
     }
 
     function resetAgenda() {
@@ -1338,7 +1343,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "weekly-agenda-backup.json";
+      link.download = "config.json";
       link.click();
       URL.revokeObjectURL(link.href);
     }
@@ -1368,10 +1373,12 @@
       updateClock();
       updateWeather();
       renderAgenda();
+      loadRemoteAgendaData();
       startAgendaMinuteRefresh();
       initializeSignageAudio();
       setInterval(updateClock, 1000);
       setInterval(updateWeather, 10 * 60 * 1000);
+      setInterval(loadRemoteAgendaData, 5 * 60 * 1000);
 
       document.getElementById("editor-backdrop").addEventListener("click", closeEditor);
       document.getElementById("close-editor").addEventListener("click", closeEditor);
@@ -1428,7 +1435,7 @@
 
   <section id="title-tile" class="content-tile" aria-label="Welcome title">
     <div id="header">
-      Welcome to the Center of Clinical Excellence and Simulation
+      Welcome to the Center for Clinical Excellence and Simulation
     </div>
     <div id="subheading">&nbsp;</div>
   </section>
@@ -1457,6 +1464,7 @@
   <section id="editor-panel" aria-label="Agenda editor">
     <h2>Edit Weekly Agenda</h2>
     <p>Add, edit, or remove events below, then select Save. The sign arranges everything automatically by day and start time, so the order you enter rows here does not matter. Set a start and end time for each session; the sign always displays them in 24-hour format. To open this editor later, add ?edit=1 to the sign URL or press Ctrl + Shift + E.</p>
+    <p>The hosted sign reads its content from config.json in the GitHub repository and re-checks it every 5 minutes, so config.json overrides anything saved here. To update every sign, make your changes, select Download config.json, then upload that file to the GitHub repository replacing the existing config.json.</p>
 
     <div class="editor-field">
       <label for="edit-center-name">Center name</label>
@@ -1473,7 +1481,7 @@
     <div class="editor-actions">
       <button id="save-editor" type="button" class="editor-button primary">Save</button>
       <button id="add-row" type="button" class="editor-button secondary">Add Row</button>
-      <button id="download-json" type="button" class="editor-button neutral">Download Backup</button>
+      <button id="download-json" type="button" class="editor-button neutral">Download config.json</button>
       <label class="editor-button neutral" for="import-json">Import Backup</label>
       <input id="import-json" type="file" accept="application/json" style="display: none;">
       <button id="reset-agenda" type="button" class="editor-button danger">Reset</button>
