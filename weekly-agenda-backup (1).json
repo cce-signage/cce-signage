@@ -1,0 +1,18 @@
+{
+  "centerName": "Center of Clinical Excellence and Simulation",
+  "agendaTitle": "Upcoming",
+  "rows": [
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1400",
+      "event": "GME Emergency Medicine Didactic Course",
+      "location": "Classroom 118"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1400",
+      "event": "GME Emergency Medicine eFAST Training",
+      "location": "Simulation Room 105"
+    }
+  ]
+}
