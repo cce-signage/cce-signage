@@ -581,11 +581,53 @@
       display: grid;
       grid-template-columns: 1fr 0.9fr 0.9fr 2fr 1.3fr auto;
       gap: 10px;
-      align-items: end;
+      align-items: start;
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 12px;
       padding: 12px;
       background: rgba(255, 255, 255, 0.08);
+    }
+
+    .location-entry-line {
+      display: flex;
+      gap: 6px;
+    }
+
+    .location-entry-line select {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .location-entry + .location-entry {
+      margin-top: 6px;
+    }
+
+    .location-entry-line .remove-space {
+      padding: 8px 11px;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .add-space-button {
+      margin-top: 8px;
+      font-size: 13px;
+      padding: 6px 10px;
+    }
+
+    #about-panel {
+      display: none;
+      margin-top: 18px;
+      padding: 14px 18px;
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 15px;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    #about-panel.open {
+      display: block;
     }
 
     .editor-actions,
@@ -635,13 +677,16 @@
     }
 
     .row-actions {
-      align-self: end;
+      align-self: start;
+      flex-direction: column;
+      padding-top: 25px;
       justify-content: flex-end;
       min-width: 0;
     }
 
-    .remove-row-button {
-      align-self: end;
+    .row-actions .editor-button {
+      font-size: 14px;
+      padding: 8px 12px;
       white-space: nowrap;
     }
 
@@ -660,6 +705,22 @@
     }
   </style>
   <script>
+    // Versioning: bump the patch for fixes, the minor for new features, and
+    // the major for changes that break config.json compatibility. Update
+    // SIGN_PUBLISHED whenever the version changes. Shown in the editor's
+    // About box.
+    const SIGN_VERSION = "2.0.0";
+    const SIGN_PUBLISHED = "2026-07-13";
+
+    const ABOUT_TEXT = [
+      "AdventHealth West Florida Division",
+      "Center for Clinical Excellence and Simulation",
+      "Contact: WFD.SimulationEducation@adventhealth.com",
+      "",
+      `Version: ${SIGN_VERSION}`,
+      `Published: ${SIGN_PUBLISHED}`
+    ].join("\n");
+
     const defaultAgendaData = {
       centerName: "Center for Clinical Excellence and Simulation",
       agendaTitle: "Upcoming",
@@ -684,13 +745,19 @@
       "Skills Lab Room 116"
     ];
 
+    // A location can be one space or a comma-separated list of spaces
+    // ("Classroom 118, Classroom 119"); aliases are applied per space.
     function normalizeLocation(location) {
-      const value = String(location || "").trim();
       const knownAliases = {
         "Auditorium 115": "Auditorium Room 115",
         "Auditorium 134": "Auditorium Room 134"
       };
-      return knownAliases[value] || value;
+      return String(location || "")
+        .split(/\s*,\s*/)
+        .map(value => value.trim())
+        .filter(Boolean)
+        .map(value => knownAliases[value] || value)
+        .join(", ");
     }
 
     const configUrl = "config.json";
@@ -1207,6 +1274,49 @@
       return start || end || "";
     }
 
+    // One selectable space within a row's location list. Removing the last
+    // entry just blanks it so a row always keeps one space selector.
+    function createLocationEntry(selectedLocation = "") {
+      const entry = document.createElement("div");
+      entry.className = "location-entry";
+
+      const isKnownLocation = roomOptions.includes(selectedLocation);
+      const roomDropdownOptions = roomOptions
+        .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
+        .join("");
+
+      entry.innerHTML = `
+        <div class="location-entry-line">
+          <select class="edit-location-select">
+            <option value="">Select space</option>
+            ${roomDropdownOptions}
+            <option value="__other__"${selectedLocation && !isKnownLocation ? " selected" : ""}>Other</option>
+          </select>
+          <button type="button" class="editor-button danger remove-space" title="Remove this space">&#215;</button>
+        </div>
+        <input class="edit-location-other other-location-input${selectedLocation && !isKnownLocation ? " open" : ""}" value="${selectedLocation && !isKnownLocation ? escapeHtml(selectedLocation) : ""}" placeholder="Type space name">
+      `;
+
+      const locationSelect = entry.querySelector(".edit-location-select");
+      const locationOther = entry.querySelector(".edit-location-other");
+      locationSelect.addEventListener("change", () => {
+        const useOther = locationSelect.value === "__other__";
+        locationOther.classList.toggle("open", useOther);
+        if (useOther) locationOther.focus();
+      });
+      entry.querySelector(".remove-space").addEventListener("click", () => {
+        if (entry.parentElement.querySelectorAll(".location-entry").length > 1) {
+          entry.remove();
+        } else {
+          locationSelect.value = "";
+          locationOther.value = "";
+          locationOther.classList.remove("open");
+        }
+      });
+
+      return entry;
+    }
+
     function createEditorRow(row = { day: "", time: "", event: "", location: "" }) {
       const wrapper = document.createElement("div");
       wrapper.className = "agenda-editor-row";
@@ -1219,12 +1329,6 @@
       const customDayOption = selectedDay && !daysOfWeek.includes(selectedDay)
         ? `<option value="${escapeHtml(selectedDay)}" selected>${escapeHtml(selectedDay)}</option>`
         : "";
-
-      const selectedLocation = normalizeLocation(row.location);
-      const isKnownLocation = roomOptions.includes(selectedLocation);
-      const roomDropdownOptions = roomOptions
-        .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
-        .join("");
 
       const startInputValue = minutesToTimeInput(parseAgendaStartMinutes(row.time));
       const endInputValue = minutesToTimeInput(parseAgendaEndMinutes(row.time));
@@ -1251,25 +1355,43 @@
           <input class="edit-event" value="${escapeHtml(row.event)}" placeholder="Event name">
         </div>
         <div>
-          <label>Location</label>
-          <select class="edit-location-select">
-            <option value="">Select space</option>
-            ${roomDropdownOptions}
-            <option value="__other__"${selectedLocation && !isKnownLocation ? " selected" : ""}>Other</option>
-          </select>
-          <input class="edit-location-other other-location-input${selectedLocation && !isKnownLocation ? " open" : ""}" value="${selectedLocation && !isKnownLocation ? escapeHtml(selectedLocation) : ""}" placeholder="Type space name">
+          <label>Location(s)</label>
+          <div class="location-list"></div>
+          <button type="button" class="editor-button neutral add-space-button">+ Space</button>
         </div>
         <div class="row-actions">
+          <button type="button" class="editor-button secondary duplicate-row-button">Duplicate</button>
           <button type="button" class="editor-button danger remove-row-button">Remove</button>
         </div>
       `;
 
-      const locationSelect = wrapper.querySelector(".edit-location-select");
-      const locationOther = wrapper.querySelector(".edit-location-other");
-      locationSelect.addEventListener("change", () => {
-        const useOther = locationSelect.value === "__other__";
-        locationOther.classList.toggle("open", useOther);
-        if (useOther) locationOther.focus();
+      // The stored location may be a comma-separated list of spaces; each
+      // part gets its own selector.
+      const locationList = wrapper.querySelector(".location-list");
+      const locations = normalizeLocation(row.location).split(/\s*,\s*/).map(part => part.trim()).filter(Boolean);
+      if (!locations.length) locations.push("");
+      locations.forEach(location => locationList.appendChild(createLocationEntry(location)));
+
+      // When a start time is chosen and the end is still blank, default the
+      // end to one hour later — AM stays AM, and anything starting at/after
+      // noon lands in PM automatically.
+      const startInput = wrapper.querySelector(".edit-start");
+      const endInput = wrapper.querySelector(".edit-end");
+      startInput.addEventListener("change", () => {
+        if (!startInput.value || endInput.value) return;
+        const [h, m] = startInput.value.split(":").map(Number);
+        const endMinutes = Math.min(h * 60 + m + 60, 23 * 60 + 59);
+        endInput.value = minutesToTimeInput(endMinutes);
+      });
+
+      wrapper.querySelector(".add-space-button").addEventListener("click", () => {
+        const entry = createLocationEntry("");
+        locationList.appendChild(entry);
+        entry.querySelector(".edit-location-select").focus();
+      });
+
+      wrapper.querySelector(".duplicate-row-button").addEventListener("click", () => {
+        wrapper.after(createEditorRow(readEditorRow(wrapper)));
       });
 
       wrapper.querySelector(".remove-row-button").addEventListener("click", () => {
@@ -1287,6 +1409,11 @@
       const editor = document.getElementById("agenda-editor");
       editor.innerHTML = "";
       data.rows.slice().sort(compareAgendaRows).forEach(row => editor.appendChild(createEditorRow(row)));
+      if (!editor.children.length) {
+        const blankRow = createEditorRow();
+        blankRow.querySelector(".edit-start").value = "08:00";
+        editor.appendChild(blankRow);
+      }
 
       document.getElementById("editor-backdrop").classList.add("open");
       document.getElementById("editor-panel").classList.add("open");
@@ -1299,19 +1426,38 @@
       document.getElementById("editor-panel").classList.remove("open");
     }
 
+    function readEditorRow(rowElement) {
+      const locations = Array.from(rowElement.querySelectorAll(".location-entry"))
+        .map(entry => entry.querySelector(".edit-location-select").value === "__other__"
+          ? entry.querySelector(".edit-location-other").value.trim()
+          : entry.querySelector(".edit-location-select").value.trim())
+        .filter(Boolean);
+
+      return {
+        day: rowElement.querySelector(".edit-day").value.trim(),
+        time: combineTimeRange(
+          rowElement.querySelector(".edit-start").value,
+          rowElement.querySelector(".edit-end").value
+        ),
+        event: rowElement.querySelector(".edit-event").value.trim(),
+        location: [...new Set(locations)].join(", ")
+      };
+    }
+
+    // Reorders the editor rows the same way the sign displays them. Manual
+    // (a button) so rows never jump around mid-edit, e.g. right after
+    // duplicating a line.
+    function sortEditorRows() {
+      const container = document.getElementById("agenda-editor");
+      Array.from(container.querySelectorAll(".agenda-editor-row"))
+        .map(element => ({ element, data: readEditorRow(element) }))
+        .sort((a, b) => compareAgendaRows(a.data, b.data))
+        .forEach(item => container.appendChild(item.element));
+    }
+
     function collectEditorData() {
       const rows = Array.from(document.querySelectorAll(".agenda-editor-row"))
-        .map(row => ({
-          day: row.querySelector(".edit-day").value.trim(),
-          time: combineTimeRange(
-            row.querySelector(".edit-start").value,
-            row.querySelector(".edit-end").value
-          ),
-          event: row.querySelector(".edit-event").value.trim(),
-          location: row.querySelector(".edit-location-select").value === "__other__"
-            ? row.querySelector(".edit-location-other").value.trim()
-            : row.querySelector(".edit-location-select").value.trim()
-        }))
+        .map(readEditorRow)
         .filter(row => row.day || row.time || row.event || row.location);
 
       return {
@@ -1370,10 +1516,20 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      // The sign renders at 75% zoom by default (sized for a TV panel).
+      // Preview at another size with ?zoom=100 (accepted range 25-200).
+      const zoomOverride = Number(new URLSearchParams(window.location.search).get("zoom"));
+      document.documentElement.style.zoom = `${zoomOverride >= 25 && zoomOverride <= 200 ? zoomOverride : 75}%`;
+
+      document.getElementById("about-panel").textContent = ABOUT_TEXT;
+      document.getElementById("about-button").addEventListener("click", () => {
+        document.getElementById("about-panel").classList.toggle("open");
+      });
+
       updateClock();
       updateWeather();
       renderAgenda();
-      loadRemoteAgendaData();
+      const initialAgendaLoad = loadRemoteAgendaData();
       startAgendaMinuteRefresh();
       initializeSignageAudio();
       setInterval(updateClock, 1000);
@@ -1384,8 +1540,14 @@
       document.getElementById("close-editor").addEventListener("click", closeEditor);
       document.getElementById("save-editor").addEventListener("click", saveEditorChanges);
       document.getElementById("add-row").addEventListener("click", () => {
-        document.getElementById("agenda-editor").appendChild(createEditorRow());
+        const rowElement = createEditorRow();
+        // New events default to a morning start (08:00 AM); picking a real
+        // start time then auto-fills the end an hour later.
+        rowElement.querySelector(".edit-start").value = "08:00";
+        document.getElementById("agenda-editor").appendChild(rowElement);
+        rowElement.querySelector(".edit-day").focus();
       });
+      document.getElementById("sort-editor-rows").addEventListener("click", sortEditorRows);
       document.getElementById("reset-agenda").addEventListener("click", resetAgenda);
       document.getElementById("download-json").addEventListener("click", downloadAgendaJson);
       document.getElementById("import-json").addEventListener("change", importAgendaJson);
@@ -1410,7 +1572,9 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("edit") === "1" || window.location.hash.toLowerCase() === "#edit") {
-        openEditor();
+        // Wait for the first config fetch so the editor opens with the live
+        // agenda instead of the (possibly empty) local fallback.
+        initialAgendaLoad.then(openEditor);
       }
     });
   </script>
@@ -1463,7 +1627,7 @@
 
   <section id="editor-panel" aria-label="Agenda editor">
     <h2>Edit Weekly Agenda</h2>
-    <p>Add, edit, or remove events below, then select Save. The sign arranges everything automatically by day and start time, so the order you enter rows here does not matter. Set a start and end time for each session; the sign always displays them in 24-hour format. To open this editor later, add ?edit=1 to the sign URL or press Ctrl + Shift + E.</p>
+    <p>Add, edit, or remove events below, then select Save. The sign arranges everything automatically by day and start time, so the order you enter rows here does not matter — Sort by Day &amp; Time just tidies this list. Use + Space to show an event in more than one room and Duplicate to copy a line. Set a start and end time for each session; the sign always displays them in 24-hour format. To open this editor later, add ?edit=1 to the sign URL or press Ctrl + Shift + E.</p>
     <p>The hosted sign reads its content from config.json in the GitHub repository and re-checks it every 5 minutes, so config.json overrides anything saved here. To update every sign, make your changes, select Download config.json, then upload that file to the GitHub repository replacing the existing config.json.</p>
 
     <div class="editor-field">
@@ -1478,13 +1642,17 @@
 
     <div id="agenda-editor"></div>
 
+    <div id="about-panel" aria-label="About this sign"></div>
+
     <div class="editor-actions">
       <button id="save-editor" type="button" class="editor-button primary">Save</button>
       <button id="add-row" type="button" class="editor-button secondary">Add Row</button>
+      <button id="sort-editor-rows" type="button" class="editor-button neutral">Sort by Day &amp; Time</button>
       <button id="download-json" type="button" class="editor-button neutral">Download config.json</button>
       <label class="editor-button neutral" for="import-json">Import Backup</label>
       <input id="import-json" type="file" accept="application/json" style="display: none;">
       <button id="reset-agenda" type="button" class="editor-button danger">Reset</button>
+      <button id="about-button" type="button" class="editor-button neutral">About</button>
       <button id="close-editor" type="button" class="editor-button neutral">Close</button>
       <span id="save-status" aria-live="polite"></span>
     </div>

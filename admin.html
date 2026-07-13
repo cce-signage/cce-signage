@@ -124,11 +124,49 @@
 
     .agenda-row {
       display: grid;
-      grid-template-columns: 130px 140px 140px 1fr 200px auto;
+      grid-template-columns: 130px 140px 140px 1fr 230px auto;
       gap: 12px;
-      align-items: end;
+      align-items: start;
       padding: 14px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .location-entry-line {
+      display: flex;
+      gap: 6px;
+    }
+
+    .location-entry-line select {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .location-entry + .location-entry {
+      margin-top: 6px;
+    }
+
+    .remove-space {
+      padding: 8px 11px;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .add-space {
+      margin-top: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+
+    .row-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 22px;
+    }
+
+    .row-actions button {
+      font-size: 13px;
+      padding: 8px 12px;
     }
 
     /* Wide enough that Chrome shows the full "hh:mm AM/PM" value. */
@@ -179,6 +217,20 @@
 
     #status.ok { color: var(--ah-green); }
     #status.err { color: #FFB3A0; }
+
+    #about-panel {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    #about-panel.open { display: block; }
 
     @media (max-width: 900px) {
       .agenda-row { grid-template-columns: 1fr 1fr; }
@@ -232,18 +284,36 @@
     <div id="agenda-rows"></div>
     <div class="toolbar">
       <button type="button" class="neutral" id="add-row">+ Add event</button>
+      <button type="button" class="neutral" id="sort-rows">Sort by day &amp; time</button>
       <button type="button" class="neutral" id="reload">Reload from GitHub</button>
       <button type="button" class="neutral" id="import-json-button">Import config.json</button>
       <input type="file" id="import-json" accept=".json,application/json" style="display: none">
       <button type="button" class="neutral" id="download-json">Download config.json</button>
       <button type="button" class="danger" id="clear-events">Clear all events</button>
+      <button type="button" class="neutral" id="about-button">About</button>
       <button type="button" class="primary" id="publish">Publish to sign</button>
     </div>
     <div id="status"></div>
+    <div id="about-panel" aria-label="About this app"></div>
   </section>
 </main>
 
 <script>
+  // Versioning: bump the patch for fixes, the minor for new features, and
+  // the major for changes that break config.json compatibility. Update
+  // APP_PUBLISHED whenever the version changes. Shown in the About box.
+  const APP_VERSION = "1.0.0";
+  const APP_PUBLISHED = "2026-07-13";
+
+  const ABOUT_TEXT = [
+    "AdventHealth West Florida Division",
+    "Center for Clinical Excellence and Simulation",
+    "Contact: WFD.SimulationEducation@adventhealth.com",
+    "",
+    `Version: ${APP_VERSION}`,
+    `Published: ${APP_PUBLISHED}`
+  ].join("\n");
+
   const OWNER = "cce-signage";
   const REPO = "cce-signage";
   const BRANCH = "main";
@@ -337,6 +407,51 @@
 
   // ---- Row editor ----
 
+  // One selectable space within a row's location list. Removing the last
+  // entry just blanks it so a row always has at least one space selector.
+  function createLocationEntry(selectedLocation = "") {
+    const entry = document.createElement("div");
+    entry.className = "location-entry";
+
+    const isKnownRoom = ROOMS.includes(selectedLocation);
+    const roomDropdown = ROOMS
+      .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
+      .join("");
+
+    entry.innerHTML = `
+      <div class="location-entry-line">
+        <select class="edit-location-select">
+          <option value="">Select space</option>
+          ${roomDropdown}
+          <option value="__other__"${selectedLocation && !isKnownRoom ? " selected" : ""}>Other</option>
+        </select>
+        <button type="button" class="danger remove-space" title="Remove this space">&#215;</button>
+      </div>
+      <input class="edit-location-other other-location${selectedLocation && !isKnownRoom ? " open" : ""}"
+             value="${selectedLocation && !isKnownRoom ? escapeHtml(selectedLocation) : ""}"
+             placeholder="Type space name">
+    `;
+
+    const select = entry.querySelector(".edit-location-select");
+    const other = entry.querySelector(".edit-location-other");
+    select.addEventListener("change", () => {
+      const useOther = select.value === "__other__";
+      other.classList.toggle("open", useOther);
+      if (useOther) other.focus();
+    });
+    entry.querySelector(".remove-space").addEventListener("click", () => {
+      if (entry.parentElement.querySelectorAll(".location-entry").length > 1) {
+        entry.remove();
+      } else {
+        select.value = "";
+        other.value = "";
+        other.classList.remove("open");
+      }
+    });
+
+    return entry;
+  }
+
   function createRow(row = { day: "", time: "", event: "", location: "" }) {
     const wrapper = document.createElement("div");
     wrapper.className = "agenda-row";
@@ -347,12 +462,6 @@
       .join("");
     const customDay = selectedDay && !DAYS.includes(selectedDay)
       ? `<option value="${escapeHtml(selectedDay)}" selected>${escapeHtml(selectedDay)}</option>` : "";
-
-    const selectedLocation = String(row.location || "").trim();
-    const isKnownRoom = ROOMS.includes(selectedLocation);
-    const roomDropdown = ROOMS
-      .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
-      .join("");
 
     const [startValue, endValue] = splitTimeRange(row.time);
 
@@ -378,27 +487,42 @@
         <input class="edit-event" value="${escapeHtml(row.event || "")}" placeholder="Event name">
       </div>
       <div>
-        <label>Location</label>
-        <select class="edit-location-select">
-          <option value="">Select space</option>
-          ${roomDropdown}
-          <option value="__other__"${selectedLocation && !isKnownRoom ? " selected" : ""}>Other</option>
-        </select>
-        <input class="edit-location-other other-location${selectedLocation && !isKnownRoom ? " open" : ""}"
-               value="${selectedLocation && !isKnownRoom ? escapeHtml(selectedLocation) : ""}"
-               placeholder="Type space name">
+        <label>Location(s)</label>
+        <div class="location-list"></div>
+        <button type="button" class="neutral add-space">+ Space</button>
       </div>
-      <div>
+      <div class="row-actions">
+        <button type="button" class="neutral duplicate-row">Duplicate</button>
         <button type="button" class="danger remove-row">Remove</button>
       </div>
     `;
 
-    const locationSelect = wrapper.querySelector(".edit-location-select");
-    const locationOther = wrapper.querySelector(".edit-location-other");
-    locationSelect.addEventListener("change", () => {
-      const useOther = locationSelect.value === "__other__";
-      locationOther.classList.toggle("open", useOther);
-      if (useOther) locationOther.focus();
+    // The stored location is a comma-separated list of spaces; each part
+    // gets its own selector.
+    const list = wrapper.querySelector(".location-list");
+    const locations = String(row.location || "").split(/\s*,\s*/).map(part => part.trim()).filter(Boolean);
+    if (!locations.length) locations.push("");
+    locations.forEach(location => list.appendChild(createLocationEntry(location)));
+
+    // When a start time is chosen and the end is still blank, default the end
+    // to one hour later — AM stays AM, and anything starting at/after noon
+    // lands in PM automatically.
+    const startInput = wrapper.querySelector(".edit-start");
+    const endInput = wrapper.querySelector(".edit-end");
+    startInput.addEventListener("change", () => {
+      if (!startInput.value || endInput.value) return;
+      const [h, m] = startInput.value.split(":").map(Number);
+      const endMinutes = Math.min(h * 60 + m + 60, 23 * 60 + 59);
+      endInput.value = `${String(Math.floor(endMinutes / 60)).padStart(2, "0")}:${String(endMinutes % 60).padStart(2, "0")}`;
+    });
+
+    wrapper.querySelector(".add-space").addEventListener("click", () => {
+      const entry = createLocationEntry("");
+      list.appendChild(entry);
+      entry.querySelector(".edit-location-select").focus();
+    });
+    wrapper.querySelector(".duplicate-row").addEventListener("click", () => {
+      wrapper.after(createRow(readRowData(wrapper)));
     });
     wrapper.querySelector(".remove-row").addEventListener("click", () => wrapper.remove());
 
@@ -414,19 +538,56 @@
     if (!container.children.length) container.appendChild(createRow());
   }
 
+  // Same ordering the sign uses on screen: Monday -> Sunday, then start time,
+  // with unknown days and blank times sorting last. Sorting is manual (a
+  // button) so rows never jump around mid-edit.
+  function parseStartMinutes(time) {
+    const match = String(time || "").match(/^(\d{1,2}):?(\d{2})/);
+    if (!match) return null;
+    return Number(match[1]) * 60 + Number(match[2]);
+  }
+
+  function compareRows(a, b) {
+    const dayA = DAYS.indexOf(a.day);
+    const dayB = DAYS.indexOf(b.day);
+    const weekA = dayA === -1 ? 99 : dayA;
+    const weekB = dayB === -1 ? 99 : dayB;
+    if (weekA !== weekB) return weekA - weekB;
+    const startA = parseStartMinutes(a.time);
+    const startB = parseStartMinutes(b.time);
+    return (startA === null ? 1e9 : startA) - (startB === null ? 1e9 : startB);
+  }
+
+  function sortRows() {
+    const container = document.getElementById("agenda-rows");
+    Array.from(container.querySelectorAll(".agenda-row"))
+      .map(el => ({ el, data: readRowData(el) }))
+      .sort((a, b) => compareRows(a.data, b.data))
+      .forEach(item => container.appendChild(item.el));
+    setStatus("Rows sorted by day and start time (display order on the sign is always chronological either way).", false);
+  }
+
+  function readRowData(rowEl) {
+    const locations = Array.from(rowEl.querySelectorAll(".location-entry"))
+      .map(entry => entry.querySelector(".edit-location-select").value === "__other__"
+        ? entry.querySelector(".edit-location-other").value.trim()
+        : entry.querySelector(".edit-location-select").value.trim())
+      .filter(Boolean);
+
+    return {
+      day: rowEl.querySelector(".edit-day").value.trim(),
+      time: combineTimeRange(
+        rowEl.querySelector(".edit-start").value,
+        rowEl.querySelector(".edit-end").value
+      ),
+      event: rowEl.querySelector(".edit-event").value.trim(),
+      location: [...new Set(locations)].join(", ")
+    };
+  }
+
   function collectConfig() {
     const rows = Array.from(document.querySelectorAll(".agenda-row"))
-      .map(row => ({
-        day: row.querySelector(".edit-day").value.trim(),
-        time: combineTimeRange(
-          row.querySelector(".edit-start").value,
-          row.querySelector(".edit-end").value
-        ),
-        event: row.querySelector(".edit-event").value.trim(),
-        location: row.querySelector(".edit-location-select").value === "__other__"
-          ? row.querySelector(".edit-location-other").value.trim()
-          : row.querySelector(".edit-location-select").value.trim()
-      }))
+      .map(readRowData)
       .filter(row => row.day || row.time || row.event || row.location);
 
     return {
@@ -567,7 +728,17 @@
 
     document.getElementById("test-token").addEventListener("click", testToken);
     document.getElementById("add-row").addEventListener("click", () => {
-      document.getElementById("agenda-rows").appendChild(createRow());
+      const rowEl = createRow();
+      // New events default to a morning start (08:00 AM); picking a real
+      // start time then auto-fills the end an hour later.
+      rowEl.querySelector(".edit-start").value = "08:00";
+      document.getElementById("agenda-rows").appendChild(rowEl);
+      rowEl.querySelector(".edit-day").focus();
+    });
+    document.getElementById("sort-rows").addEventListener("click", sortRows);
+    document.getElementById("about-panel").textContent = ABOUT_TEXT;
+    document.getElementById("about-button").addEventListener("click", () => {
+      document.getElementById("about-panel").classList.toggle("open");
     });
 
     // Two-click confirmation instead of a confirm() dialog: first click arms
