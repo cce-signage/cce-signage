@@ -3,12 +3,19 @@
   "agendaTitle": "Upcoming",
   "showClock": true,
   "showWeather": true,
+  "playMusic": true,
+  "footerLocationLabel": "Location",
+  "footerLocation": "Health Park, Hospital Departments of AdventHealth Tampa, 3102 E 138th Ave, Tampa, FL 33613",
+  "footerSecurityLabel": "Security",
+  "footerSecurity": "(813) 615-7922",
   "rows": [
     {
       "day": "Tuesday",
       "time": "0745 - 1600",
       "event": "Clinical Orientation",
-      "location": "Auditorium Room 134"
+      "location": "Auditorium Room 134",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-07-13"
     },
     {
       "day": "Tuesday",
@@ -20,19 +27,25 @@
       "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
-      "location": "Auditorium Room 134"
+      "location": "Auditorium Room 134",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-07-13"
     },
     {
       "day": "Thursday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
-      "location": "Auditorium Room 134"
+      "location": "Auditorium Room 134",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-07-13"
     },
     {
       "day": "Friday",
       "time": "0800 - 1400",
       "event": "GME Emergency Medicine eFAST Training",
-      "location": "Debrief Room 113, Simulation Room 105, Simulation Room 106, Simulation Room 108"
+      "location": "Debrief Room 113, Simulation Room 105, Simulation Room 106, Simulation Room 108",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-07-13"
     }
   ]
 }
