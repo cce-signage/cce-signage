@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CCE Sign Admin — Agenda Editor</title>
+  <title>CCES Sign Admin — Agenda Editor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap">
@@ -31,7 +31,7 @@
     }
 
     main {
-      max-width: 1080px;
+      max-width: min(1520px, 96vw);
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -124,7 +124,7 @@
 
     .agenda-row {
       display: grid;
-      grid-template-columns: 130px 140px 140px 1fr 230px auto;
+      grid-template-columns: 130px 140px 140px 1fr 330px auto;
       gap: 12px;
       align-items: start;
       padding: 14px 0;
@@ -136,7 +136,7 @@
       gap: 6px;
     }
 
-    .location-entry-line select {
+    .location-entry-line input {
       flex: 1;
       min-width: 0;
     }
@@ -148,6 +148,12 @@
     .remove-space {
       padding: 8px 11px;
       font-size: 14px;
+      line-height: 1;
+    }
+
+    .move-space {
+      padding: 8px 8px;
+      font-size: 11px;
       line-height: 1;
     }
 
@@ -175,13 +181,6 @@
       padding-right: 8px;
       min-width: 130px;
     }
-
-    .agenda-row .other-location {
-      display: none;
-      margin-top: 8px;
-    }
-
-    .agenda-row .other-location.open { display: block; }
 
     button {
       font-family: inherit;
@@ -240,7 +239,67 @@
 </head>
 <body>
 <main>
-  <h1>CCE Sign Admin — Agenda Editor</h1>
+  <h1>CCES Sign Admin — Agenda Editor</h1>
+
+  <section class="panel">
+    <h2>Events</h2>
+    <div id="agenda-rows"></div>
+    <div class="toolbar">
+      <button type="button" class="neutral" id="add-row">+ Add event</button>
+      <button type="button" class="neutral" id="sort-rows">Sort by day &amp; time</button>
+      <button type="button" class="neutral" id="reload">Reload from GitHub</button>
+      <button type="button" class="neutral" id="import-json-button">Import config.json</button>
+      <input type="file" id="import-json" accept=".json,application/json" style="display: none">
+      <button type="button" class="neutral" id="download-json">Download config.json</button>
+      <button type="button" class="danger" id="clear-events">Clear all events</button>
+      <button type="button" class="danger" id="reset-defaults">Reset</button>
+      <button type="button" class="neutral" id="about-button">About</button>
+      <button type="button" class="primary" id="publish">Publish to sign</button>
+    </div>
+    <div id="status"></div>
+    <div id="about-panel" aria-label="About this app"></div>
+  </section>
+  <section class="panel">
+    <h2>Sign Header &amp; Footer</h2>
+    <div class="field-grid">
+      <div>
+        <label for="center-name">Center name</label>
+        <input id="center-name" placeholder="Center for Clinical Excellence and Simulation">
+      </div>
+      <div>
+        <label for="agenda-title">Agenda title</label>
+        <input id="agenda-title" placeholder="This Week">
+      </div>
+      <div>
+        <label for="footer-location-label">Footer title</label>
+        <input id="footer-location-label" placeholder="Location">
+      </div>
+      <div>
+        <label for="footer-location">Footer text (leave blank to hide this item)</label>
+        <input id="footer-location" placeholder="Building name and address">
+      </div>
+      <div>
+        <label for="footer-security-label">Footer title</label>
+        <input id="footer-security-label" placeholder="Security">
+      </div>
+      <div>
+        <label for="footer-security">Footer text (leave blank to hide this item)</label>
+        <input id="footer-security" placeholder="(813) 555-0100">
+      </div>
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="show-clock">
+      <label for="show-clock">Show clock on the sign</label>
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="show-weather">
+      <label for="show-weather">Show weather on the sign</label>
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="play-music">
+      <label for="play-music">Play background music on the sign</label>
+    </div>
+  </section>
 
   <section class="panel" id="token-panel">
     <h2>GitHub Access</h2>
@@ -265,44 +324,14 @@
     </div>
   </section>
 
-  <section class="panel">
-    <h2>Sign Header</h2>
-    <div class="field-grid">
-      <div>
-        <label for="center-name">Center name</label>
-        <input id="center-name" placeholder="Center for Clinical Excellence and Simulation">
-      </div>
-      <div>
-        <label for="agenda-title">Agenda title</label>
-        <input id="agenda-title" placeholder="This Week">
-      </div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <h2>Events</h2>
-    <div id="agenda-rows"></div>
-    <div class="toolbar">
-      <button type="button" class="neutral" id="add-row">+ Add event</button>
-      <button type="button" class="neutral" id="sort-rows">Sort by day &amp; time</button>
-      <button type="button" class="neutral" id="reload">Reload from GitHub</button>
-      <button type="button" class="neutral" id="import-json-button">Import config.json</button>
-      <input type="file" id="import-json" accept=".json,application/json" style="display: none">
-      <button type="button" class="neutral" id="download-json">Download config.json</button>
-      <button type="button" class="danger" id="clear-events">Clear all events</button>
-      <button type="button" class="neutral" id="about-button">About</button>
-      <button type="button" class="primary" id="publish">Publish to sign</button>
-    </div>
-    <div id="status"></div>
-    <div id="about-panel" aria-label="About this app"></div>
-  </section>
+  <datalist id="room-list"></datalist>
 </main>
 
 <script>
   // Versioning: bump the patch for fixes, the minor for new features, and
   // the major for changes that break config.json compatibility. Update
   // APP_PUBLISHED whenever the version changes. Shown in the About box.
-  const APP_VERSION = "1.0.0";
+  const APP_VERSION = "1.5.0";
   const APP_PUBLISHED = "2026-07-13";
 
   const ABOUT_TEXT = [
@@ -322,6 +351,11 @@
   const TOKEN_STORAGE_KEY = "cce-admin-github-token";
 
   const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  // "alpha" sorts the room dropdown alphabetically (numeric-aware, so
+  // Room 105 < Room 108 < Room 110); set to "manual" to show the list
+  // exactly in the order written below.
+  const ROOM_ORDER = "alpha";
+
   const ROOMS = [
     "Auditorium Room 115",
     "Auditorium Room 134",
@@ -334,13 +368,29 @@
     "Debrief Room 113",
     "Simulation Room 105",
     "Simulation Room 106",
-    "Simulation Room 107",
+    "Simulation Room 108",
     "Skills Lab Room 116"
   ];
 
+  if (ROOM_ORDER === "alpha") {
+    ROOMS.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  }
+
+  // Old space names in a previously published config are auto-corrected to
+  // their current names when the config loads into the editor.
+  const ROOM_ALIASES = {
+    "Auditorium 115": "Auditorium Room 115",
+    "Auditorium 134": "Auditorium Room 134",
+    "Simulation Room 107": "Simulation Room 108"
+  };
+
   const DEFAULTS = {
     centerName: "Center for Clinical Excellence and Simulation",
-    agendaTitle: "This Week"
+    agendaTitle: "This Week",
+    footerLocationLabel: "Location",
+    footerLocation: "Health Park, Hospital Departments of AdventHealth Tampa, 3102 E 138th Ave, Tampa, FL 33613",
+    footerSecurityLabel: "Security",
+    footerSecurity: "(813) 615-7922"
   };
 
   let currentSha = null;
@@ -407,45 +457,36 @@
 
   // ---- Row editor ----
 
-  // One selectable space within a row's location list. Removing the last
-  // entry just blanks it so a row always has at least one space selector.
+  // One space within a row's location list: a free-text input prefilled with
+  // the current value, with the room list offered as native suggestions.
+  // Removing the last entry just blanks it so a row always keeps one input.
   function createLocationEntry(selectedLocation = "") {
     const entry = document.createElement("div");
     entry.className = "location-entry";
 
-    const isKnownRoom = ROOMS.includes(selectedLocation);
-    const roomDropdown = ROOMS
-      .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
-      .join("");
-
     entry.innerHTML = `
       <div class="location-entry-line">
-        <select class="edit-location-select">
-          <option value="">Select space</option>
-          ${roomDropdown}
-          <option value="__other__"${selectedLocation && !isKnownRoom ? " selected" : ""}>Other</option>
-        </select>
+        <input class="edit-location" list="room-list" value="${escapeHtml(selectedLocation)}" placeholder="Space name">
+        <button type="button" class="neutral move-space move-space-up" title="Move this space up">&#9650;</button>
+        <button type="button" class="neutral move-space move-space-down" title="Move this space down">&#9660;</button>
         <button type="button" class="danger remove-space" title="Remove this space">&#215;</button>
       </div>
-      <input class="edit-location-other other-location${selectedLocation && !isKnownRoom ? " open" : ""}"
-             value="${selectedLocation && !isKnownRoom ? escapeHtml(selectedLocation) : ""}"
-             placeholder="Type space name">
     `;
 
-    const select = entry.querySelector(".edit-location-select");
-    const other = entry.querySelector(".edit-location-other");
-    select.addEventListener("change", () => {
-      const useOther = select.value === "__other__";
-      other.classList.toggle("open", useOther);
-      if (useOther) other.focus();
+    // The order of spaces here is the order the sign stacks them on screen.
+    entry.querySelector(".move-space-up").addEventListener("click", () => {
+      const previous = entry.previousElementSibling;
+      if (previous) entry.parentElement.insertBefore(entry, previous);
+    });
+    entry.querySelector(".move-space-down").addEventListener("click", () => {
+      const next = entry.nextElementSibling;
+      if (next) entry.parentElement.insertBefore(next, entry);
     });
     entry.querySelector(".remove-space").addEventListener("click", () => {
       if (entry.parentElement.querySelectorAll(".location-entry").length > 1) {
         entry.remove();
       } else {
-        select.value = "";
-        other.value = "";
-        other.classList.remove("open");
+        entry.querySelector(".edit-location").value = "";
       }
     });
 
@@ -500,7 +541,8 @@
     // The stored location is a comma-separated list of spaces; each part
     // gets its own selector.
     const list = wrapper.querySelector(".location-list");
-    const locations = String(row.location || "").split(/\s*,\s*/).map(part => part.trim()).filter(Boolean);
+    const locations = String(row.location || "").split(/\s*,\s*/).map(part => part.trim()).filter(Boolean)
+      .map(part => ROOM_ALIASES[part] || part);
     if (!locations.length) locations.push("");
     locations.forEach(location => list.appendChild(createLocationEntry(location)));
 
@@ -519,7 +561,7 @@
     wrapper.querySelector(".add-space").addEventListener("click", () => {
       const entry = createLocationEntry("");
       list.appendChild(entry);
-      entry.querySelector(".edit-location-select").focus();
+      entry.querySelector(".edit-location").focus();
     });
     wrapper.querySelector(".duplicate-row").addEventListener("click", () => {
       wrapper.after(createRow(readRowData(wrapper)));
@@ -532,6 +574,15 @@
   function populateEditor(data) {
     document.getElementById("center-name").value = data.centerName || DEFAULTS.centerName;
     document.getElementById("agenda-title").value = data.agendaTitle || DEFAULTS.agendaTitle;
+    // Clock, weather, and music default to on unless the config says false.
+    document.getElementById("show-clock").checked = data.showClock !== false;
+    document.getElementById("show-weather").checked = data.showWeather !== false;
+    document.getElementById("play-music").checked = data.playMusic !== false;
+    // Footer: missing fields fall back to the defaults; empty means hidden.
+    document.getElementById("footer-location").value = typeof data.footerLocation === "string" ? data.footerLocation : DEFAULTS.footerLocation;
+    document.getElementById("footer-security").value = typeof data.footerSecurity === "string" ? data.footerSecurity : DEFAULTS.footerSecurity;
+    document.getElementById("footer-location-label").value = typeof data.footerLocationLabel === "string" ? data.footerLocationLabel : DEFAULTS.footerLocationLabel;
+    document.getElementById("footer-security-label").value = typeof data.footerSecurityLabel === "string" ? data.footerSecurityLabel : DEFAULTS.footerSecurityLabel;
     const container = document.getElementById("agenda-rows");
     container.innerHTML = "";
     (Array.isArray(data.rows) ? data.rows : []).forEach(row => container.appendChild(createRow(row)));
@@ -568,10 +619,8 @@
   }
 
   function readRowData(rowEl) {
-    const locations = Array.from(rowEl.querySelectorAll(".location-entry"))
-      .map(entry => entry.querySelector(".edit-location-select").value === "__other__"
-        ? entry.querySelector(".edit-location-other").value.trim()
-        : entry.querySelector(".edit-location-select").value.trim())
+    const locations = Array.from(rowEl.querySelectorAll(".edit-location"))
+      .map(input => input.value.trim())
       .filter(Boolean);
 
     return {
@@ -593,6 +642,13 @@
     return {
       centerName: document.getElementById("center-name").value.trim() || DEFAULTS.centerName,
       agendaTitle: document.getElementById("agenda-title").value.trim() || DEFAULTS.agendaTitle,
+      showClock: document.getElementById("show-clock").checked,
+      showWeather: document.getElementById("show-weather").checked,
+      playMusic: document.getElementById("play-music").checked,
+      footerLocationLabel: document.getElementById("footer-location-label").value.trim(),
+      footerLocation: document.getElementById("footer-location").value.trim(),
+      footerSecurityLabel: document.getElementById("footer-security-label").value.trim(),
+      footerSecurity: document.getElementById("footer-security").value.trim(),
       rows
     };
   }
@@ -708,6 +764,10 @@
   }
 
   window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("room-list").innerHTML = ROOMS
+      .map(room => `<option value="${escapeHtml(room)}"></option>`)
+      .join("");
+
     const savedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
     if (savedToken) {
       document.getElementById("github-token").value = savedToken;
@@ -763,6 +823,27 @@
           clearButton.textContent = "Clear all events";
         }, 4000);
       }
+    });
+
+    // Two-click confirmation: restores every setting to its default and
+    // clears the events. Nothing changes on the sign until Publish.
+    const resetButton = document.getElementById("reset-defaults");
+    let resetDisarmTimer = null;
+    resetButton.addEventListener("click", () => {
+      if (!resetButton.dataset.armed) {
+        resetButton.dataset.armed = "1";
+        resetButton.textContent = "Click again to confirm";
+        resetDisarmTimer = setTimeout(() => {
+          delete resetButton.dataset.armed;
+          resetButton.textContent = "Reset";
+        }, 4000);
+        return;
+      }
+      clearTimeout(resetDisarmTimer);
+      delete resetButton.dataset.armed;
+      resetButton.textContent = "Reset";
+      populateEditor({ ...DEFAULTS, showClock: true, showWeather: true, playMusic: true, rows: [] });
+      setStatus("Defaults restored and events cleared (not yet published — click Publish to sign to apply).", false);
     });
 
     document.getElementById("import-json-button").addEventListener("click", () => {

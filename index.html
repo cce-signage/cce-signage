@@ -110,12 +110,13 @@
       display: block;
     }
 
+    /* Flex (not a fixed grid) so hiding the clock or weather card via the
+       config toggles collapses cleanly toward the right edge. */
     #right-status {
-      display: grid;
-      grid-template-columns: 390px 390px;
+      display: flex;
+      justify-content: flex-end;
       align-items: stretch;
       gap: 24px;
-      min-width: 804px;
     }
 
     #weather-card {
@@ -295,10 +296,12 @@
       max-width: 100%;
     }
 
+    /* fr units (not %) so the 24px gaps are subtracted from the available
+       width instead of overflowing the tile. */
     .schedule-header,
     .schedule-row {
       display: grid;
-      grid-template-columns: 15% 19% 46% 20%;
+      grid-template-columns: 15fr 19fr 46fr 20fr;
       column-gap: 24px;
       align-items: start;
     }
@@ -421,7 +424,6 @@
       font-weight: 700;
     }
 
-
     #facility-info {
       position: relative;
       width: 100%;
@@ -472,16 +474,14 @@
       font-size: 1.28em;
     }
 
-
     @media (max-width: 1100px) {
       #top-bar {
         align-items: flex-start;
       }
 
       #right-status {
-        grid-template-columns: 390px;
-        justify-items: end;
-        min-width: 390px;
+        flex-direction: column;
+        align-items: flex-end;
       }
 
       #weather-card,
@@ -506,7 +506,7 @@
       right: 24px;
       bottom: 24px;
       z-index: 40;
-      width: min(980px, calc(100vw - 48px));
+      width: min(1520px, calc(100vw - 48px));
       overflow: auto;
       background: var(--panel-bg);
       border: 1px solid var(--panel-border);
@@ -561,13 +561,35 @@
       padding: 10px 12px;
     }
 
-    .other-location-input {
-      display: none;
-      margin-top: 8px;
+    .editor-toggle-row {
+      display: flex;
+      gap: 28px;
     }
 
-    .other-location-input.open {
-      display: block;
+    .editor-toggle-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .editor-toggle-row input[type="checkbox"] {
+      width: auto;
+    }
+
+    .editor-footer-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 14px;
+    }
+
+    .editor-subheading {
+      margin: 26px 0 12px;
+      font-size: 20px;
     }
 
     #agenda-editor {
@@ -579,7 +601,7 @@
 
     .agenda-editor-row {
       display: grid;
-      grid-template-columns: 1fr 0.9fr 0.9fr 2fr 1.3fr auto;
+      grid-template-columns: 1fr 0.9fr 0.9fr 1.7fr 1.7fr auto;
       gap: 10px;
       align-items: start;
       border: 1px solid rgba(255, 255, 255, 0.18);
@@ -605,6 +627,12 @@
     .location-entry-line .remove-space {
       padding: 8px 11px;
       font-size: 14px;
+      line-height: 1;
+    }
+
+    .location-entry-line .move-space {
+      padding: 8px 8px;
+      font-size: 11px;
       line-height: 1;
     }
 
@@ -709,7 +737,7 @@
     // the major for changes that break config.json compatibility. Update
     // SIGN_PUBLISHED whenever the version changes. Shown in the editor's
     // About box.
-    const SIGN_VERSION = "2.0.0";
+    const SIGN_VERSION = "2.5.0";
     const SIGN_PUBLISHED = "2026-07-13";
 
     const ABOUT_TEXT = [
@@ -724,10 +752,22 @@
     const defaultAgendaData = {
       centerName: "Center for Clinical Excellence and Simulation",
       agendaTitle: "Upcoming",
+      showClock: true,
+      showWeather: true,
+      playMusic: true,
+      footerLocationLabel: "Location",
+      footerLocation: "Health Park, Hospital Departments of AdventHealth Tampa, 3102 E 138th Ave, Tampa, FL 33613",
+      footerSecurityLabel: "Security",
+      footerSecurity: "(813) 615-7922",
       rows: []
     };
 
     const storageKey = "cce-simulation-weekly-agenda-v1";
+
+    // "alpha" sorts the room dropdown alphabetically (numeric-aware, so
+    // Room 105 < Room 108 < Room 110); set to "manual" to show the list
+    // exactly in the order written below.
+    const ROOM_ORDER = "alpha";
 
     const roomOptions = [
       "Auditorium Room 115",
@@ -741,16 +781,21 @@
       "Debrief Room 113",
       "Simulation Room 105",
       "Simulation Room 106",
-      "Simulation Room 107",
+      "Simulation Room 108",
       "Skills Lab Room 116"
     ];
+
+    if (ROOM_ORDER === "alpha") {
+      roomOptions.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    }
 
     // A location can be one space or a comma-separated list of spaces
     // ("Classroom 118, Classroom 119"); aliases are applied per space.
     function normalizeLocation(location) {
       const knownAliases = {
         "Auditorium 115": "Auditorium Room 115",
-        "Auditorium 134": "Auditorium Room 134"
+        "Auditorium 134": "Auditorium Room 134",
+        "Simulation Room 107": "Simulation Room 108"
       };
       return String(location || "")
         .split(/\s*,\s*/)
@@ -767,6 +812,16 @@
       return {
         centerName: String(parsed.centerName || defaultAgendaData.centerName).replace(/[.]+$/, ""),
         agendaTitle: parsed.agendaTitle || defaultAgendaData.agendaTitle,
+        // Clock, weather, and music default to on unless the config says false.
+        showClock: parsed.showClock !== false,
+        showWeather: parsed.showWeather !== false,
+        playMusic: parsed.playMusic !== false,
+        // Footer: missing fields fall back to the defaults; an explicitly
+        // empty string hides that footer item.
+        footerLocationLabel: typeof parsed.footerLocationLabel === "string" ? parsed.footerLocationLabel : defaultAgendaData.footerLocationLabel,
+        footerLocation: typeof parsed.footerLocation === "string" ? parsed.footerLocation : defaultAgendaData.footerLocation,
+        footerSecurityLabel: typeof parsed.footerSecurityLabel === "string" ? parsed.footerSecurityLabel : defaultAgendaData.footerSecurityLabel,
+        footerSecurity: typeof parsed.footerSecurity === "string" ? parsed.footerSecurity : defaultAgendaData.footerSecurity,
         rows: (Array.isArray(parsed.rows) ? parsed.rows : defaultAgendaData.rows)
           .map(row => ({ ...row, location: normalizeLocation(row.location) }))
       };
@@ -950,6 +1005,23 @@
       const data = getAgendaData();
       document.getElementById("header").textContent = `Welcome to the ${String(data.centerName).replace(/[.]+$/, "")}`;
       document.getElementById("agenda-title").textContent = data.agendaTitle;
+      document.getElementById("clock").style.display = data.showClock === false ? "none" : "";
+      document.getElementById("weather-card").style.display = data.showWeather === false ? "none" : "";
+      applyMusicSetting(data.playMusic);
+
+      const footerLocation = String(data.footerLocation ?? "").trim();
+      const footerSecurity = String(data.footerSecurity ?? "").trim();
+      const footerLocationLabel = String(data.footerLocationLabel ?? "").trim();
+      const footerSecurityLabel = String(data.footerSecurityLabel ?? "").trim();
+      document.getElementById("footer-location-value").textContent = footerLocation;
+      document.getElementById("footer-security-value").textContent = footerSecurity;
+      document.getElementById("footer-location-label").textContent = footerLocationLabel;
+      document.getElementById("footer-security-label").textContent = footerSecurityLabel;
+      document.getElementById("footer-location-label").style.display = footerLocationLabel ? "" : "none";
+      document.getElementById("footer-security-label").style.display = footerSecurityLabel ? "" : "none";
+      document.getElementById("footer-location-item").style.display = footerLocation ? "" : "none";
+      document.getElementById("footer-security-item").style.display = footerSecurity ? "" : "none";
+      document.getElementById("facility-info").style.display = footerLocation || footerSecurity ? "" : "none";
 
       const schedule = document.getElementById("schedule");
       schedule.innerHTML = `
@@ -1010,7 +1082,14 @@
           const dim = status === "ended" ? " ended" : "";
           cells.push(`<div class="schedule-column time${dim}" style="grid-row: ${gridRow};">${escapeHtml(item.time)}</div>`);
           cells.push(`<div class="schedule-column event${dim}" style="grid-row: ${gridRow};">${badge}<strong>${escapeHtml(item.event)}</strong></div>`);
-          cells.push(`<div class="schedule-column location${dim}" style="grid-row: ${gridRow};">${escapeHtml(item.location)}</div>`);
+          // Each space on its own line: a row can list several
+          // comma-separated spaces, and one long comma string wraps badly.
+          const locationHtml = String(item.location || "")
+            .split(/\s*,\s*/)
+            .filter(Boolean)
+            .map(escapeHtml)
+            .join("<br>");
+          cells.push(`<div class="schedule-column location${dim}" style="grid-row: ${gridRow};">${locationHtml}</div>`);
         });
 
         rowElement.innerHTML = cells.join("");
@@ -1129,7 +1208,6 @@
       }
     }
 
-
     function startAgendaMinuteRefresh() {
       let agendaRefreshInterval;
 
@@ -1212,9 +1290,22 @@
       signageAudio.addEventListener("ended", playNextAudioTrack);
       signageAudio.addEventListener("error", playNextAudioTrack);
       prepareAudioQueue();
-      playNextAudioTrack();
+      if (getAgendaData().playMusic !== false) playNextAudioTrack();
     }
 
+    // Called on every agenda render, so a config change flips the music
+    // within one poll cycle: off pauses mid-track, on resumes (or starts).
+    function applyMusicSetting(enabled) {
+      if (!signageAudio) return;
+      if (enabled === false) {
+        if (!signageAudio.paused) signageAudio.pause();
+        return;
+      }
+      if (signageAudio.paused) {
+        if (signageAudio.src) signageAudio.play().catch(addAudioUnlockListeners);
+        else playNextAudioTrack();
+      }
+    }
 
     function updateClock() {
       const now = new Date();
@@ -1274,43 +1365,37 @@
       return start || end || "";
     }
 
-    // One selectable space within a row's location list. Removing the last
-    // entry just blanks it so a row always keeps one space selector.
+    // One space within a row's location list: a free-text input prefilled
+    // with the current value, with the room list offered as native
+    // suggestions. Removing the last entry just blanks it so a row always
+    // keeps one input.
     function createLocationEntry(selectedLocation = "") {
       const entry = document.createElement("div");
       entry.className = "location-entry";
 
-      const isKnownLocation = roomOptions.includes(selectedLocation);
-      const roomDropdownOptions = roomOptions
-        .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
-        .join("");
-
       entry.innerHTML = `
         <div class="location-entry-line">
-          <select class="edit-location-select">
-            <option value="">Select space</option>
-            ${roomDropdownOptions}
-            <option value="__other__"${selectedLocation && !isKnownLocation ? " selected" : ""}>Other</option>
-          </select>
+          <input class="edit-location" list="room-list" value="${escapeHtml(selectedLocation)}" placeholder="Space name">
+          <button type="button" class="editor-button neutral move-space move-space-up" title="Move this space up">&#9650;</button>
+          <button type="button" class="editor-button neutral move-space move-space-down" title="Move this space down">&#9660;</button>
           <button type="button" class="editor-button danger remove-space" title="Remove this space">&#215;</button>
         </div>
-        <input class="edit-location-other other-location-input${selectedLocation && !isKnownLocation ? " open" : ""}" value="${selectedLocation && !isKnownLocation ? escapeHtml(selectedLocation) : ""}" placeholder="Type space name">
       `;
 
-      const locationSelect = entry.querySelector(".edit-location-select");
-      const locationOther = entry.querySelector(".edit-location-other");
-      locationSelect.addEventListener("change", () => {
-        const useOther = locationSelect.value === "__other__";
-        locationOther.classList.toggle("open", useOther);
-        if (useOther) locationOther.focus();
+      // The order of spaces here is the order the sign stacks them on screen.
+      entry.querySelector(".move-space-up").addEventListener("click", () => {
+        const previous = entry.previousElementSibling;
+        if (previous) entry.parentElement.insertBefore(entry, previous);
+      });
+      entry.querySelector(".move-space-down").addEventListener("click", () => {
+        const next = entry.nextElementSibling;
+        if (next) entry.parentElement.insertBefore(next, entry);
       });
       entry.querySelector(".remove-space").addEventListener("click", () => {
         if (entry.parentElement.querySelectorAll(".location-entry").length > 1) {
           entry.remove();
         } else {
-          locationSelect.value = "";
-          locationOther.value = "";
-          locationOther.classList.remove("open");
+          entry.querySelector(".edit-location").value = "";
         }
       });
 
@@ -1387,7 +1472,7 @@
       wrapper.querySelector(".add-space-button").addEventListener("click", () => {
         const entry = createLocationEntry("");
         locationList.appendChild(entry);
-        entry.querySelector(".edit-location-select").focus();
+        entry.querySelector(".edit-location").focus();
       });
 
       wrapper.querySelector(".duplicate-row-button").addEventListener("click", () => {
@@ -1405,6 +1490,13 @@
       const data = getAgendaData();
       document.getElementById("edit-center-name").value = data.centerName;
       document.getElementById("edit-agenda-title").value = data.agendaTitle;
+      document.getElementById("edit-show-clock").checked = data.showClock !== false;
+      document.getElementById("edit-show-weather").checked = data.showWeather !== false;
+      document.getElementById("edit-play-music").checked = data.playMusic !== false;
+      document.getElementById("edit-footer-location").value = String(data.footerLocation ?? "");
+      document.getElementById("edit-footer-security").value = String(data.footerSecurity ?? "");
+      document.getElementById("edit-footer-location-label").value = String(data.footerLocationLabel ?? "");
+      document.getElementById("edit-footer-security-label").value = String(data.footerSecurityLabel ?? "");
 
       const editor = document.getElementById("agenda-editor");
       editor.innerHTML = "";
@@ -1427,10 +1519,8 @@
     }
 
     function readEditorRow(rowElement) {
-      const locations = Array.from(rowElement.querySelectorAll(".location-entry"))
-        .map(entry => entry.querySelector(".edit-location-select").value === "__other__"
-          ? entry.querySelector(".edit-location-other").value.trim()
-          : entry.querySelector(".edit-location-select").value.trim())
+      const locations = Array.from(rowElement.querySelectorAll(".edit-location"))
+        .map(input => input.value.trim())
         .filter(Boolean);
 
       return {
@@ -1463,6 +1553,13 @@
       return {
         centerName: (document.getElementById("edit-center-name").value.trim() || defaultAgendaData.centerName).replace(/[.]+$/, ""),
         agendaTitle: document.getElementById("edit-agenda-title").value.trim() || defaultAgendaData.agendaTitle,
+        showClock: document.getElementById("edit-show-clock").checked,
+        showWeather: document.getElementById("edit-show-weather").checked,
+        playMusic: document.getElementById("edit-play-music").checked,
+        footerLocationLabel: document.getElementById("edit-footer-location-label").value.trim(),
+        footerLocation: document.getElementById("edit-footer-location").value.trim(),
+        footerSecurityLabel: document.getElementById("edit-footer-security-label").value.trim(),
+        footerSecurity: document.getElementById("edit-footer-security").value.trim(),
         rows
       };
     }
@@ -1476,12 +1573,41 @@
       setTimeout(closeEditor, 1500);
     }
 
+    // Two-click confirmation (no blocking dialog): restores every setting to
+    // its default and clears the events. Nothing is saved until Save.
+    let resetDisarmTimer = null;
     function resetAgenda() {
-      if (!confirm("Reset this sign to the original agenda?")) return;
-      localStorage.removeItem(storageKey);
-      renderAgenda();
-      openEditor();
-      document.getElementById("save-status").textContent = "Reset complete.";
+      const button = document.getElementById("reset-agenda");
+      if (!button.dataset.armed) {
+        button.dataset.armed = "1";
+        button.textContent = "Click again to confirm";
+        resetDisarmTimer = setTimeout(() => {
+          delete button.dataset.armed;
+          button.textContent = "Reset";
+        }, 4000);
+        return;
+      }
+      clearTimeout(resetDisarmTimer);
+      delete button.dataset.armed;
+      button.textContent = "Reset";
+
+      document.getElementById("edit-center-name").value = defaultAgendaData.centerName;
+      document.getElementById("edit-agenda-title").value = defaultAgendaData.agendaTitle;
+      document.getElementById("edit-show-clock").checked = true;
+      document.getElementById("edit-show-weather").checked = true;
+      document.getElementById("edit-play-music").checked = true;
+      document.getElementById("edit-footer-location-label").value = defaultAgendaData.footerLocationLabel;
+      document.getElementById("edit-footer-location").value = defaultAgendaData.footerLocation;
+      document.getElementById("edit-footer-security-label").value = defaultAgendaData.footerSecurityLabel;
+      document.getElementById("edit-footer-security").value = defaultAgendaData.footerSecurity;
+
+      const editor = document.getElementById("agenda-editor");
+      editor.innerHTML = "";
+      const blankRow = createEditorRow();
+      blankRow.querySelector(".edit-start").value = "08:00";
+      editor.appendChild(blankRow);
+
+      document.getElementById("save-status").textContent = "Defaults restored and events cleared — select Save to apply.";
     }
 
     function downloadAgendaJson() {
@@ -1520,6 +1646,10 @@
       // Preview at another size with ?zoom=100 (accepted range 25-200).
       const zoomOverride = Number(new URLSearchParams(window.location.search).get("zoom"));
       document.documentElement.style.zoom = `${zoomOverride >= 25 && zoomOverride <= 200 ? zoomOverride : 75}%`;
+
+      document.getElementById("room-list").innerHTML = roomOptions
+        .map(room => `<option value="${escapeHtml(room)}"></option>`)
+        .join("");
 
       document.getElementById("about-panel").textContent = ABOUT_TEXT;
       document.getElementById("about-button").addEventListener("click", () => {
@@ -1613,13 +1743,13 @@
   </section>
 
   <footer id="facility-info" aria-label="Facility information">
-    <div class="facility-info-item">
-      <div class="facility-info-label">Location</div>
-      <div class="facility-info-value address">Health Park, Hospital Departments of AdventHealth Tampa, 3102 E 138th Ave, Tampa, FL 33613</div>
+    <div class="facility-info-item" id="footer-location-item">
+      <div class="facility-info-label" id="footer-location-label">Location</div>
+      <div class="facility-info-value address" id="footer-location-value">Health Park, Hospital Departments of AdventHealth Tampa, 3102 E 138th Ave, Tampa, FL 33613</div>
     </div>
-    <div class="facility-info-item">
-      <div class="facility-info-label">Security</div>
-      <div class="facility-info-value">(813) 615-7922</div>
+    <div class="facility-info-item" id="footer-security-item">
+      <div class="facility-info-label" id="footer-security-label">Security</div>
+      <div class="facility-info-value" id="footer-security-value">(813) 615-7922</div>
     </div>
   </footer>
 
@@ -1629,6 +1759,11 @@
     <h2>Edit Weekly Agenda</h2>
     <p>Add, edit, or remove events below, then select Save. The sign arranges everything automatically by day and start time, so the order you enter rows here does not matter — Sort by Day &amp; Time just tidies this list. Use + Space to show an event in more than one room and Duplicate to copy a line. Set a start and end time for each session; the sign always displays them in 24-hour format. To open this editor later, add ?edit=1 to the sign URL or press Ctrl + Shift + E.</p>
     <p>The hosted sign reads its content from config.json in the GitHub repository and re-checks it every 5 minutes, so config.json overrides anything saved here. To update every sign, make your changes, select Download config.json, then upload that file to the GitHub repository replacing the existing config.json.</p>
+
+    <div id="agenda-editor"></div>
+    <datalist id="room-list"></datalist>
+
+    <h3 class="editor-subheading">Sign settings</h3>
 
     <div class="editor-field">
       <label for="edit-center-name">Center name</label>
@@ -1640,7 +1775,33 @@
       <input id="edit-agenda-title" type="text">
     </div>
 
-    <div id="agenda-editor"></div>
+    <div class="editor-field editor-toggle-row">
+      <label><input type="checkbox" id="edit-show-clock"> Show clock</label>
+      <label><input type="checkbox" id="edit-show-weather"> Show weather</label>
+      <label><input type="checkbox" id="edit-play-music"> Play music</label>
+    </div>
+
+    <div class="editor-field editor-footer-grid">
+      <div>
+        <label for="edit-footer-location-label">Footer title</label>
+        <input id="edit-footer-location-label" type="text">
+      </div>
+      <div>
+        <label for="edit-footer-location">Footer text (leave blank to hide this item)</label>
+        <input id="edit-footer-location" type="text">
+      </div>
+    </div>
+
+    <div class="editor-field editor-footer-grid">
+      <div>
+        <label for="edit-footer-security-label">Footer title</label>
+        <input id="edit-footer-security-label" type="text">
+      </div>
+      <div>
+        <label for="edit-footer-security">Footer text (leave blank to hide this item)</label>
+        <input id="edit-footer-security" type="text">
+      </div>
+    </div>
 
     <div id="about-panel" aria-label="About this sign"></div>
 
