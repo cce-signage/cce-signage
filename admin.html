@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CCE Sign Admin — Agenda Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap">
+  <style>
+    :root {
+      --ah-primary-blue: #006298;
+      --ah-bright-blue: #00A3E0;
+      --ah-green: #84BD00;
+      --ah-white: #FFFFFF;
+      --panel-bg: rgba(3, 34, 56, 0.72);
+      --panel-border: rgba(255, 255, 255, 0.3);
+      --danger: #C84630;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 32px 24px 64px;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(160deg, #007cb4 0%, var(--ah-primary-blue) 46%, #00486e 100%);
+      background-attachment: fixed;
+      color: var(--ah-white);
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    h1 {
+      font-size: 1.9em;
+      font-weight: 700;
+      margin: 0;
+      padding-left: 18px;
+      border-left: 8px solid var(--ah-bright-blue);
+      border-radius: 2px;
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 22px 26px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 1.15em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ah-bright-blue);
+    }
+
+    label {
+      display: block;
+      font-size: 0.8em;
+      font-weight: 600;
+      margin-bottom: 5px;
+      opacity: 0.9;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.94);
+      color: #10222e;
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    input:focus, select:focus {
+      outline: 3px solid var(--ah-bright-blue);
+      outline-offset: 1px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .token-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.9em;
+    }
+
+    .remember-row input { width: auto; }
+    .remember-row label { margin: 0; font-size: 1em; }
+
+    .token-help {
+      font-size: 0.82em;
+      line-height: 1.5;
+      opacity: 0.85;
+      margin-top: 12px;
+    }
+
+    .token-help a { color: var(--ah-bright-blue); }
+
+    .agenda-row {
+      display: grid;
+      grid-template-columns: 130px 140px 140px 1fr 200px auto;
+      gap: 12px;
+      align-items: end;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* Wide enough that Chrome shows the full "hh:mm AM/PM" value. */
+    input[type="time"] {
+      padding-left: 8px;
+      padding-right: 8px;
+      min-width: 130px;
+    }
+
+    .agenda-row .other-location {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .agenda-row .other-location.open { display: block; }
+
+    button {
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 9px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    button.primary { background: var(--ah-green); color: #10222e; }
+    button.secondary { background: var(--ah-bright-blue); color: #10222e; }
+    button.neutral { background: rgba(255, 255, 255, 0.88); color: #10222e; }
+    button.danger { background: var(--danger); color: var(--ah-white); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    #status {
+      font-size: 0.92em;
+      font-weight: 600;
+      min-height: 1.4em;
+      margin-top: 14px;
+    }
+
+    #status.ok { color: var(--ah-green); }
+    #status.err { color: #FFB3A0; }
+
+    @media (max-width: 900px) {
+      .agenda-row { grid-template-columns: 1fr 1fr; }
+      .field-grid, .token-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>CCE Sign Admin — Agenda Editor</h1>
+
+  <section class="panel" id="token-panel">
+    <h2>GitHub Access</h2>
+    <div class="token-row">
+      <div>
+        <label for="github-token">Fine-grained personal access token</label>
+        <input type="password" id="github-token" placeholder="github_pat_..." autocomplete="off">
+      </div>
+      <button type="button" class="secondary" id="test-token">Test</button>
+      <button type="button" class="danger" id="clear-token">Forget token</button>
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="remember-token">
+      <label for="remember-token">Remember this token on this device (use only on your own computer)</label>
+    </div>
+    <div class="token-help">
+      Create one at GitHub &rarr; Settings &rarr; Developer settings &rarr;
+      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained tokens</a>.
+      Set <strong>Repository access</strong> to only <strong>cce-signage/cce-signage</strong> and grant a single
+      permission: <strong>Contents &rarr; Read and write</strong>. Tokens expire (max 1 year) — when publishing
+      starts failing with 401, create a new one.
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Sign Header</h2>
+    <div class="field-grid">
+      <div>
+        <label for="center-name">Center name</label>
+        <input id="center-name" placeholder="Center for Clinical Excellence and Simulation">
+      </div>
+      <div>
+        <label for="agenda-title">Agenda title</label>
+        <input id="agenda-title" placeholder="This Week">
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Events</h2>
+    <div id="agenda-rows"></div>
+    <div class="toolbar">
+      <button type="button" class="neutral" id="add-row">+ Add event</button>
+      <button type="button" class="neutral" id="reload">Reload from GitHub</button>
+      <button type="button" class="neutral" id="import-json-button">Import config.json</button>
+      <input type="file" id="import-json" accept=".json,application/json" style="display: none">
+      <button type="button" class="neutral" id="download-json">Download config.json</button>
+      <button type="button" class="danger" id="clear-events">Clear all events</button>
+      <button type="button" class="primary" id="publish">Publish to sign</button>
+    </div>
+    <div id="status"></div>
+  </section>
+</main>
+
+<script>
+  const OWNER = "cce-signage";
+  const REPO = "cce-signage";
+  const BRANCH = "main";
+  const FILE_PATH = "config.json";
+  const API_URL = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+  const TOKEN_STORAGE_KEY = "cce-admin-github-token";
+
+  const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const ROOMS = [
+    "Auditorium Room 115",
+    "Auditorium Room 134",
+    "Classroom 118",
+    "Classroom 119",
+    "Classroom 120",
+    "Classroom 121",
+    "Debrief Room 111",
+    "Debrief Room 112",
+    "Debrief Room 113",
+    "Simulation Room 105",
+    "Simulation Room 106",
+    "Simulation Room 107",
+    "Skills Lab Room 116"
+  ];
+
+  const DEFAULTS = {
+    centerName: "Center for Clinical Excellence and Simulation",
+    agendaTitle: "This Week"
+  };
+
+  let currentSha = null;
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function setStatus(message, isError) {
+    const el = document.getElementById("status");
+    el.textContent = message;
+    el.className = isError ? "err" : "ok";
+  }
+
+  function getToken() {
+    return document.getElementById("github-token").value.trim();
+  }
+
+  function persistTokenIfRequested() {
+    if (document.getElementById("remember-token").checked && getToken()) {
+      localStorage.setItem(TOKEN_STORAGE_KEY, getToken());
+    }
+  }
+
+  function apiHeaders() {
+    const headers = {
+      "Accept": "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28"
+    };
+    const token = getToken();
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    return headers;
+  }
+
+  // ---- Time helpers: canonical stored format is "0745 - 1700" ----
+
+  function rangePartToInput(part) {
+    const match = String(part || "").trim().match(/^(\d{1,2}):?(\d{2})$/);
+    if (!match) return "";
+    return `${String(match[1]).padStart(2, "0")}:${match[2]}`;
+  }
+
+  function splitTimeRange(range) {
+    const parts = String(range || "").split(/\s*[-–]\s*/);
+    return [rangePartToInput(parts[0]), rangePartToInput(parts[1])];
+  }
+
+  function compactTime(inputValue) {
+    const match = String(inputValue || "").match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return "";
+    return String(match[1]).padStart(2, "0") + match[2];
+  }
+
+  function combineTimeRange(startInput, endInput) {
+    const start = compactTime(startInput);
+    const end = compactTime(endInput);
+    if (start && end) return `${start} - ${end}`;
+    return start || end || "";
+  }
+
+  // ---- Row editor ----
+
+  function createRow(row = { day: "", time: "", event: "", location: "" }) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "agenda-row";
+
+    const selectedDay = String(row.day || "").trim();
+    const dayOptions = DAYS
+      .map(day => `<option value="${escapeHtml(day)}"${day === selectedDay ? " selected" : ""}>${escapeHtml(day)}</option>`)
+      .join("");
+    const customDay = selectedDay && !DAYS.includes(selectedDay)
+      ? `<option value="${escapeHtml(selectedDay)}" selected>${escapeHtml(selectedDay)}</option>` : "";
+
+    const selectedLocation = String(row.location || "").trim();
+    const isKnownRoom = ROOMS.includes(selectedLocation);
+    const roomDropdown = ROOMS
+      .map(room => `<option value="${escapeHtml(room)}"${room === selectedLocation ? " selected" : ""}>${escapeHtml(room)}</option>`)
+      .join("");
+
+    const [startValue, endValue] = splitTimeRange(row.time);
+
+    wrapper.innerHTML = `
+      <div>
+        <label>Day</label>
+        <select class="edit-day">
+          <option value="">Select day</option>
+          ${dayOptions}
+          ${customDay}
+        </select>
+      </div>
+      <div>
+        <label>Start</label>
+        <input type="time" class="edit-start" value="${startValue}">
+      </div>
+      <div>
+        <label>End</label>
+        <input type="time" class="edit-end" value="${endValue}">
+      </div>
+      <div>
+        <label>Event</label>
+        <input class="edit-event" value="${escapeHtml(row.event || "")}" placeholder="Event name">
+      </div>
+      <div>
+        <label>Location</label>
+        <select class="edit-location-select">
+          <option value="">Select space</option>
+          ${roomDropdown}
+          <option value="__other__"${selectedLocation && !isKnownRoom ? " selected" : ""}>Other</option>
+        </select>
+        <input class="edit-location-other other-location${selectedLocation && !isKnownRoom ? " open" : ""}"
+               value="${selectedLocation && !isKnownRoom ? escapeHtml(selectedLocation) : ""}"
+               placeholder="Type space name">
+      </div>
+      <div>
+        <button type="button" class="danger remove-row">Remove</button>
+      </div>
+    `;
+
+    const locationSelect = wrapper.querySelector(".edit-location-select");
+    const locationOther = wrapper.querySelector(".edit-location-other");
+    locationSelect.addEventListener("change", () => {
+      const useOther = locationSelect.value === "__other__";
+      locationOther.classList.toggle("open", useOther);
+      if (useOther) locationOther.focus();
+    });
+    wrapper.querySelector(".remove-row").addEventListener("click", () => wrapper.remove());
+
+    return wrapper;
+  }
+
+  function populateEditor(data) {
+    document.getElementById("center-name").value = data.centerName || DEFAULTS.centerName;
+    document.getElementById("agenda-title").value = data.agendaTitle || DEFAULTS.agendaTitle;
+    const container = document.getElementById("agenda-rows");
+    container.innerHTML = "";
+    (Array.isArray(data.rows) ? data.rows : []).forEach(row => container.appendChild(createRow(row)));
+    if (!container.children.length) container.appendChild(createRow());
+  }
+
+  function collectConfig() {
+    const rows = Array.from(document.querySelectorAll(".agenda-row"))
+      .map(row => ({
+        day: row.querySelector(".edit-day").value.trim(),
+        time: combineTimeRange(
+          row.querySelector(".edit-start").value,
+          row.querySelector(".edit-end").value
+        ),
+        event: row.querySelector(".edit-event").value.trim(),
+        location: row.querySelector(".edit-location-select").value === "__other__"
+          ? row.querySelector(".edit-location-other").value.trim()
+          : row.querySelector(".edit-location-select").value.trim()
+      }))
+      .filter(row => row.day || row.time || row.event || row.location);
+
+    return {
+      centerName: document.getElementById("center-name").value.trim() || DEFAULTS.centerName,
+      agendaTitle: document.getElementById("agenda-title").value.trim() || DEFAULTS.agendaTitle,
+      rows
+    };
+  }
+
+  // ---- GitHub API ----
+
+  async function loadFromGitHub() {
+    setStatus("Loading current config from GitHub…", false);
+    try {
+      const response = await fetch(`${API_URL}?ref=${BRANCH}&t=${Date.now()}`, { headers: apiHeaders(), cache: "no-store" });
+      if (!response.ok) throw new Error(`GitHub responded ${response.status}`);
+      const file = await response.json();
+      currentSha = file.sha;
+      const text = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g, "")), c => c.charCodeAt(0)));
+      populateEditor(JSON.parse(text));
+      setStatus("Loaded current config.json from GitHub.", false);
+    } catch (error) {
+      currentSha = null;
+      populateEditor({ ...DEFAULTS, rows: [] });
+      setStatus(`Could not load config.json (${error.message}). Starting from a blank agenda.`, true);
+    }
+  }
+
+  async function publish() {
+    const token = getToken();
+    if (!token) {
+      setStatus("Paste your GitHub token above before publishing.", true);
+      return;
+    }
+
+    const config = collectConfig();
+    const json = JSON.stringify(config, null, 2) + "\n";
+    const bytes = new TextEncoder().encode(json);
+    let binary = "";
+    bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+    const contentBase64 = btoa(binary);
+
+    const button = document.getElementById("publish");
+    button.disabled = true;
+    setStatus("Publishing…", false);
+
+    try {
+      // Refresh the sha right before writing so a stale page can't clobber
+      // a newer commit unknowingly.
+      const head = await fetch(`${API_URL}?ref=${BRANCH}&t=${Date.now()}`, { headers: apiHeaders(), cache: "no-store" });
+      if (head.ok) currentSha = (await head.json()).sha;
+
+      const body = {
+        message: `Update sign agenda (${new Date().toLocaleString("en-US", { timeZone: "America/New_York" })} ET)`,
+        content: contentBase64,
+        branch: BRANCH
+      };
+      if (currentSha) body.sha = currentSha;
+
+      const response = await fetch(API_URL, {
+        method: "PUT",
+        headers: { ...apiHeaders(), "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Token was rejected (expired or missing Contents write permission).");
+      }
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail.message || `GitHub responded ${response.status}`);
+      }
+
+      const result = await response.json();
+      currentSha = result.content.sha;
+      persistTokenIfRequested();
+      setStatus("Published. Signs pick up the change within about 5 minutes (they poll config.json every 5 minutes).", false);
+    } catch (error) {
+      setStatus(`Publish failed: ${error.message}`, true);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  async function testToken() {
+    const token = getToken();
+    if (!token) {
+      setStatus("Paste a token first.", true);
+      return;
+    }
+    setStatus("Testing token…", false);
+    try {
+      const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`, { headers: apiHeaders() });
+      if (!response.ok) throw new Error(`GitHub responded ${response.status}`);
+      // GitHub reports the ACCOUNT's repo permissions here, not what this
+      // fine-grained token was granted, so a token created with read-only
+      // Contents still looks writable. Write access is only truly proven by
+      // a Publish, so don't claim more than we know.
+      const repo = await response.json();
+      if (repo.permissions && repo.permissions.push) {
+        persistTokenIfRequested();
+        setStatus("Token accepted. Note: this can't verify write access — if Publish fails with 403/404, re-check the token's Contents permission is 'Read and write' and that cce-signage/cce-signage is selected.", false);
+      } else {
+        setStatus("Token is valid but its account has no write access to the repository.", true);
+      }
+    } catch (error) {
+      setStatus(`Token test failed: ${error.message}`, true);
+    }
+  }
+
+  function downloadJson() {
+    const blob = new Blob([JSON.stringify(collectConfig(), null, 2) + "\n"], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "config.json";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const savedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (savedToken) {
+      document.getElementById("github-token").value = savedToken;
+      document.getElementById("remember-token").checked = true;
+    }
+
+    document.getElementById("remember-token").addEventListener("change", event => {
+      if (event.target.checked) persistTokenIfRequested();
+      else localStorage.removeItem(TOKEN_STORAGE_KEY);
+    });
+    document.getElementById("github-token").addEventListener("change", persistTokenIfRequested);
+    document.getElementById("clear-token").addEventListener("click", () => {
+      localStorage.removeItem(TOKEN_STORAGE_KEY);
+      document.getElementById("github-token").value = "";
+      document.getElementById("remember-token").checked = false;
+      setStatus("Token forgotten on this device.", false);
+    });
+
+    document.getElementById("test-token").addEventListener("click", testToken);
+    document.getElementById("add-row").addEventListener("click", () => {
+      document.getElementById("agenda-rows").appendChild(createRow());
+    });
+
+    // Two-click confirmation instead of a confirm() dialog: first click arms
+    // the button for 4 seconds, second click clears the events. Nothing is
+    // published until "Publish to sign" is pressed.
+    const clearButton = document.getElementById("clear-events");
+    let disarmTimer = null;
+    clearButton.addEventListener("click", () => {
+      if (clearButton.dataset.armed) {
+        clearTimeout(disarmTimer);
+        delete clearButton.dataset.armed;
+        clearButton.textContent = "Clear all events";
+        const container = document.getElementById("agenda-rows");
+        container.innerHTML = "";
+        container.appendChild(createRow());
+        setStatus("All events cleared (not yet published — click Publish to sign to update the sign).", false);
+      } else {
+        clearButton.dataset.armed = "1";
+        clearButton.textContent = "Click again to confirm";
+        disarmTimer = setTimeout(() => {
+          delete clearButton.dataset.armed;
+          clearButton.textContent = "Clear all events";
+        }, 4000);
+      }
+    });
+
+    document.getElementById("import-json-button").addEventListener("click", () => {
+      document.getElementById("import-json").click();
+    });
+    document.getElementById("import-json").addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const imported = JSON.parse(reader.result);
+          if (!Array.isArray(imported.rows)) throw new Error("missing rows");
+          populateEditor(imported);
+          setStatus(`Imported ${file.name} (not yet published — review, then click Publish to sign).`, false);
+        } catch {
+          setStatus("That file is not a valid config.json (it needs a \"rows\" list).", true);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    });
+    document.getElementById("reload").addEventListener("click", loadFromGitHub);
+    document.getElementById("download-json").addEventListener("click", downloadJson);
+    document.getElementById("publish").addEventListener("click", publish);
+
+    loadFromGitHub();
+  });
+</script>
+</body>
+</html>
