@@ -1,6 +1,8 @@
 {
   "centerName": "Center for Clinical Excellence and Simulation",
   "agendaTitle": "Upcoming",
+  "showClock": true,
+  "showWeather": true,
   "rows": [
     {
       "day": "Tuesday",
@@ -30,7 +32,7 @@
       "day": "Friday",
       "time": "0800 - 1400",
       "event": "GME Emergency Medicine eFAST Training",
-      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 107, Debrief Room 113"
+      "location": "Debrief Room 113, Simulation Room 105, Simulation Room 106, Simulation Room 108"
     }
   ]
 }
