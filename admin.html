@@ -47,6 +47,34 @@
       border-radius: 2px;
     }
 
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    #launch-sign {
+      background: var(--ah-white);
+      color: var(--ah-primary-blue);
+      font-weight: 800;
+      font-size: 16px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      border: 2px solid var(--ah-white);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    #launch-sign:hover,
+    #launch-sign:focus-visible {
+      background: var(--ah-green);
+      border-color: var(--ah-green);
+      color: #10222e;
+    }
+
     .panel {
       background: var(--panel-bg);
       border: 2px solid var(--panel-border);
@@ -202,9 +230,33 @@
     .toolbar {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
+      gap: 14px;
+      align-items: stretch;
       margin-top: 18px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .toolbar-divider {
+      width: 1px;
+      align-self: stretch;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    /* Publish sits alone at the far right so the one button that changes the
+       live sign never gets lost in the crowd. */
+    .toolbar-publish {
+      margin-left: auto;
+    }
+
+    .toolbar-publish button {
+      padding: 10px 28px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
     }
 
     #status {
@@ -231,30 +283,158 @@
 
     #about-panel.open { display: block; }
 
+    .repeat-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 8px 0 0;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+
+    .repeat-label select {
+      width: auto;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .schedule-pill {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .schedule-pill.this-week { background: var(--ah-green); color: #10222e; }
+    .schedule-pill.held { background: #9FB1BC; color: #14222B; }
+    .schedule-pill.next-week { background: var(--ah-bright-blue); color: #10222e; }
+    .schedule-pill.two-weeks { background: #00635B; color: #FFFFFF; }
+
     @media (max-width: 900px) {
       .agenda-row { grid-template-columns: 1fr 1fr; }
       .field-grid, .token-row { grid-template-columns: 1fr; }
+      .toolbar-divider { display: none; }
+      .toolbar-publish { margin-left: 0; }
+    }
+
+    #map-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    #map-popup {
+      display: none;
+      position: fixed;
+      inset: 24px;
+      z-index: 40;
+      flex-direction: column;
+      background: #052a43;
+      border: 2px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    #map-backdrop.open { display: block; }
+    #map-popup.open { display: flex; }
+
+    .map-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    .map-head h2 {
+      margin: 0;
+      font-size: 1.05em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ah-bright-blue);
+    }
+
+    .map-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .map-controls button {
+      padding: 8px 14px;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    #map-scroll {
+      flex: 1;
+      overflow: auto;
+      background: #FFFFFF;
+      cursor: grab;
+      touch-action: pan-x pan-y;
+    }
+
+    #map-scroll.dragging {
+      cursor: grabbing;
+    }
+
+    #map-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      /* Clicks land on the scroll pane so drag-to-pan works; also stops the
+         browser's native image-drag ghost. */
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 <main>
-  <h1>CCES Sign Admin — Agenda Editor</h1>
+  <div class="page-head">
+    <h1>CCES Sign Admin — Agenda Editor</h1>
+    <a id="launch-sign" href="https://cce-signage.github.io/cce-signage/" target="_blank" rel="noopener">Launch sign &#8599;</a>
+  </div>
 
   <section class="panel">
     <h2>Events</h2>
     <div id="agenda-rows"></div>
     <div class="toolbar">
-      <button type="button" class="neutral" id="add-row">+ Add event</button>
-      <button type="button" class="neutral" id="sort-rows">Sort by day &amp; time</button>
-      <button type="button" class="neutral" id="reload">Reload from GitHub</button>
-      <button type="button" class="neutral" id="import-json-button">Import config.json</button>
-      <input type="file" id="import-json" accept=".json,application/json" style="display: none">
-      <button type="button" class="neutral" id="download-json">Download config.json</button>
-      <button type="button" class="danger" id="clear-events">Clear all events</button>
-      <button type="button" class="danger" id="reset-defaults">Reset</button>
-      <button type="button" class="neutral" id="about-button">About</button>
-      <button type="button" class="primary" id="publish">Publish to sign</button>
+      <div class="toolbar-group">
+        <button type="button" class="neutral" id="add-row">+ Add event</button>
+        <button type="button" class="neutral" id="sort-rows">Sort by day &amp; time</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button type="button" class="neutral" id="reload">Reload from GitHub</button>
+        <button type="button" class="neutral" id="import-json-button">Import config.json</button>
+        <input type="file" id="import-json" accept=".json,application/json" style="display: none">
+        <button type="button" class="neutral" id="download-json">Download config.json</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button type="button" class="neutral" id="facility-map-button">Facility map</button>
+        <button type="button" class="neutral" id="about-button">About</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        <button type="button" class="danger" id="clear-events">Clear all events</button>
+        <button type="button" class="danger" id="reset-defaults">Reset</button>
+      </div>
+      <div class="toolbar-group toolbar-publish">
+        <button type="button" class="primary" id="publish">Publish to sign</button>
+      </div>
     </div>
     <div id="status"></div>
     <div id="about-panel" aria-label="About this app"></div>
@@ -327,11 +507,27 @@
   <datalist id="room-list"></datalist>
 </main>
 
+<div id="map-backdrop"></div>
+<div id="map-popup" role="dialog" aria-modal="true" aria-label="Facility map">
+  <div class="map-head">
+    <h2>Facility Map — Center for Clinical Excellence and Simulation</h2>
+    <div class="map-controls">
+      <button type="button" class="neutral" id="map-zoom-out" title="Zoom out">&minus;</button>
+      <button type="button" class="neutral" id="map-zoom-fit" title="Fit to window">Fit</button>
+      <button type="button" class="neutral" id="map-zoom-in" title="Zoom in">+</button>
+      <button type="button" class="danger" id="map-close">Close</button>
+    </div>
+  </div>
+  <div id="map-scroll">
+    <img id="map-image" src="CCES_Map.png" alt="Floor plan of the Center for Clinical Excellence and Simulation at Health Park" loading="lazy">
+  </div>
+</div>
+
 <script>
   // Versioning: bump the patch for fixes, the minor for new features, and
   // the major for changes that break config.json compatibility. Update
   // APP_PUBLISHED whenever the version changes. Shown in the About box.
-  const APP_VERSION = "1.5.0";
+  const APP_VERSION = "1.9.1";
   const APP_PUBLISHED = "2026-07-13";
 
   const ABOUT_TEXT = [
@@ -506,6 +702,8 @@
 
     const [startValue, endValue] = splitTimeRange(row.time);
 
+    if (row.repeatAnchor) wrapper.dataset.repeatAnchor = row.repeatAnchor;
+
     wrapper.innerHTML = `
       <div>
         <label>Day</label>
@@ -526,6 +724,13 @@
       <div>
         <label>Event</label>
         <input class="edit-event" value="${escapeHtml(row.event || "")}" placeholder="Event name">
+        <label class="repeat-label">Repeat
+          <select class="edit-repeat">
+            <option value="">One-time</option>
+            <option value="weekly"${row.repeat === true || row.repeat === "weekly" ? " selected" : ""}>Weekly</option>
+            <option value="biweekly"${row.repeat === "biweekly" ? " selected" : ""}>Every 2 weeks</option>
+          </select>
+        </label>
       </div>
       <div>
         <label>Location(s)</label>
@@ -565,6 +770,7 @@
     });
     wrapper.querySelector(".duplicate-row").addEventListener("click", () => {
       wrapper.after(createRow(readRowData(wrapper)));
+      refreshSchedulePills();
     });
     wrapper.querySelector(".remove-row").addEventListener("click", () => wrapper.remove());
 
@@ -587,6 +793,7 @@
     container.innerHTML = "";
     (Array.isArray(data.rows) ? data.rows : []).forEach(row => container.appendChild(createRow(row)));
     if (!container.children.length) container.appendChild(createRow());
+    refreshSchedulePills();
   }
 
   // Same ordering the sign uses on screen: Monday -> Sunday, then start time,
@@ -615,6 +822,7 @@
       .map(el => ({ el, data: readRowData(el) }))
       .sort((a, b) => compareRows(a.data, b.data))
       .forEach(item => container.appendChild(item.el));
+    refreshSchedulePills();
     setStatus("Rows sorted by day and start time (display order on the sign is always chronological either way).", false);
   }
 
@@ -630,7 +838,13 @@
         rowEl.querySelector(".edit-end").value
       ),
       event: rowEl.querySelector(".edit-event").value.trim(),
-      location: [...new Set(locations)].join(", ")
+      location: [...new Set(locations)].join(", "),
+      // Biweekly rows keep their original anchor date so the on/off week
+      // parity never shifts when re-edited.
+      ...(rowEl.querySelector(".edit-repeat").value === "weekly" ? { repeat: true } : {}),
+      ...(rowEl.querySelector(".edit-repeat").value === "biweekly"
+        ? { repeat: "biweekly", repeatAnchor: rowEl.dataset.repeatAnchor || easternTodayIso() }
+        : {})
     };
   }
 
@@ -653,6 +867,90 @@
     };
   }
 
+  function easternTodayIso() {
+    return new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  }
+
+  function easternNowMinutes() {
+    const parts = new Date().toLocaleTimeString("en-GB", { timeZone: "America/New_York", hour12: false }).split(":");
+    return Number(parts[0]) * 60 + Number(parts[1]);
+  }
+
+  // Mon-Sun week number since epoch for an ISO date — same math as the sign.
+  function weekNumberOf(isoDate) {
+    const [y, m, d] = String(isoDate || "").split("-").map(Number);
+    if (!y || !m || !d) return null;
+    const utc = Date.UTC(y, m - 1, d);
+    const daysFromMonday = (new Date(utc).getUTCDay() + 6) % 7;
+    return Math.floor((utc - daysFromMonday * 86400000) / 604800000);
+  }
+
+  function isBiweeklyOffWeek(row) {
+    if (row.repeat !== "biweekly") return false;
+    const anchorWeek = weekNumberOf(row.repeatAnchor);
+    if (anchorWeek === null) return false;
+    const thisWeek = weekNumberOf(easternTodayIso());
+    return (((thisWeek - anchorWeek) % 2) + 2) % 2 === 1;
+  }
+
+  // Date-free schedule pill for an editor row. Elapsed = day earlier this
+  // Mon-Sun week, or today with the end time already past.
+  function rowScheduleStatus(row) {
+    const dayIndex = DAYS.indexOf(String(row.day || "").trim());
+    if (dayIndex === -1) return null;
+    const todayIndex = DAYS.indexOf(new Date().toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "long" }));
+    const endInput = splitTimeRange(row.time)[1];
+    const endMatch = String(endInput || "").match(/^(\d{1,2}):(\d{2})$/);
+    const endMinutes = endMatch ? Number(endMatch[1]) * 60 + Number(endMatch[2]) : null;
+    const elapsed = dayIndex < todayIndex
+      || (dayIndex === todayIndex && endMinutes !== null && endMinutes <= easternNowMinutes());
+
+    if (isBiweeklyOffWeek(row)) return { label: "Runs next week", cls: "next-week" };
+    if (elapsed) {
+      if (row.repeat === true || row.repeat === "weekly") return { label: "Runs next week", cls: "next-week" };
+      if (row.repeat === "biweekly") return { label: "Runs in 2 weeks", cls: "two-weeks" };
+      return { label: "Held", cls: "held", title: "Past one-time event — removed on next publish" };
+    }
+    return { label: "This week", cls: "this-week" };
+  }
+
+  function refreshSchedulePills() {
+    document.querySelectorAll(".agenda-row").forEach(rowEl => {
+      const status = rowScheduleStatus(readRowData(rowEl));
+      let pill = rowEl.querySelector(".schedule-pill");
+      if (!status) {
+        if (pill) pill.remove();
+        return;
+      }
+      if (!pill) {
+        pill = document.createElement("span");
+        const repeatLabel = rowEl.querySelector(".repeat-label");
+        repeatLabel.parentElement.insertBefore(pill, repeatLabel);
+      }
+      pill.className = `schedule-pill ${status.cls}`;
+      pill.textContent = status.label;
+      pill.title = status.title || "";
+    });
+  }
+
+  // One-time events (no "repeat weekly") whose day has already passed this
+  // Mon-Sun week are deleted from the editor when the config loads, so the
+  // next publish permanently drops them from config.json. The sign itself
+  // hides them at midnight but cannot write to GitHub; this is where the
+  // actual purge happens. Repeat-weekly events are never purged.
+  function purgeElapsedOneTimeRows(rows) {
+    const todayName = new Date().toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "long" });
+    const todayIndex = DAYS.indexOf(todayName);
+    const kept = [];
+    let removed = 0;
+    (Array.isArray(rows) ? rows : []).forEach(row => {
+      const rowIndex = DAYS.indexOf(String(row.day || "").trim());
+      if (!row.repeat && rowIndex !== -1 && todayIndex !== -1 && rowIndex < todayIndex) removed += 1;
+      else kept.push(row);
+    });
+    return { kept, removed };
+  }
+
   // ---- GitHub API ----
 
   async function loadFromGitHub() {
@@ -663,8 +961,13 @@
       const file = await response.json();
       currentSha = file.sha;
       const text = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g, "")), c => c.charCodeAt(0)));
-      populateEditor(JSON.parse(text));
-      setStatus("Loaded current config.json from GitHub.", false);
+      const config = JSON.parse(text);
+      const { kept, removed } = purgeElapsedOneTimeRows(config.rows);
+      config.rows = kept;
+      populateEditor(config);
+      setStatus(removed
+        ? `Loaded config.json from GitHub. Removed ${removed} past one-time event${removed === 1 ? "" : "s"} — click Publish to sign to make that permanent.`
+        : "Loaded current config.json from GitHub.", false);
     } catch (error) {
       currentSha = null;
       populateEditor({ ...DEFAULTS, rows: [] });
@@ -754,6 +1057,40 @@
     }
   }
 
+  // ---- Facility map popup ----
+  // Zoom works by widening the image inside a scrollable pane: 100% = fit
+  // the popup width, larger values pan with the scrollbars/touch. Zooming
+  // keeps whatever was mid-viewport centered.
+
+  const MAP_ZOOM_MIN = 1;
+  const MAP_ZOOM_MAX = 5;
+  const MAP_ZOOM_STEP = 1.4;
+  let mapZoom = 1;
+
+  function setMapZoom(nextZoom) {
+    const scroll = document.getElementById("map-scroll");
+    const clamped = Math.min(MAP_ZOOM_MAX, Math.max(MAP_ZOOM_MIN, nextZoom));
+    const factor = clamped / mapZoom;
+    const centerX = scroll.scrollLeft + scroll.clientWidth / 2;
+    const centerY = scroll.scrollTop + scroll.clientHeight / 2;
+    mapZoom = clamped;
+    document.getElementById("map-image").style.width = `${mapZoom * 100}%`;
+    scroll.scrollLeft = centerX * factor - scroll.clientWidth / 2;
+    scroll.scrollTop = centerY * factor - scroll.clientHeight / 2;
+  }
+
+  function openMap() {
+    document.getElementById("map-backdrop").classList.add("open");
+    document.getElementById("map-popup").classList.add("open");
+    mapZoom = 1;
+    document.getElementById("map-image").style.width = "100%";
+  }
+
+  function closeMap() {
+    document.getElementById("map-backdrop").classList.remove("open");
+    document.getElementById("map-popup").classList.remove("open");
+  }
+
   function downloadJson() {
     const blob = new Blob([JSON.stringify(collectConfig(), null, 2) + "\n"], { type: "application/json" });
     const link = document.createElement("a");
@@ -793,8 +1130,13 @@
       // start time then auto-fills the end an hour later.
       rowEl.querySelector(".edit-start").value = "08:00";
       document.getElementById("agenda-rows").appendChild(rowEl);
+      refreshSchedulePills();
       rowEl.querySelector(".edit-day").focus();
     });
+
+    // Pills react live to any day/time/repeat edit.
+    document.getElementById("agenda-rows").addEventListener("change", refreshSchedulePills);
+    document.getElementById("agenda-rows").addEventListener("input", refreshSchedulePills);
     document.getElementById("sort-rows").addEventListener("click", sortRows);
     document.getElementById("about-panel").textContent = ABOUT_TEXT;
     document.getElementById("about-button").addEventListener("click", () => {
@@ -869,6 +1211,41 @@
     document.getElementById("reload").addEventListener("click", loadFromGitHub);
     document.getElementById("download-json").addEventListener("click", downloadJson);
     document.getElementById("publish").addEventListener("click", publish);
+
+    document.getElementById("facility-map-button").addEventListener("click", openMap);
+    document.getElementById("map-close").addEventListener("click", closeMap);
+    document.getElementById("map-backdrop").addEventListener("click", closeMap);
+    document.getElementById("map-zoom-in").addEventListener("click", () => setMapZoom(mapZoom * MAP_ZOOM_STEP));
+    document.getElementById("map-zoom-out").addEventListener("click", () => setMapZoom(mapZoom / MAP_ZOOM_STEP));
+    document.getElementById("map-zoom-fit").addEventListener("click", () => setMapZoom(1));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMap();
+    });
+
+    // Drag-to-pan the zoomed map with the mouse. Touch devices already pan
+    // natively (touch-action allows it), so only the mouse pointer is handled.
+    const mapScroll = document.getElementById("map-scroll");
+    let mapDragStart = null;
+    mapScroll.addEventListener("pointerdown", event => {
+      if (event.pointerType !== "mouse" || event.button !== 0) return;
+      mapDragStart = {
+        x: event.clientX,
+        y: event.clientY,
+        left: mapScroll.scrollLeft,
+        top: mapScroll.scrollTop
+      };
+      mapScroll.classList.add("dragging");
+      mapScroll.setPointerCapture(event.pointerId);
+    });
+    mapScroll.addEventListener("pointermove", event => {
+      if (!mapDragStart) return;
+      mapScroll.scrollLeft = mapDragStart.left - (event.clientX - mapDragStart.x);
+      mapScroll.scrollTop = mapDragStart.top - (event.clientY - mapDragStart.y);
+    });
+    ["pointerup", "pointercancel"].forEach(type => mapScroll.addEventListener(type, () => {
+      mapDragStart = null;
+      mapScroll.classList.remove("dragging");
+    }));
 
     loadFromGitHub();
   });

@@ -192,6 +192,10 @@
       white-space: nowrap;
     }
 
+    /* Flex with fixed side margins on the colon keeps it exactly centered
+       between the digit groups at any zoom level; the old fixed-width boxes
+       drifted off-center from subpixel rounding. Tabular figures keep the
+       digit groups the same width every minute, so nothing shifts. */
     #clock-time {
       font-size: 3.25em;
       font-weight: 700;
@@ -201,19 +205,13 @@
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
       font-feature-settings: "tnum" 1, "lnum" 1;
-    }
-
-    #clock-hour,
-    #clock-minute {
-      display: inline-block;
-      width: 1.25em;
-      text-align: center;
+      display: flex;
+      justify-content: flex-end;
+      align-items: baseline;
     }
 
     #clock-colon {
-      display: inline-block;
-      width: 0.42em;
-      text-align: center;
+      margin: 0 0.09em;
       transition: opacity 120ms linear;
     }
 
@@ -490,264 +488,14 @@
         height: 118px;
       }
     }
-
-    #editor-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 30;
-      background: rgba(0, 0, 0, 0.42);
-    }
-
-    #editor-panel {
-      display: none;
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      bottom: 24px;
-      z-index: 40;
-      width: min(1520px, calc(100vw - 48px));
-      overflow: auto;
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 18px;
-      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
-      color: var(--ah-white);
-      padding: 24px;
-      box-sizing: border-box;
-    }
-
-    #editor-panel.open,
-    #editor-backdrop.open {
-      display: block;
-    }
-
-    #editor-panel h2 {
-      margin: 0 0 6px 0;
-      font-size: 28px;
-    }
-
-    #editor-panel p {
-      margin: 0 0 20px 0;
-      opacity: 0.88;
-      line-height: 1.4;
-    }
-
-    .editor-field {
-      margin-bottom: 18px;
-    }
-
-    .editor-field label,
-    .agenda-editor-row label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .editor-field input,
-    .agenda-editor-row input,
-    .agenda-editor-row select {
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.96);
-      color: var(--ah-black);
-      font-family: inherit;
-      font-size: 16px;
-      padding: 10px 12px;
-    }
-
-    .editor-toggle-row {
-      display: flex;
-      gap: 28px;
-    }
-
-    .editor-toggle-row label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-transform: none;
-      letter-spacing: normal;
-      font-size: 15px;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .editor-toggle-row input[type="checkbox"] {
-      width: auto;
-    }
-
-    .editor-footer-grid {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 14px;
-    }
-
-    .editor-subheading {
-      margin: 26px 0 12px;
-      font-size: 20px;
-    }
-
-    #agenda-editor {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .agenda-editor-row {
-      display: grid;
-      grid-template-columns: 1fr 0.9fr 0.9fr 1.7fr 1.7fr auto;
-      gap: 10px;
-      align-items: start;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 12px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .location-entry-line {
-      display: flex;
-      gap: 6px;
-    }
-
-    .location-entry-line select {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .location-entry + .location-entry {
-      margin-top: 6px;
-    }
-
-    .location-entry-line .remove-space {
-      padding: 8px 11px;
-      font-size: 14px;
-      line-height: 1;
-    }
-
-    .location-entry-line .move-space {
-      padding: 8px 8px;
-      font-size: 11px;
-      line-height: 1;
-    }
-
-    .add-space-button {
-      margin-top: 8px;
-      font-size: 13px;
-      padding: 6px 10px;
-    }
-
-    #about-panel {
-      display: none;
-      margin-top: 18px;
-      padding: 14px 18px;
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      font-size: 15px;
-      line-height: 1.55;
-      white-space: pre-line;
-    }
-
-    #about-panel.open {
-      display: block;
-    }
-
-    .editor-actions,
-    .row-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .editor-actions {
-      position: sticky;
-      bottom: -24px;
-      margin: 22px -24px -24px -24px;
-      padding: 16px 24px;
-      background: rgba(0, 0, 0, 0.9);
-      border-top: 1px solid var(--panel-border);
-    }
-
-    .editor-button {
-      border: 0;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 700;
-      padding: 10px 14px;
-      cursor: pointer;
-    }
-
-    .editor-button.primary {
-      background: var(--ah-green);
-      color: var(--ah-black);
-    }
-
-    .editor-button.secondary {
-      background: var(--ah-bright-blue);
-      color: var(--ah-black);
-    }
-
-    .editor-button.neutral {
-      background: var(--ah-white);
-      color: var(--ah-black);
-    }
-
-    .editor-button.danger {
-      background: #DA291C;
-      color: var(--ah-white);
-    }
-
-    .row-actions {
-      align-self: start;
-      flex-direction: column;
-      padding-top: 25px;
-      justify-content: flex-end;
-      min-width: 0;
-    }
-
-    .row-actions .editor-button {
-      font-size: 14px;
-      padding: 8px 12px;
-      white-space: nowrap;
-    }
-
-    #save-status {
-      align-self: center;
-      min-width: 180px;
-      font-size: 15px;
-      opacity: 0.9;
-    }
-
-    @media print {
-      #editor-backdrop,
-      #editor-panel {
-        display: none !important;
-      }
-    }
   </style>
   <script>
     // Versioning: bump the patch for fixes, the minor for new features, and
     // the major for changes that break config.json compatibility. Update
-    // SIGN_PUBLISHED whenever the version changes. Shown in the editor's
-    // About box.
-    const SIGN_VERSION = "2.5.0";
+    // SIGN_PUBLISHED whenever the version changes. Logged to the console.
+    const SIGN_VERSION = "2.9.0";
     const SIGN_PUBLISHED = "2026-07-13";
-
-    const ABOUT_TEXT = [
-      "AdventHealth West Florida Division",
-      "Center for Clinical Excellence and Simulation",
-      "Contact: WFD.SimulationEducation@adventhealth.com",
-      "",
-      `Version: ${SIGN_VERSION}`,
-      `Published: ${SIGN_PUBLISHED}`
-    ].join("\n");
+    console.log(`CCES sign v${SIGN_VERSION} (${SIGN_PUBLISHED})`);
 
     const defaultAgendaData = {
       centerName: "Center for Clinical Excellence and Simulation",
@@ -763,31 +511,6 @@
     };
 
     const storageKey = "cce-simulation-weekly-agenda-v1";
-
-    // "alpha" sorts the room dropdown alphabetically (numeric-aware, so
-    // Room 105 < Room 108 < Room 110); set to "manual" to show the list
-    // exactly in the order written below.
-    const ROOM_ORDER = "alpha";
-
-    const roomOptions = [
-      "Auditorium Room 115",
-      "Auditorium Room 134",
-      "Classroom 118",
-      "Classroom 119",
-      "Classroom 120",
-      "Classroom 121",
-      "Debrief Room 111",
-      "Debrief Room 112",
-      "Debrief Room 113",
-      "Simulation Room 105",
-      "Simulation Room 106",
-      "Simulation Room 108",
-      "Skills Lab Room 116"
-    ];
-
-    if (ROOM_ORDER === "alpha") {
-      roomOptions.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-    }
 
     // A location can be one space or a comma-separated list of spaces
     // ("Classroom 118, Classroom 119"); aliases are applied per space.
@@ -823,7 +546,13 @@
         footerSecurityLabel: typeof parsed.footerSecurityLabel === "string" ? parsed.footerSecurityLabel : defaultAgendaData.footerSecurityLabel,
         footerSecurity: typeof parsed.footerSecurity === "string" ? parsed.footerSecurity : defaultAgendaData.footerSecurity,
         rows: (Array.isArray(parsed.rows) ? parsed.rows : defaultAgendaData.rows)
-          .map(row => ({ ...row, location: normalizeLocation(row.location) }))
+          .map(row => ({
+            ...row,
+            day: String(row.day ?? ""),
+            time: String(row.time ?? ""),
+            event: String(row.event ?? ""),
+            location: normalizeLocation(row.location)
+          }))
       };
     }
 
@@ -951,6 +680,29 @@
       return (startA === null ? 1e9 : startA) - (startB === null ? 1e9 : startB);
     }
 
+    function easternTodayIso() {
+      return new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+    }
+
+    // Mon-Sun week number since epoch for an ISO date ("YYYY-MM-DD").
+    function weekNumberOf(isoDate) {
+      const [y, m, d] = String(isoDate || "").split("-").map(Number);
+      if (!y || !m || !d) return null;
+      const utc = Date.UTC(y, m - 1, d);
+      const daysFromMonday = (new Date(utc).getUTCDay() + 6) % 7;
+      return Math.floor((utc - daysFromMonday * 86400000) / 604800000);
+    }
+
+    // Biweekly rows carry repeatAnchor (the date they were configured).
+    // Even weeks-elapsed since the anchor week = show; odd = hide all week.
+    function isBiweeklyOffWeek(row) {
+      if (row.repeat !== "biweekly") return false;
+      const anchorWeek = weekNumberOf(row.repeatAnchor);
+      if (anchorWeek === null) return false;   // no/bad anchor: never hide
+      const thisWeek = weekNumberOf(easternTodayIso());
+      return (((thisWeek - anchorWeek) % 2) + 2) % 2 === 1;
+    }
+
     function hasAgendaItemPassed(row, eastern) {
       const rowWeek = weekIndexFromDay(getDayIndex(row.day));
       if (rowWeek === 99) return false;   // unknown day: never auto-hide
@@ -1036,7 +788,9 @@
       const eastern = getEasternNow();
       const todayName = eastern.weekdayName.toLowerCase();
       const todayWeek = weekIndexFromDay(eastern.dayIndex);
-      const visibleRows = data.rows.filter(row => !hasAgendaItemPassed(row, eastern)).sort(compareAgendaRows);
+      const visibleRows = data.rows
+        .filter(row => !isBiweeklyOffWeek(row) && !hasAgendaItemPassed(row, eastern))
+        .sort(compareAgendaRows);
 
       assignAgendaStatus(visibleRows, eastern, todayWeek);
 
@@ -1342,370 +1096,33 @@
       colonEl.classList.toggle("colon-off", now.getSeconds() % 2 === 1);
     }
 
-    // Bridge between the stored compact range ("0745 - 1700") and the
-    // <input type="time"> value format ("HH:MM"). The stored string stays the
-    // canonical format used by the sign, sorting, and the JSON.
-    function minutesToTimeInput(mins) {
-      if (mins === null || mins === undefined) return "";
-      const h = String(Math.floor(mins / 60)).padStart(2, "0");
-      const m = String(mins % 60).padStart(2, "0");
-      return `${h}:${m}`;
-    }
-
-    function compactTime(inputValue) {
-      const match = String(inputValue || "").match(/^(\d{1,2}):(\d{2})$/);
-      if (!match) return "";
-      return String(match[1]).padStart(2, "0") + match[2];
-    }
-
-    function combineTimeRange(startInput, endInput) {
-      const start = compactTime(startInput);
-      const end = compactTime(endInput);
-      if (start && end) return `${start} - ${end}`;
-      return start || end || "";
-    }
-
-    // One space within a row's location list: a free-text input prefilled
-    // with the current value, with the room list offered as native
-    // suggestions. Removing the last entry just blanks it so a row always
-    // keeps one input.
-    function createLocationEntry(selectedLocation = "") {
-      const entry = document.createElement("div");
-      entry.className = "location-entry";
-
-      entry.innerHTML = `
-        <div class="location-entry-line">
-          <input class="edit-location" list="room-list" value="${escapeHtml(selectedLocation)}" placeholder="Space name">
-          <button type="button" class="editor-button neutral move-space move-space-up" title="Move this space up">&#9650;</button>
-          <button type="button" class="editor-button neutral move-space move-space-down" title="Move this space down">&#9660;</button>
-          <button type="button" class="editor-button danger remove-space" title="Remove this space">&#215;</button>
-        </div>
-      `;
-
-      // The order of spaces here is the order the sign stacks them on screen.
-      entry.querySelector(".move-space-up").addEventListener("click", () => {
-        const previous = entry.previousElementSibling;
-        if (previous) entry.parentElement.insertBefore(entry, previous);
-      });
-      entry.querySelector(".move-space-down").addEventListener("click", () => {
-        const next = entry.nextElementSibling;
-        if (next) entry.parentElement.insertBefore(next, entry);
-      });
-      entry.querySelector(".remove-space").addEventListener("click", () => {
-        if (entry.parentElement.querySelectorAll(".location-entry").length > 1) {
-          entry.remove();
-        } else {
-          entry.querySelector(".edit-location").value = "";
-        }
-      });
-
-      return entry;
-    }
-
-    function createEditorRow(row = { day: "", time: "", event: "", location: "" }) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "agenda-editor-row";
-
-      const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-      const selectedDay = String(row.day || "").trim();
-      const dayOptions = daysOfWeek
-        .map(day => `<option value="${escapeHtml(day)}"${day === selectedDay ? " selected" : ""}>${escapeHtml(day)}</option>`)
-        .join("");
-      const customDayOption = selectedDay && !daysOfWeek.includes(selectedDay)
-        ? `<option value="${escapeHtml(selectedDay)}" selected>${escapeHtml(selectedDay)}</option>`
-        : "";
-
-      const startInputValue = minutesToTimeInput(parseAgendaStartMinutes(row.time));
-      const endInputValue = minutesToTimeInput(parseAgendaEndMinutes(row.time));
-
-      wrapper.innerHTML = `
-        <div>
-          <label>Day</label>
-          <select class="edit-day">
-            <option value="">Select day</option>
-            ${dayOptions}
-            ${customDayOption}
-          </select>
-        </div>
-        <div>
-          <label>Start</label>
-          <input type="time" class="edit-start" value="${startInputValue}">
-        </div>
-        <div>
-          <label>End</label>
-          <input type="time" class="edit-end" value="${endInputValue}">
-        </div>
-        <div>
-          <label>Event</label>
-          <input class="edit-event" value="${escapeHtml(row.event)}" placeholder="Event name">
-        </div>
-        <div>
-          <label>Location(s)</label>
-          <div class="location-list"></div>
-          <button type="button" class="editor-button neutral add-space-button">+ Space</button>
-        </div>
-        <div class="row-actions">
-          <button type="button" class="editor-button secondary duplicate-row-button">Duplicate</button>
-          <button type="button" class="editor-button danger remove-row-button">Remove</button>
-        </div>
-      `;
-
-      // The stored location may be a comma-separated list of spaces; each
-      // part gets its own selector.
-      const locationList = wrapper.querySelector(".location-list");
-      const locations = normalizeLocation(row.location).split(/\s*,\s*/).map(part => part.trim()).filter(Boolean);
-      if (!locations.length) locations.push("");
-      locations.forEach(location => locationList.appendChild(createLocationEntry(location)));
-
-      // When a start time is chosen and the end is still blank, default the
-      // end to one hour later — AM stays AM, and anything starting at/after
-      // noon lands in PM automatically.
-      const startInput = wrapper.querySelector(".edit-start");
-      const endInput = wrapper.querySelector(".edit-end");
-      startInput.addEventListener("change", () => {
-        if (!startInput.value || endInput.value) return;
-        const [h, m] = startInput.value.split(":").map(Number);
-        const endMinutes = Math.min(h * 60 + m + 60, 23 * 60 + 59);
-        endInput.value = minutesToTimeInput(endMinutes);
-      });
-
-      wrapper.querySelector(".add-space-button").addEventListener("click", () => {
-        const entry = createLocationEntry("");
-        locationList.appendChild(entry);
-        entry.querySelector(".edit-location").focus();
-      });
-
-      wrapper.querySelector(".duplicate-row-button").addEventListener("click", () => {
-        wrapper.after(createEditorRow(readEditorRow(wrapper)));
-      });
-
-      wrapper.querySelector(".remove-row-button").addEventListener("click", () => {
-        wrapper.remove();
-      });
-
-      return wrapper;
-    }
-
-    function openEditor() {
-      const data = getAgendaData();
-      document.getElementById("edit-center-name").value = data.centerName;
-      document.getElementById("edit-agenda-title").value = data.agendaTitle;
-      document.getElementById("edit-show-clock").checked = data.showClock !== false;
-      document.getElementById("edit-show-weather").checked = data.showWeather !== false;
-      document.getElementById("edit-play-music").checked = data.playMusic !== false;
-      document.getElementById("edit-footer-location").value = String(data.footerLocation ?? "");
-      document.getElementById("edit-footer-security").value = String(data.footerSecurity ?? "");
-      document.getElementById("edit-footer-location-label").value = String(data.footerLocationLabel ?? "");
-      document.getElementById("edit-footer-security-label").value = String(data.footerSecurityLabel ?? "");
-
-      const editor = document.getElementById("agenda-editor");
-      editor.innerHTML = "";
-      data.rows.slice().sort(compareAgendaRows).forEach(row => editor.appendChild(createEditorRow(row)));
-      if (!editor.children.length) {
-        const blankRow = createEditorRow();
-        blankRow.querySelector(".edit-start").value = "08:00";
-        editor.appendChild(blankRow);
-      }
-
-      document.getElementById("editor-backdrop").classList.add("open");
-      document.getElementById("editor-panel").classList.add("open");
-      document.getElementById("save-status").textContent = "";
-      document.getElementById("edit-center-name").focus();
-    }
-
-    function closeEditor() {
-      document.getElementById("editor-backdrop").classList.remove("open");
-      document.getElementById("editor-panel").classList.remove("open");
-    }
-
-    function readEditorRow(rowElement) {
-      const locations = Array.from(rowElement.querySelectorAll(".edit-location"))
-        .map(input => input.value.trim())
-        .filter(Boolean);
-
-      return {
-        day: rowElement.querySelector(".edit-day").value.trim(),
-        time: combineTimeRange(
-          rowElement.querySelector(".edit-start").value,
-          rowElement.querySelector(".edit-end").value
-        ),
-        event: rowElement.querySelector(".edit-event").value.trim(),
-        location: [...new Set(locations)].join(", ")
-      };
-    }
-
-    // Reorders the editor rows the same way the sign displays them. Manual
-    // (a button) so rows never jump around mid-edit, e.g. right after
-    // duplicating a line.
-    function sortEditorRows() {
-      const container = document.getElementById("agenda-editor");
-      Array.from(container.querySelectorAll(".agenda-editor-row"))
-        .map(element => ({ element, data: readEditorRow(element) }))
-        .sort((a, b) => compareAgendaRows(a.data, b.data))
-        .forEach(item => container.appendChild(item.element));
-    }
-
-    function collectEditorData() {
-      const rows = Array.from(document.querySelectorAll(".agenda-editor-row"))
-        .map(readEditorRow)
-        .filter(row => row.day || row.time || row.event || row.location);
-
-      return {
-        centerName: (document.getElementById("edit-center-name").value.trim() || defaultAgendaData.centerName).replace(/[.]+$/, ""),
-        agendaTitle: document.getElementById("edit-agenda-title").value.trim() || defaultAgendaData.agendaTitle,
-        showClock: document.getElementById("edit-show-clock").checked,
-        showWeather: document.getElementById("edit-show-weather").checked,
-        playMusic: document.getElementById("edit-play-music").checked,
-        footerLocationLabel: document.getElementById("edit-footer-location-label").value.trim(),
-        footerLocation: document.getElementById("edit-footer-location").value.trim(),
-        footerSecurityLabel: document.getElementById("edit-footer-security-label").value.trim(),
-        footerSecurity: document.getElementById("edit-footer-security").value.trim(),
-        rows
-      };
-    }
-
-    function saveEditorChanges() {
-      const data = collectEditorData();
-      saveAgendaData(data);
-      if (remoteAgendaData) remoteAgendaData = structuredClone(data);
-      renderAgenda();
-      document.getElementById("save-status").textContent = "Saved on this device. To update every sign, use Download JSON and upload the file to GitHub as config.json.";
-      setTimeout(closeEditor, 1500);
-    }
-
-    // Two-click confirmation (no blocking dialog): restores every setting to
-    // its default and clears the events. Nothing is saved until Save.
-    let resetDisarmTimer = null;
-    function resetAgenda() {
-      const button = document.getElementById("reset-agenda");
-      if (!button.dataset.armed) {
-        button.dataset.armed = "1";
-        button.textContent = "Click again to confirm";
-        resetDisarmTimer = setTimeout(() => {
-          delete button.dataset.armed;
-          button.textContent = "Reset";
-        }, 4000);
-        return;
-      }
-      clearTimeout(resetDisarmTimer);
-      delete button.dataset.armed;
-      button.textContent = "Reset";
-
-      document.getElementById("edit-center-name").value = defaultAgendaData.centerName;
-      document.getElementById("edit-agenda-title").value = defaultAgendaData.agendaTitle;
-      document.getElementById("edit-show-clock").checked = true;
-      document.getElementById("edit-show-weather").checked = true;
-      document.getElementById("edit-play-music").checked = true;
-      document.getElementById("edit-footer-location-label").value = defaultAgendaData.footerLocationLabel;
-      document.getElementById("edit-footer-location").value = defaultAgendaData.footerLocation;
-      document.getElementById("edit-footer-security-label").value = defaultAgendaData.footerSecurityLabel;
-      document.getElementById("edit-footer-security").value = defaultAgendaData.footerSecurity;
-
-      const editor = document.getElementById("agenda-editor");
-      editor.innerHTML = "";
-      const blankRow = createEditorRow();
-      blankRow.querySelector(".edit-start").value = "08:00";
-      editor.appendChild(blankRow);
-
-      document.getElementById("save-status").textContent = "Defaults restored and events cleared — select Save to apply.";
-    }
-
-    function downloadAgendaJson() {
-      const data = collectEditorData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "config.json";
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    function importAgendaJson(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const imported = JSON.parse(reader.result);
-          if (!Array.isArray(imported.rows)) throw new Error("Invalid agenda file.");
-          saveAgendaData(imported);
-          renderAgenda();
-          openEditor();
-          document.getElementById("save-status").textContent = "Imported agenda file.";
-        } catch {
-          alert("The selected file is not a valid agenda backup.");
-        }
-      };
-      reader.readAsText(file);
-      event.target.value = "";
+    // The TV never gets a manual refresh, so reload nightly at 3:30 AM ET to
+    // pick up newly deployed index.html versions.
+    function scheduleNightlyReload() {
+      const targetMinutes = 3 * 60 + 30;
+      let minutesUntil = targetMinutes - getEasternNow().minutes;
+      if (minutesUntil <= 0) minutesUntil += 24 * 60;
+      const delayMs = minutesUntil * 60000 + 30000;
+      window.__nextReloadInMs = delayMs;
+      setTimeout(() => location.reload(), delayMs);
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      scheduleNightlyReload();
       // The sign renders at 75% zoom by default (sized for a TV panel).
       // Preview at another size with ?zoom=100 (accepted range 25-200).
       const zoomOverride = Number(new URLSearchParams(window.location.search).get("zoom"));
       document.documentElement.style.zoom = `${zoomOverride >= 25 && zoomOverride <= 200 ? zoomOverride : 75}%`;
 
-      document.getElementById("room-list").innerHTML = roomOptions
-        .map(room => `<option value="${escapeHtml(room)}"></option>`)
-        .join("");
-
-      document.getElementById("about-panel").textContent = ABOUT_TEXT;
-      document.getElementById("about-button").addEventListener("click", () => {
-        document.getElementById("about-panel").classList.toggle("open");
-      });
-
       updateClock();
       updateWeather();
       renderAgenda();
-      const initialAgendaLoad = loadRemoteAgendaData();
+      loadRemoteAgendaData();
       startAgendaMinuteRefresh();
       initializeSignageAudio();
       setInterval(updateClock, 1000);
       setInterval(updateWeather, 10 * 60 * 1000);
       setInterval(loadRemoteAgendaData, 5 * 60 * 1000);
-
-      document.getElementById("editor-backdrop").addEventListener("click", closeEditor);
-      document.getElementById("close-editor").addEventListener("click", closeEditor);
-      document.getElementById("save-editor").addEventListener("click", saveEditorChanges);
-      document.getElementById("add-row").addEventListener("click", () => {
-        const rowElement = createEditorRow();
-        // New events default to a morning start (08:00 AM); picking a real
-        // start time then auto-fills the end an hour later.
-        rowElement.querySelector(".edit-start").value = "08:00";
-        document.getElementById("agenda-editor").appendChild(rowElement);
-        rowElement.querySelector(".edit-day").focus();
-      });
-      document.getElementById("sort-editor-rows").addEventListener("click", sortEditorRows);
-      document.getElementById("reset-agenda").addEventListener("click", resetAgenda);
-      document.getElementById("download-json").addEventListener("click", downloadAgendaJson);
-      document.getElementById("import-json").addEventListener("change", importAgendaJson);
-
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape") closeEditor();
-        if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "e") {
-          event.preventDefault();
-          openEditor();
-        }
-      });
-
-      let logoPressTimer;
-      const logoContainer = document.getElementById("logo-container");
-      const clearLogoPressTimer = () => clearTimeout(logoPressTimer);
-      logoContainer.addEventListener("pointerdown", () => {
-        logoPressTimer = setTimeout(openEditor, 3000);
-      });
-      logoContainer.addEventListener("pointerup", clearLogoPressTimer);
-      logoContainer.addEventListener("pointerleave", clearLogoPressTimer);
-      logoContainer.addEventListener("pointercancel", clearLogoPressTimer);
-
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("edit") === "1" || window.location.hash.toLowerCase() === "#edit") {
-        // Wait for the first config fetch so the editor opens with the live
-        // agenda instead of the (possibly empty) local fallback.
-        initialAgendaLoad.then(openEditor);
-      }
     });
   </script>
 </head>
@@ -1753,70 +1170,5 @@
     </div>
   </footer>
 
-  <div id="editor-backdrop"></div>
-
-  <section id="editor-panel" aria-label="Agenda editor">
-    <h2>Edit Weekly Agenda</h2>
-    <p>Add, edit, or remove events below, then select Save. The sign arranges everything automatically by day and start time, so the order you enter rows here does not matter — Sort by Day &amp; Time just tidies this list. Use + Space to show an event in more than one room and Duplicate to copy a line. Set a start and end time for each session; the sign always displays them in 24-hour format. To open this editor later, add ?edit=1 to the sign URL or press Ctrl + Shift + E.</p>
-    <p>The hosted sign reads its content from config.json in the GitHub repository and re-checks it every 5 minutes, so config.json overrides anything saved here. To update every sign, make your changes, select Download config.json, then upload that file to the GitHub repository replacing the existing config.json.</p>
-
-    <div id="agenda-editor"></div>
-    <datalist id="room-list"></datalist>
-
-    <h3 class="editor-subheading">Sign settings</h3>
-
-    <div class="editor-field">
-      <label for="edit-center-name">Center name</label>
-      <input id="edit-center-name" type="text">
-    </div>
-
-    <div class="editor-field">
-      <label for="edit-agenda-title">Agenda title</label>
-      <input id="edit-agenda-title" type="text">
-    </div>
-
-    <div class="editor-field editor-toggle-row">
-      <label><input type="checkbox" id="edit-show-clock"> Show clock</label>
-      <label><input type="checkbox" id="edit-show-weather"> Show weather</label>
-      <label><input type="checkbox" id="edit-play-music"> Play music</label>
-    </div>
-
-    <div class="editor-field editor-footer-grid">
-      <div>
-        <label for="edit-footer-location-label">Footer title</label>
-        <input id="edit-footer-location-label" type="text">
-      </div>
-      <div>
-        <label for="edit-footer-location">Footer text (leave blank to hide this item)</label>
-        <input id="edit-footer-location" type="text">
-      </div>
-    </div>
-
-    <div class="editor-field editor-footer-grid">
-      <div>
-        <label for="edit-footer-security-label">Footer title</label>
-        <input id="edit-footer-security-label" type="text">
-      </div>
-      <div>
-        <label for="edit-footer-security">Footer text (leave blank to hide this item)</label>
-        <input id="edit-footer-security" type="text">
-      </div>
-    </div>
-
-    <div id="about-panel" aria-label="About this sign"></div>
-
-    <div class="editor-actions">
-      <button id="save-editor" type="button" class="editor-button primary">Save</button>
-      <button id="add-row" type="button" class="editor-button secondary">Add Row</button>
-      <button id="sort-editor-rows" type="button" class="editor-button neutral">Sort by Day &amp; Time</button>
-      <button id="download-json" type="button" class="editor-button neutral">Download config.json</button>
-      <label class="editor-button neutral" for="import-json">Import Backup</label>
-      <input id="import-json" type="file" accept="application/json" style="display: none;">
-      <button id="reset-agenda" type="button" class="editor-button danger">Reset</button>
-      <button id="about-button" type="button" class="editor-button neutral">About</button>
-      <button id="close-editor" type="button" class="editor-button neutral">Close</button>
-      <span id="save-status" aria-live="polite"></span>
-    </div>
-  </section>
 </body>
 </html>
