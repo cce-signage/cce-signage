@@ -500,7 +500,8 @@
       <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained tokens</a>.
       Set <strong>Repository access</strong> to only <strong>cce-signage/cce-signage</strong> and grant a single
       permission: <strong>Contents &rarr; Read and write</strong>. Tokens expire (max 1 year) — when publishing
-      starts failing with 401, create a new one.
+      starts failing with 401, create a new one. A remembered token is never shown in this field again —
+      the placeholder just confirms one is saved.
     </div>
   </section>
 
@@ -527,7 +528,7 @@
   // Versioning: bump the patch for fixes, the minor for new features, and
   // the major for changes that break config.json compatibility. Update
   // APP_PUBLISHED whenever the version changes. Shown in the About box.
-  const APP_VERSION = "1.10.0";
+  const APP_VERSION = "1.11.0";
   const APP_PUBLISHED = "2026-07-13";
 
   const ABOUT_TEXT = [
@@ -605,13 +606,29 @@
     el.className = isError ? "err" : "ok";
   }
 
+  // The remembered token is never put back into the input field: a page
+  // saved from the browser serializes whatever is sitting in the form, and
+  // that is exactly how a token once nearly ended up in the public repo.
+  // It lives only in localStorage and this variable; the field just shows a
+  // "saved" placeholder.
+  let rememberedToken = "";
+
   function getToken() {
-    return document.getElementById("github-token").value.trim();
+    return document.getElementById("github-token").value.trim() || rememberedToken;
+  }
+
+  function markTokenSaved() {
+    const input = document.getElementById("github-token");
+    input.value = "";
+    input.placeholder = "•••• token saved on this device";
   }
 
   function persistTokenIfRequested() {
-    if (document.getElementById("remember-token").checked && getToken()) {
-      localStorage.setItem(TOKEN_STORAGE_KEY, getToken());
+    const token = getToken();
+    if (document.getElementById("remember-token").checked && token) {
+      localStorage.setItem(TOKEN_STORAGE_KEY, token);
+      rememberedToken = token;
+      markTokenSaved();
     }
   }
 
@@ -1147,18 +1164,24 @@
 
     const savedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
     if (savedToken) {
-      document.getElementById("github-token").value = savedToken;
+      rememberedToken = savedToken;
       document.getElementById("remember-token").checked = true;
+      markTokenSaved();
     }
 
     document.getElementById("remember-token").addEventListener("change", event => {
       if (event.target.checked) persistTokenIfRequested();
+      // Unchecking wipes it from disk; the in-memory copy keeps working
+      // until the page is closed.
       else localStorage.removeItem(TOKEN_STORAGE_KEY);
     });
     document.getElementById("github-token").addEventListener("change", persistTokenIfRequested);
     document.getElementById("clear-token").addEventListener("click", () => {
       localStorage.removeItem(TOKEN_STORAGE_KEY);
-      document.getElementById("github-token").value = "";
+      rememberedToken = "";
+      const input = document.getElementById("github-token");
+      input.value = "";
+      input.placeholder = "github_pat_...";
       document.getElementById("remember-token").checked = false;
       setStatus("Token forgotten on this device.", false);
     });
