@@ -13,6 +13,24 @@
       "time": "0800 - 1400",
       "event": "GME Emergency Medicine eFAST Training",
       "location": "Simulation Room 105"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0745 - 1600",
+      "event": "Clinical Orientation",
+      "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0745 - 1600",
+      "event": "Nursing Orientation",
+      "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Thursday",
+      "time": "0745 - 1600",
+      "event": "Nursing Orientation",
+      "location": "Auditorium Room 134"
     }
   ]
 }
