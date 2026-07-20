@@ -40,6 +40,42 @@
       "location": "AdventHealth Tampa Pod 5 (located in main hospital)",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-13"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0830 - 1030",
+      "event": "Think Twice",
+      "location": "Classroom 121"
+    },
+    {
+      "day": "Tuesday",
+      "time": "1200 - 1400",
+      "event": "Code Blue Class",
+      "location": "Classroom 121"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1000 - 1230",
+      "event": "Defensive Documentation",
+      "location": "Classroom 121"
+    },
+    {
+      "day": "Thursday",
+      "time": "0830 - 1700",
+      "event": "Nurse Residency Workshop 1",
+      "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1700",
+      "event": "Comeback Day",
+      "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0730 - 1530",
+      "event": "Surgical Technologist Training Program Simulation Day 6",
+      "location": "Auditorium Room 134"
     }
   ]
 }
