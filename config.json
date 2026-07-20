@@ -76,6 +76,12 @@
       "time": "0730 - 1530",
       "event": "Surgical Technologist Training Program Simulation Day 6",
       "location": "Auditorium Room 134"
+    },
+    {
+      "day": "Monday",
+      "time": "0830 - 1630",
+      "event": "EKG Interpretation",
+      "location": "Auditorium Room 134"
     }
   ]
 }
