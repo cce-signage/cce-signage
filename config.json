@@ -42,18 +42,6 @@
       "repeatAnchor": "2026-07-13"
     },
     {
-      "day": "Tuesday",
-      "time": "0830 - 1030",
-      "event": "Think Twice",
-      "location": "Classroom 121"
-    },
-    {
-      "day": "Tuesday",
-      "time": "1200 - 1400",
-      "event": "Code Blue Class",
-      "location": "Classroom 121"
-    },
-    {
       "day": "Wednesday",
       "time": "1000 - 1230",
       "event": "Defensive Documentation",
@@ -78,10 +66,16 @@
       "location": "Auditorium Room 134"
     },
     {
-      "day": "Monday",
-      "time": "0900 - 1630",
-      "event": "EKG Interpretation",
-      "location": "Auditorium Room 134"
+      "day": "Wednesday",
+      "time": "1000 - 1230",
+      "event": "Defensive Documentation",
+      "location": "Classroom 121"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1300 - 1500",
+      "event": "Cardiac Drips",
+      "location": "Classroom 121"
     }
   ]
 }
