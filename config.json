@@ -70,6 +70,12 @@
       "time": "1300 - 1500",
       "event": "Cardiac Drips",
       "location": "Classroom 121"
+    },
+    {
+      "day": "Thursday",
+      "time": "1300 - 1400",
+      "event": "GME Emergency Medicine RSI & Advanced Airway Management",
+      "location": "Simulation Room 108"
     }
   ]
 }
