@@ -64,6 +64,12 @@
       "time": "0900 - 1000",
       "event": "Care Plan Visits Simulation Experience Debrief",
       "location": "Debrief Room 113"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1700",
+      "event": "PREP Workshop 3",
+      "location": "Auditorium Room 115"
     }
   ]
 }
