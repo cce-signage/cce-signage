@@ -40,10 +40,16 @@
       "location": "Auditorium Room 134"
     },
     {
-      "day": "Friday",
-      "time": "0800 - 1700",
-      "event": "Fall Bootcamp/Comeback Day Lecture",
-      "location": "Auditorium Room 134"
+      "day": "Thursday",
+      "time": "0900 - 1000",
+      "event": "Care Plan Visits Simulation Experience Debrief",
+      "location": "Debrief Room 111"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1700",
+      "event": "PREP Workshop 3",
+      "location": "Auditorium Room 115"
     },
     {
       "day": "Thursday",
@@ -52,16 +58,10 @@
       "location": "Simulation Room 105, Simulation Room 106"
     },
     {
-      "day": "Thursday",
-      "time": "0900 - 1000",
-      "event": "Care Plan Visits Simulation Experience Debrief",
-      "location": "Debrief Room 113"
-    },
-    {
-      "day": "Thursday",
-      "time": "0900 - 1700",
-      "event": "PREP Workshop 3",
-      "location": "Auditorium Room 115"
+      "day": "Friday",
+      "time": "0800 - 1700",
+      "event": "Fall Bootcamp/Comeback Day Lecture",
+      "location": "Auditorium Room 134"
     },
     {
       "day": "Friday",
