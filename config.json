@@ -34,14 +34,6 @@
       "repeatAnchor": "2026-07-13"
     },
     {
-      "day": "Friday",
-      "time": "0800 - 1400",
-      "event": "GME Emergency Medicine eFAST Training",
-      "location": "AdventHealth Tampa Pod 5 (located in main hospital)",
-      "repeat": "biweekly",
-      "repeatAnchor": "2026-07-13"
-    },
-    {
       "day": "Thursday",
       "time": "0830 - 1700",
       "event": "Nurse Residency Workshop 1",
@@ -50,7 +42,7 @@
     {
       "day": "Friday",
       "time": "0800 - 1700",
-      "event": "Comeback Day",
+      "event": "Fall Bootcamp/Comeback Day Lecture",
       "location": "Auditorium Room 134"
     },
     {
@@ -70,6 +62,12 @@
       "time": "0900 - 1700",
       "event": "PREP Workshop 3",
       "location": "Auditorium Room 115"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1700",
+      "event": "Fall Bootcamp/Comeback Day Skills",
+      "location": "Skills Lab Room 116, Classroom 121"
     }
   ]
 }
