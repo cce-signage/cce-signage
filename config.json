@@ -26,6 +26,12 @@
       "repeatAnchor": "2026-07-13"
     },
     {
+      "day": "Wednesday",
+      "time": "0800 - 1500",
+      "event": "Surgical Technologist Training Program Simulation Day 7",
+      "location": "Auditorium Room 115, Simulation Room 105, Simulation Room 106, Simulation Room 108"
+    },
+    {
       "day": "Thursday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
@@ -35,39 +41,17 @@
     },
     {
       "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 1",
-      "location": "Auditorium Room 134"
+      "time": "0800 - 1430",
+      "event": "GME Emergency Medicine Conference",
+      "location": "Classroom 118"
     },
     {
       "day": "Thursday",
-      "time": "0900 - 1000",
-      "event": "Care Plan Visits Simulation Experience Debrief",
-      "location": "Debrief Room 111"
-    },
-    {
-      "day": "Thursday",
-      "time": "0900 - 1700",
-      "event": "PREP Workshop 3",
-      "location": "Auditorium Room 115"
-    },
-    {
-      "day": "Thursday",
-      "time": "1300 - 1400",
-      "event": "GME Emergency Medicine RSI & Advanced Airway Management",
-      "location": "Simulation Room 105, Simulation Room 106"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1700",
-      "event": "Fall Bootcamp/Comeback Day Lecture",
-      "location": "Auditorium Room 134"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1700",
-      "event": "Fall Bootcamp/Comeback Day Skills",
-      "location": "Skills Lab Room 116, Classroom 121"
+      "time": "0800 - 1130",
+      "event": "New Hire Orientation Skills",
+      "location": "Debrief Room 111, Debrief Room 112, Debrief Room 113",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-07-27"
     }
   ]
 }
