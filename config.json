@@ -40,6 +40,24 @@
       "location": "Debrief Room 111, Debrief Room 112, Debrief Room 113",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-27"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0745 - 1615",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Auditorium Room 115"
+    },
+    {
+      "day": "Thursday",
+      "time": "0745 - 1615",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Auditorium Room 115"
+    },
+    {
+      "day": "Friday",
+      "time": "0745 - 1200",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Auditorium Room 115"
     }
   ]
 }
