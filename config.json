@@ -26,24 +26,12 @@
       "repeatAnchor": "2026-07-13"
     },
     {
-      "day": "Wednesday",
-      "time": "0800 - 1500",
-      "event": "Surgical Technologist Training Program Simulation Day 7",
-      "location": "Auditorium Room 115, Simulation Room 105, Simulation Room 106, Simulation Room 108"
-    },
-    {
       "day": "Thursday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-13"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1430",
-      "event": "GME Emergency Medicine Conference",
-      "location": "Classroom 118"
     },
     {
       "day": "Thursday",
