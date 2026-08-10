@@ -52,6 +52,18 @@
       "time": "0900 - 1200",
       "event": "EKG Testing",
       "location": "Classroom 121"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1100",
+      "event": "Advanced Code Blue",
+      "location": "Classroom 121, Skills Lab Room 116"
+    },
+    {
+      "day": "Tuesday",
+      "time": "1200 - 1400",
+      "event": "Introduction to Simulation: Sim 101- Part 2",
+      "location": "Debrief Room 111, Simulation Room 105"
     }
   ]
 }
