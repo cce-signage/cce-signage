@@ -52,6 +52,12 @@
       "time": "1200 - 1400",
       "event": "Introduction to Simulation: Sim 101- Part 2",
       "location": "Debrief Room 111, Simulation Room 105"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "Emergency Department Emergency Severity Index Triage Class",
+      "location": "Classroom 121"
     }
   ]
 }
