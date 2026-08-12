@@ -26,6 +26,24 @@
       "repeatAnchor": "2026-07-13"
     },
     {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Drip",
+      "location": "Classroom 121"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "Emergency Department Emergency Severity Index Triage Class",
+      "location": "Classroom 121"
+    },
+    {
+      "day": "Thursday",
+      "time": "0730 - 1530",
+      "event": "Surgical Technologist Training Program Simulation Day 8",
+      "location": "Auditorium Room 115, Simulation Room 105, Simulation Room 106, Simulation Room 108"
+    },
+    {
       "day": "Thursday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
@@ -37,20 +55,14 @@
       "day": "Thursday",
       "time": "0800 - 1130",
       "event": "New Hire Orientation Skills",
-      "location": "Debrief Room 111, Debrief Room 112, Debrief Room 113",
+      "location": "Skills Lab Room 116, Classroom 118, Classroom 120",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-27"
     },
     {
-      "day": "Wednesday",
-      "time": "1200 - 1700",
-      "event": "Emergency Department Emergency Severity Index Triage Class",
-      "location": "Classroom 121"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0900 - 1200",
-      "event": "Heparin Drip",
+      "day": "Thursday",
+      "time": "0900 - 1500",
+      "event": "Nurse Residency Body Workshop",
       "location": "Classroom 121"
     }
   ]
