@@ -152,11 +152,15 @@
 
     .agenda-row {
       display: grid;
-      grid-template-columns: 130px 140px 140px 1fr 330px auto;
+      grid-template-columns: 150px 130px 130px minmax(220px, 1fr) minmax(240px, 320px) auto;
       gap: 12px;
       align-items: start;
       padding: 14px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .agenda-row.expired-row {
+      opacity: 0.88;
     }
 
     .location-entry-line {
@@ -316,8 +320,31 @@
     .schedule-pill.held { background: #9FB1BC; color: #14222B; }
     .schedule-pill.next-week { background: var(--ah-bright-blue); color: #10222e; }
     .schedule-pill.two-weeks { background: #00635B; color: #FFFFFF; }
+    .schedule-pill.needs-date { background: #FFB3A0; color: #4A130B; }
+    .schedule-pill.not-displayed { background: #F6C85F; color: #3A2A00; }
 
-    @media (max-width: 900px) {
+    #expired-events {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    #expired-events summary {
+      cursor: pointer;
+      color: #DDE7EC;
+      font-weight: 700;
+    }
+
+    .expired-help {
+      margin: 10px 0 2px;
+      font-size: 0.82em;
+      line-height: 1.45;
+      opacity: 0.86;
+    }
+
+    @media (max-width: 1100px) {
       .agenda-row { grid-template-columns: 1fr 1fr; }
       .field-grid, .token-row { grid-template-columns: 1fr; }
       .toolbar-divider { display: none; }
@@ -410,10 +437,15 @@
   <section class="panel">
     <h2>Events</h2>
     <div id="agenda-rows"></div>
+    <details id="expired-events" hidden>
+      <summary id="expired-summary">0 expired events hidden</summary>
+      <div class="expired-help">Expired one-time events are omitted from the sign and the next published config. Change an event to today or a future date, then restore it if needed.</div>
+      <div id="expired-rows"></div>
+    </details>
     <div class="toolbar">
       <div class="toolbar-group">
         <button type="button" class="neutral" id="add-row">+ Add event</button>
-        <button type="button" class="neutral" id="sort-rows">Sort by day &amp; time</button>
+        <button type="button" class="neutral" id="sort-rows">Sort by date &amp; time</button>
       </div>
       <div class="toolbar-divider"></div>
       <div class="toolbar-group">
@@ -528,8 +560,8 @@
   // Versioning: bump the patch for fixes, the minor for new features, and
   // the major for changes that break config.json compatibility. Update
   // APP_PUBLISHED whenever the version changes. Shown in the About box.
-  const APP_VERSION = "1.11.0";
-  const APP_PUBLISHED = "2026-07-13";
+  const APP_VERSION = "1.12.0";
+  const APP_PUBLISHED = "2026-08-12";
 
   const ABOUT_TEXT = [
     "AdventHealth West Florida Division",
@@ -546,6 +578,7 @@
   const FILE_PATH = "config.json";
   const API_URL = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
   const TOKEN_STORAGE_KEY = "cce-admin-github-token";
+  const TIME_ZONE = "America/New_York";
 
   const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   // "alpha" sorts the room dropdown alphabetically (numeric-aware, so
@@ -668,6 +701,70 @@
     return start || end || "";
   }
 
+  // ---- Date helpers: one-time events store eventDate as YYYY-MM-DD ----
+
+  function parseIsoDate(isoDate) {
+    const match = String(isoDate || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return null;
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const utc = new Date(Date.UTC(year, month - 1, day));
+    if (utc.getUTCFullYear() !== year || utc.getUTCMonth() !== month - 1 || utc.getUTCDate() !== day) return null;
+    return utc;
+  }
+
+  function isoFromUtcDate(date) {
+    return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
+  }
+
+  function addIsoDays(isoDate, days) {
+    const date = parseIsoDate(isoDate);
+    if (!date) return "";
+    date.setUTCDate(date.getUTCDate() + days);
+    return isoFromUtcDate(date);
+  }
+
+  function weekdayNameFromIso(isoDate) {
+    const date = parseIsoDate(isoDate);
+    if (!date) return "";
+    return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][date.getUTCDay()];
+  }
+
+  function easternTodayIso() {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(new Date());
+    const map = {};
+    parts.forEach(part => { map[part.type] = part.value; });
+    return `${map.year}-${map.month}-${map.day}`;
+  }
+
+  function mondayOfWeek(isoDate) {
+    const date = parseIsoDate(isoDate);
+    if (!date) return "";
+    const daysFromMonday = (date.getUTCDay() + 6) % 7;
+    date.setUTCDate(date.getUTCDate() - daysFromMonday);
+    return isoFromUtcDate(date);
+  }
+
+  function displayWindowFor(isoDate) {
+    const start = mondayOfWeek(isoDate);
+    return { start, endExclusive: addIsoDays(start, 6) };
+  }
+
+  // Older biweekly rows stored the date they were configured, which can be a
+  // different weekday from the event. Normalize that legacy anchor to the
+  // row's scheduled weekday in the same week so recurrence parity is kept.
+  function recurringStartDate(row) {
+    if (!parseIsoDate(row.repeatAnchor)) return "";
+    const dayOffset = DAYS.indexOf(String(row.day || "").trim());
+    return dayOffset === -1 ? row.repeatAnchor : addIsoDays(mondayOfWeek(row.repeatAnchor), dayOffset);
+  }
+
   // ---- Row editor ----
 
   // One space within a row's location list: a free-text input prefilled with
@@ -706,29 +803,19 @@
     return entry;
   }
 
-  function createRow(row = { day: "", time: "", event: "", location: "" }) {
+  function createRow(row = { day: "", eventDate: "", time: "", event: "", location: "" }, { expired = false } = {}) {
     const wrapper = document.createElement("div");
     wrapper.className = "agenda-row";
-
-    const selectedDay = String(row.day || "").trim();
-    const dayOptions = DAYS
-      .map(day => `<option value="${escapeHtml(day)}"${day === selectedDay ? " selected" : ""}>${escapeHtml(day)}</option>`)
-      .join("");
-    const customDay = selectedDay && !DAYS.includes(selectedDay)
-      ? `<option value="${escapeHtml(selectedDay)}" selected>${escapeHtml(selectedDay)}</option>` : "";
+    wrapper.dataset.legacyDay = String(row.day || "").trim();
 
     const [startValue, endValue] = splitTimeRange(row.time);
-
-    if (row.repeatAnchor) wrapper.dataset.repeatAnchor = row.repeatAnchor;
+    const storedDate = row.repeat ? recurringStartDate(row) : row.eventDate;
+    const scheduleDate = parseIsoDate(storedDate) ? storedDate : "";
 
     wrapper.innerHTML = `
-      <div>
-        <label>Day</label>
-        <select class="edit-day">
-          <option value="">Select day</option>
-          ${dayOptions}
-          ${customDay}
-        </select>
+      <div class="date-field">
+        <label class="edit-date-label">${row.repeat ? "Start date" : "Date"}</label>
+        <input type="date" class="edit-date" value="${escapeHtml(scheduleDate)}">
       </div>
       <div>
         <label>Start</label>
@@ -755,6 +842,7 @@
         <button type="button" class="neutral add-space">+ Space</button>
       </div>
       <div class="row-actions">
+        ${expired ? '<button type="button" class="secondary restore-row">Restore</button>' : ""}
         <button type="button" class="neutral duplicate-row">Duplicate</button>
         <button type="button" class="danger remove-row">Remove</button>
       </div>
@@ -780,18 +868,64 @@
       endInput.value = `${String(Math.floor(endMinutes / 60)).padStart(2, "0")}:${String(endMinutes % 60).padStart(2, "0")}`;
     });
 
+    const dateInput = wrapper.querySelector(".edit-date");
+    const repeatSelect = wrapper.querySelector(".edit-repeat");
+    dateInput.addEventListener("change", () => {
+      refreshSchedulePills();
+    });
+    repeatSelect.addEventListener("change", () => {
+      updateRowDateMode(wrapper);
+      refreshSchedulePills();
+    });
+
     wrapper.querySelector(".add-space").addEventListener("click", () => {
       const entry = createLocationEntry("");
       list.appendChild(entry);
       entry.querySelector(".edit-location").focus();
     });
     wrapper.querySelector(".duplicate-row").addEventListener("click", () => {
-      wrapper.after(createRow(readRowData(wrapper)));
+      wrapper.after(createRow(readRowData(wrapper), { expired: wrapper.classList.contains("expired-row") }));
+      updateExpiredSummary();
       refreshSchedulePills();
     });
-    wrapper.querySelector(".remove-row").addEventListener("click", () => wrapper.remove());
+    wrapper.querySelector(".remove-row").addEventListener("click", () => {
+      wrapper.remove();
+      updateExpiredSummary();
+    });
+
+    const restoreButton = wrapper.querySelector(".restore-row");
+    if (restoreButton) {
+      restoreButton.addEventListener("click", () => {
+        const data = readRowData(wrapper);
+        const dataDate = data.repeat ? data.repeatAnchor : data.eventDate;
+        if (!parseIsoDate(dataDate) || (!data.repeat && dataDate < easternTodayIso())) {
+          setStatus(data.repeat
+            ? "Choose a valid start date before restoring that recurring event."
+            : "Choose today or a future date before restoring that event.", true);
+          wrapper.querySelector(".edit-date").focus();
+          return;
+        }
+        wrapper.classList.remove("expired-row");
+        restoreButton.remove();
+        document.getElementById("agenda-rows").appendChild(wrapper);
+        updateExpiredSummary();
+        refreshSchedulePills();
+        setStatus("Event restored to the active editor (not yet published).", false);
+      });
+    }
+
+    wrapper.classList.toggle("expired-row", expired);
+    updateRowDateMode(wrapper);
 
     return wrapper;
+  }
+
+  function updateRowDateMode(rowEl) {
+    const isOneTime = rowEl.querySelector(".edit-repeat").value === "";
+    const dateInput = rowEl.querySelector(".edit-date");
+    rowEl.querySelector(".edit-date-label").textContent = isOneTime ? "Date" : "Start date";
+    dateInput.disabled = false;
+    dateInput.required = true;
   }
 
   function populateEditor(data) {
@@ -806,16 +940,41 @@
     document.getElementById("footer-security").value = typeof data.footerSecurity === "string" ? data.footerSecurity : DEFAULTS.footerSecurity;
     document.getElementById("footer-location-label").value = typeof data.footerLocationLabel === "string" ? data.footerLocationLabel : DEFAULTS.footerLocationLabel;
     document.getElementById("footer-security-label").value = typeof data.footerSecurityLabel === "string" ? data.footerSecurityLabel : DEFAULTS.footerSecurityLabel;
+    const { active, expired } = partitionExpiredOneTimeRows(data.rows);
     const container = document.getElementById("agenda-rows");
     container.innerHTML = "";
-    (Array.isArray(data.rows) ? data.rows : []).forEach(row => container.appendChild(createRow(row)));
+    active.forEach(row => container.appendChild(createRow(row)));
     if (!container.children.length) container.appendChild(createRow());
+    const expiredContainer = document.getElementById("expired-rows");
+    expiredContainer.innerHTML = "";
+    expired.forEach(row => expiredContainer.appendChild(createRow(row, { expired: true })));
+    updateExpiredSummary();
     refreshSchedulePills();
   }
 
-  // Same ordering the sign uses on screen: Monday -> Sunday, then start time,
-  // with unknown days and blank times sorting last. Sorting is manual (a
-  // button) so rows never jump around mid-edit.
+  function updateExpiredSummary() {
+    const details = document.getElementById("expired-events");
+    const count = document.querySelectorAll("#expired-rows > .agenda-row").length;
+    document.getElementById("expired-summary").textContent = `${count} expired event${count === 1 ? "" : "s"} hidden`;
+    details.hidden = count === 0;
+    if (!count) details.open = false;
+  }
+
+  function moveNewlyExpiredRows() {
+    const expiredContainer = document.getElementById("expired-rows");
+    Array.from(document.querySelectorAll("#agenda-rows > .agenda-row")).forEach(rowEl => {
+      const data = readRowData(rowEl);
+      if (data.repeat || !parseIsoDate(data.eventDate) || data.eventDate >= easternTodayIso()) return;
+      expiredContainer.appendChild(createRow(data, { expired: true }));
+      rowEl.remove();
+    });
+    const activeContainer = document.getElementById("agenda-rows");
+    if (!activeContainer.children.length) activeContainer.appendChild(createRow());
+    updateExpiredSummary();
+  }
+
+  // Date-aware editor ordering: one-time events use their exact date;
+  // repeating events use this week's occurrence. Missing dates sort last.
   function parseStartMinutes(time) {
     const match = String(time || "").match(/^(\d{1,2}):?(\d{2})/);
     if (!match) return null;
@@ -823,11 +982,22 @@
   }
 
   function compareRows(a, b) {
+    const weekStart = mondayOfWeek(easternTodayIso());
     const dayA = DAYS.indexOf(a.day);
     const dayB = DAYS.indexOf(b.day);
-    const weekA = dayA === -1 ? 99 : dayA;
-    const weekB = dayB === -1 ? 99 : dayB;
-    if (weekA !== weekB) return weekA - weekB;
+    const occurrenceA = a.repeat && dayA !== -1
+      ? (parseIsoDate(a.repeatAnchor) && addIsoDays(weekStart, dayA) < a.repeatAnchor
+        ? a.repeatAnchor
+        : addIsoDays(weekStart, dayA))
+      : (parseIsoDate(a.eventDate) ? a.eventDate : "9999-12-31");
+    const occurrenceB = b.repeat && dayB !== -1
+      ? (parseIsoDate(b.repeatAnchor) && addIsoDays(weekStart, dayB) < b.repeatAnchor
+        ? b.repeatAnchor
+        : addIsoDays(weekStart, dayB))
+      : (parseIsoDate(b.eventDate) ? b.eventDate : "9999-12-31");
+    const safeA = occurrenceA || "9999-12-31";
+    const safeB = occurrenceB || "9999-12-31";
+    if (safeA !== safeB) return safeA.localeCompare(safeB);
     const startA = parseStartMinutes(a.time);
     const startB = parseStartMinutes(b.time);
     return (startA === null ? 1e9 : startA) - (startB === null ? 1e9 : startB);
@@ -840,35 +1010,39 @@
       .sort((a, b) => compareRows(a.data, b.data))
       .forEach(item => container.appendChild(item.el));
     refreshSchedulePills();
-    setStatus("Rows sorted by day and start time (display order on the sign is always chronological either way).", false);
+    setStatus("Rows sorted by occurrence date and start time.", false);
   }
 
   function readRowData(rowEl) {
     const locations = Array.from(rowEl.querySelectorAll(".edit-location"))
       .map(input => input.value.trim())
       .filter(Boolean);
+    const repeatValue = rowEl.querySelector(".edit-repeat").value;
+    const scheduleDate = rowEl.querySelector(".edit-date").value;
+    const dateWeekday = weekdayNameFromIso(scheduleDate);
 
     return {
-      day: rowEl.querySelector(".edit-day").value.trim(),
+      day: dateWeekday || rowEl.dataset.legacyDay || "",
       time: combineTimeRange(
         rowEl.querySelector(".edit-start").value,
         rowEl.querySelector(".edit-end").value
       ),
       event: rowEl.querySelector(".edit-event").value.trim(),
       location: [...new Set(locations)].join(", "),
-      // Biweekly rows keep their original anchor date so the on/off week
-      // parity never shifts when re-edited.
-      ...(rowEl.querySelector(".edit-repeat").value === "weekly" ? { repeat: true } : {}),
-      ...(rowEl.querySelector(".edit-repeat").value === "biweekly"
-        ? { repeat: "biweekly", repeatAnchor: rowEl.dataset.repeatAnchor || easternTodayIso() }
+      ...(repeatValue === "" ? { eventDate: scheduleDate } : {}),
+      // Recurring rows use the chosen start date as their anchor. Weekly
+      // rows do not run before it; biweekly parity is calculated from it.
+      ...(repeatValue === "weekly" ? { repeat: true, repeatAnchor: scheduleDate } : {}),
+      ...(repeatValue === "biweekly"
+        ? { repeat: "biweekly", repeatAnchor: scheduleDate }
         : {})
     };
   }
 
   function collectConfig() {
-    const rows = Array.from(document.querySelectorAll(".agenda-row"))
+    const rows = Array.from(document.querySelectorAll("#agenda-rows > .agenda-row"))
       .map(readRowData)
-      .filter(row => row.day || row.time || row.event || row.location);
+      .filter(row => row.day || row.eventDate || row.time || row.event || row.location);
 
     return {
       centerName: document.getElementById("center-name").value.trim() || DEFAULTS.centerName,
@@ -884,12 +1058,19 @@
     };
   }
 
-  function easternTodayIso() {
-    return new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  function validateConfig(config) {
+    const missingDates = config.rows.filter(row => {
+      const scheduleDate = row.repeat ? row.repeatAnchor : row.eventDate;
+      return !parseIsoDate(scheduleDate);
+    });
+    if (missingDates.length) {
+      return `${missingDates.length} event${missingDates.length === 1 ? " needs" : "s need"} a valid date or start date before publishing.`;
+    }
+    return "";
   }
 
   function easternNowMinutes() {
-    const parts = new Date().toLocaleTimeString("en-GB", { timeZone: "America/New_York", hour12: false }).split(":");
+    const parts = new Date().toLocaleTimeString("en-GB", { timeZone: TIME_ZONE, hour12: false }).split(":");
     return Number(parts[0]) * 60 + Number(parts[1]);
   }
 
@@ -910,15 +1091,45 @@
     return (((thisWeek - anchorWeek) % 2) + 2) % 2 === 1;
   }
 
-  // Date-free schedule pill for an editor row. Elapsed = day earlier this
-  // Mon-Sun week, or today with the end time already past.
   function rowScheduleStatus(row) {
-    const dayIndex = DAYS.indexOf(String(row.day || "").trim());
-    if (dayIndex === -1) return null;
-    const todayIndex = DAYS.indexOf(new Date().toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "long" }));
+    const today = easternTodayIso();
     const endInput = splitTimeRange(row.time)[1];
     const endMatch = String(endInput || "").match(/^(\d{1,2}):(\d{2})$/);
     const endMinutes = endMatch ? Number(endMatch[1]) * 60 + Number(endMatch[2]) : null;
+    const scheduleDate = row.repeat ? row.repeatAnchor : row.eventDate;
+
+    if (!parseIsoDate(scheduleDate)) {
+      return {
+        label: row.repeat ? "Start date required" : "Date required",
+        cls: "needs-date",
+        title: row.repeat ? "Choose when this recurrence begins" : "Choose the event's exact date before publishing"
+      };
+    }
+    if (weekdayNameFromIso(scheduleDate) === "Sunday") {
+      return { label: "Not displayed", cls: "not-displayed", title: "The sign displays Monday through Saturday" };
+    }
+
+    if (!row.repeat) {
+      if (scheduleDate < today) return { label: "Expired", cls: "held" };
+      if (scheduleDate === today && endMinutes !== null && endMinutes <= easternNowMinutes()) {
+        return { label: "Held", cls: "held", title: "Remains on the sign until midnight" };
+      }
+      const displayWindow = displayWindowFor(today);
+      if (scheduleDate >= displayWindow.start && scheduleDate < displayWindow.endExclusive) {
+        return { label: "This week", cls: "this-week" };
+      }
+      return { label: "Future", cls: "next-week" };
+    }
+
+    const dayIndex = DAYS.indexOf(String(row.day || "").trim());
+    if (dayIndex === -1) return null;
+    if (String(row.day || "").trim() === "Sunday") {
+      return { label: "Not displayed", cls: "not-displayed", title: "The sign displays Monday through Saturday" };
+    }
+    const displayWindow = displayWindowFor(today);
+    const thisWeekOccurrence = addIsoDays(displayWindow.start, dayIndex);
+    if (thisWeekOccurrence < scheduleDate) return { label: "Future", cls: "next-week" };
+    const todayIndex = DAYS.indexOf(new Date().toLocaleDateString("en-US", { timeZone: TIME_ZONE, weekday: "long" }));
     const elapsed = dayIndex < todayIndex
       || (dayIndex === todayIndex && endMinutes !== null && endMinutes <= easternNowMinutes());
 
@@ -926,7 +1137,6 @@
     if (elapsed) {
       if (row.repeat === true || row.repeat === "weekly") return { label: "Runs next week", cls: "next-week" };
       if (row.repeat === "biweekly") return { label: "Runs in 2 weeks", cls: "two-weeks" };
-      return { label: "Held", cls: "held", title: "Past one-time event — removed on next publish" };
     }
     return { label: "This week", cls: "this-week" };
   }
@@ -950,22 +1160,18 @@
     });
   }
 
-  // One-time events (no "repeat weekly") whose day has already passed this
-  // Mon-Sun week are deleted from the editor when the config loads, so the
-  // next publish permanently drops them from config.json. The sign itself
-  // hides them at midnight but cannot write to GitHub; this is where the
-  // actual purge happens. Repeat-weekly events are never purged.
-  function purgeElapsedOneTimeRows(rows) {
-    const todayName = new Date().toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "long" });
-    const todayIndex = DAYS.indexOf(todayName);
-    const kept = [];
-    let removed = 0;
+  // Expired one-time rows stay recoverable in a collapsed editor section.
+  // They are omitted from the next publish; recurring and undated legacy
+  // rows are never removed automatically.
+  function partitionExpiredOneTimeRows(rows) {
+    const today = easternTodayIso();
+    const active = [];
+    const expired = [];
     (Array.isArray(rows) ? rows : []).forEach(row => {
-      const rowIndex = DAYS.indexOf(String(row.day || "").trim());
-      if (!row.repeat && rowIndex !== -1 && todayIndex !== -1 && rowIndex < todayIndex) removed += 1;
-      else kept.push(row);
+      if (!row.repeat && parseIsoDate(row.eventDate) && row.eventDate < today) expired.push(row);
+      else active.push(row);
     });
-    return { kept, removed };
+    return { active, expired };
   }
 
   // ---- GitHub API ----
@@ -1011,13 +1217,12 @@
       currentSha = file.sha;
       const text = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g, "")), c => c.charCodeAt(0)));
       const config = JSON.parse(text);
-      const { kept, removed } = purgeElapsedOneTimeRows(config.rows);
-      config.rows = kept;
       populateEditor(config);
+      const expiredCount = document.querySelectorAll("#expired-rows > .agenda-row").length;
       const loadedAt = `Loaded config.json from GitHub at ${formatEastern(new Date())}`
         + (lastPublished ? ` (last published ${lastPublished})` : "") + ".";
-      setStatus(removed
-        ? `${loadedAt} Removed ${removed} past one-time event${removed === 1 ? "" : "s"} — click Publish to sign to make that permanent.`
+      setStatus(expiredCount
+        ? `${loadedAt} ${expiredCount} expired one-time event${expiredCount === 1 ? " is" : "s are"} hidden and will be omitted on the next publish.`
         : loadedAt, false);
     } catch (error) {
       currentSha = null;
@@ -1027,6 +1232,7 @@
   }
 
   async function publish() {
+    moveNewlyExpiredRows();
     const token = getToken();
     if (!token) {
       setStatus("Paste your GitHub token above before publishing.", true);
@@ -1034,6 +1240,11 @@
     }
 
     const config = collectConfig();
+    const validationError = validateConfig(config);
+    if (validationError) {
+      setStatus(validationError, true);
+      return;
+    }
     const json = JSON.stringify(config, null, 2) + "\n";
     const bytes = new TextEncoder().encode(json);
     let binary = "";
@@ -1074,6 +1285,8 @@
       const result = await response.json();
       currentSha = result.content.sha;
       persistTokenIfRequested();
+      document.getElementById("expired-rows").innerHTML = "";
+      updateExpiredSummary();
       setStatus(`Published at ${formatEastern(new Date())}. Signs pick up the change within about 5 minutes (they poll config.json every 5 minutes).`, false);
     } catch (error) {
       setStatus(`Publish failed: ${error.message}`, true);
@@ -1149,7 +1362,14 @@
   }
 
   function downloadJson() {
-    const blob = new Blob([JSON.stringify(collectConfig(), null, 2) + "\n"], { type: "application/json" });
+    moveNewlyExpiredRows();
+    const config = collectConfig();
+    const validationError = validateConfig(config);
+    if (validationError) {
+      setStatus(validationError, true);
+      return;
+    }
+    const blob = new Blob([JSON.stringify(config, null, 2) + "\n"], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "config.json";
@@ -1194,10 +1414,10 @@
       rowEl.querySelector(".edit-start").value = "08:00";
       document.getElementById("agenda-rows").appendChild(rowEl);
       refreshSchedulePills();
-      rowEl.querySelector(".edit-day").focus();
+      rowEl.querySelector(".edit-date").focus();
     });
 
-    // Pills react live to any day/time/repeat edit.
+    // Pills react live to any date/time/repeat edit.
     document.getElementById("agenda-rows").addEventListener("change", refreshSchedulePills);
     document.getElementById("agenda-rows").addEventListener("input", refreshSchedulePills);
     document.getElementById("sort-rows").addEventListener("click", sortRows);
@@ -1219,6 +1439,8 @@
         const container = document.getElementById("agenda-rows");
         container.innerHTML = "";
         container.appendChild(createRow());
+        document.getElementById("expired-rows").innerHTML = "";
+        updateExpiredSummary();
         setStatus("All events cleared (not yet published — click Publish to sign to update the sign).", false);
       } else {
         clearButton.dataset.armed = "1";
@@ -1284,6 +1506,13 @@
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") closeMap();
     });
+
+    // Keep an admin tab left open across midnight tidy without any external
+    // scheduled script. Publishing repeats this check before writing.
+    setInterval(() => {
+      moveNewlyExpiredRows();
+      refreshSchedulePills();
+    }, 60 * 1000);
 
     // Drag-to-pan the zoomed map with the mouse. Touch devices already pan
     // natively (touch-action allows it), so only the mouse pointer is handled.

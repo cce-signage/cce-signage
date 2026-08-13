@@ -219,6 +219,13 @@
       opacity: 0.16;
     }
 
+    #clock-period {
+      margin-left: 0.25em;
+      font-size: 0.38em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
     .content-tile {
       border: 2px solid var(--tile-border);
       border-radius: 18px;
@@ -493,9 +500,12 @@
     // Versioning: bump the patch for fixes, the minor for new features, and
     // the major for changes that break config.json compatibility. Update
     // SIGN_PUBLISHED whenever the version changes. Logged to the console.
-    const SIGN_VERSION = "2.9.0";
-    const SIGN_PUBLISHED = "2026-07-13";
+    const SIGN_VERSION = "2.10.0";
+    const SIGN_PUBLISHED = "2026-08-12";
     console.log(`CCES sign v${SIGN_VERSION} (${SIGN_PUBLISHED})`);
+
+    const TIME_ZONE = "America/New_York";
+    const DISPLAY_WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     const defaultAgendaData = {
       centerName: "Center for Clinical Excellence and Simulation",
@@ -549,6 +559,8 @@
           .map(row => ({
             ...row,
             day: String(row.day ?? ""),
+            eventDate: String(row.eventDate ?? ""),
+            repeatAnchor: String(row.repeatAnchor ?? ""),
             time: String(row.time ?? ""),
             event: String(row.event ?? ""),
             location: normalizeLocation(row.location)
@@ -608,6 +620,47 @@
       return days.indexOf(String(dayName || "").trim().toLowerCase());
     }
 
+    function parseIsoDate(isoDate) {
+      const match = String(isoDate || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return null;
+      const year = Number(match[1]);
+      const month = Number(match[2]);
+      const day = Number(match[3]);
+      const utc = new Date(Date.UTC(year, month - 1, day));
+      if (utc.getUTCFullYear() !== year || utc.getUTCMonth() !== month - 1 || utc.getUTCDate() !== day) return null;
+      return utc;
+    }
+
+    function isoFromUtcDate(date) {
+      return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
+    }
+
+    function addIsoDays(isoDate, days) {
+      const date = parseIsoDate(isoDate);
+      if (!date) return "";
+      date.setUTCDate(date.getUTCDate() + days);
+      return isoFromUtcDate(date);
+    }
+
+    function weekdayNameFromIso(isoDate) {
+      const date = parseIsoDate(isoDate);
+      if (!date) return "";
+      return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][date.getUTCDay()];
+    }
+
+    function mondayOfWeek(isoDate) {
+      const date = parseIsoDate(isoDate);
+      if (!date) return "";
+      const daysFromMonday = (date.getUTCDay() + 6) % 7;
+      date.setUTCDate(date.getUTCDate() - daysFromMonday);
+      return isoFromUtcDate(date);
+    }
+
+    function displayWindowFor(isoDate) {
+      const start = mondayOfWeek(isoDate);
+      return { start, endExclusive: addIsoDays(start, 6) }; // Sunday 12:00 AM ET
+    }
+
     function parseAgendaEndMinutes(timeText) {
       const matches = String(timeText || "").match(/(\d{1,2}):?(\d{2})/g);
       if (!matches || !matches.length) return null;
@@ -637,12 +690,40 @@
       return hours * 60 + minutes;
     }
 
+    function formatMinutes12(minutes) {
+      if (!Number.isFinite(minutes)) return "";
+      const hours24 = Math.floor(minutes / 60) % 24;
+      const minute = minutes % 60;
+      const hours12 = hours24 % 12 || 12;
+      const period = hours24 >= 12 ? "PM" : "AM";
+      return `${hours12}:${String(minute).padStart(2, "0")} ${period}`;
+    }
+
+    function formatAgendaTimeRange(timeText) {
+      const matches = String(timeText || "").match(/(\d{1,2}):?(\d{2})/g);
+      if (!matches || !matches.length) return String(timeText || "");
+
+      const formatted = matches.map(value => {
+        const normalized = value.replace(/\D/g, "").padStart(4, "0");
+        const hours = Number(normalized.slice(0, -2));
+        const minutes = Number(normalized.slice(-2));
+        if (hours > 23 || minutes > 59) return "";
+        return formatMinutes12(hours * 60 + minutes);
+      });
+
+      if (formatted.some(value => !value)) return String(timeText || "");
+      return formatted.join(formatted.length > 1 ? " – " : "");
+    }
+
     // Single source of truth for "now" in Eastern time, independent of the
     // signage player's OS timezone. Only requires the device clock to be
     // accurate; a player mistakenly set to UTC still reads correctly.
     function getEasternNow(reference = new Date()) {
       const parts = new Intl.DateTimeFormat("en-US", {
-        timeZone: "America/New_York",
+        timeZone: TIME_ZONE,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
         weekday: "long",
         hour: "2-digit",
         minute: "2-digit",
@@ -657,23 +738,17 @@
       const minute = parseInt(map.minute, 10) || 0;
 
       return {
+        isoDate: `${map.year}-${map.month}-${map.day}`,
         weekdayName: map.weekday || "",
         dayIndex: getDayIndex(map.weekday),   // Sunday=0 .. Saturday=6, -1 if unknown
         minutes: hour * 60 + minute
       };
     }
 
-    // Week runs Monday(0) -> Sunday(6); unknown days sort to the very end.
-    function weekIndexFromDay(dayIndex) {
-      return dayIndex === -1 ? 99 : (dayIndex + 6) % 7;
-    }
-
-    // Display order is derived, never hand-maintained: weekday first
-    // (Monday -> Sunday), then start time. Unknown days sort to the end.
+    // Display order is derived from each row's occurrence date, then start
+    // time. The ISO date keeps separate weeks from ever collapsing together.
     function compareAgendaRows(a, b) {
-      const weekA = weekIndexFromDay(getDayIndex(a.day));
-      const weekB = weekIndexFromDay(getDayIndex(b.day));
-      if (weekA !== weekB) return weekA - weekB;
+      if (a._occurrenceDate !== b._occurrenceDate) return a._occurrenceDate.localeCompare(b._occurrenceDate);
 
       const startA = parseAgendaStartMinutes(a.time);
       const startB = parseAgendaStartMinutes(b.time);
@@ -681,7 +756,7 @@
     }
 
     function easternTodayIso() {
-      return new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+      return getEasternNow().isoDate;
     }
 
     // Mon-Sun week number since epoch for an ISO date ("YYYY-MM-DD").
@@ -693,8 +768,8 @@
       return Math.floor((utc - daysFromMonday * 86400000) / 604800000);
     }
 
-    // Biweekly rows carry repeatAnchor (the date they were configured).
-    // Even weeks-elapsed since the anchor week = show; odd = hide all week.
+    // Recurring rows carry repeatAnchor as their chosen start date. For
+    // biweekly rows, even weeks elapsed from that anchor week are active.
     function isBiweeklyOffWeek(row) {
       if (row.repeat !== "biweekly") return false;
       const anchorWeek = weekNumberOf(row.repeatAnchor);
@@ -703,24 +778,36 @@
       return (((thisWeek - anchorWeek) % 2) + 2) % 2 === 1;
     }
 
-    function hasAgendaItemPassed(row, eastern) {
-      const rowWeek = weekIndexFromDay(getDayIndex(row.day));
-      if (rowWeek === 99) return false;   // unknown day: never auto-hide
+    // Older biweekly rows stored a week anchor that could be on a different
+    // weekday from the event. Normalize those rows to their saved weekday in
+    // the same week, preserving both the schedule and biweekly parity.
+    function recurringStartDate(row) {
+      if (!parseIsoDate(row.repeatAnchor)) return "";
+      let dayOffset = DISPLAY_WEEKDAYS.indexOf(String(row.day || "").trim());
+      if (dayOffset === -1) {
+        dayOffset = DISPLAY_WEEKDAYS.indexOf(weekdayNameFromIso(row.repeatAnchor));
+      }
+      return dayOffset === -1 ? "" : addIsoDays(mondayOfWeek(row.repeatAnchor), dayOffset);
+    }
 
-      // Hide only earlier days this Mon-Sun week. Today's events stay visible
-      // (tagged "ended" once they finish) until the day rolls over at midnight.
-      const todayWeek = weekIndexFromDay(eastern.dayIndex);
-      return rowWeek < todayWeek;
+    function occurrenceDateForRow(row, displayWindow) {
+      if (!row.repeat) return parseIsoDate(row.eventDate) ? row.eventDate : "";
+      const startDate = recurringStartDate(row);
+      if (!startDate) return "";
+      const dayOffset = DISPLAY_WEEKDAYS.indexOf(weekdayNameFromIso(startDate));
+      if (dayOffset === -1) return "";
+      const occurrenceDate = addIsoDays(displayWindow.start, dayOffset);
+      return occurrenceDate < startDate ? "" : occurrenceDate;
     }
 
     // Tags each visible row with _status: "now" (in progress today), "ended"
     // (finished but still showing until midnight), or "upnext" (the soonest
     // session not yet started, rolling into the next day once today's are done).
-    function assignAgendaStatus(rows, eastern, todayWeek) {
+    function assignAgendaStatus(rows, eastern) {
       rows.forEach(row => { row._status = null; });
 
       rows.forEach(row => {
-        if (weekIndexFromDay(getDayIndex(row.day)) !== todayWeek) return;
+        if (row._occurrenceDate !== eastern.isoDate) return;
         const start = parseAgendaStartMinutes(row.time);
         const end = parseAgendaEndMinutes(row.time);
         if (start === null || end === null) return;
@@ -736,16 +823,15 @@
         if (row._status) return false;
         const start = parseAgendaStartMinutes(row.time);
         if (start === null) return false;
-        const rowWeek = weekIndexFromDay(getDayIndex(row.day));
-        if (rowWeek > todayWeek) return true;
-        return rowWeek === todayWeek && start > eastern.minutes;
+        if (row._occurrenceDate > eastern.isoDate) return true;
+        return row._occurrenceDate === eastern.isoDate && start > eastern.minutes;
       });
 
       if (upcoming.length) {
-        const leadWeek = weekIndexFromDay(getDayIndex(upcoming[0].day));
+        const leadDate = upcoming[0]._occurrenceDate;
         const leadStart = parseAgendaStartMinutes(upcoming[0].time);
         upcoming.forEach(row => {
-          if (weekIndexFromDay(getDayIndex(row.day)) === leadWeek
+          if (row._occurrenceDate === leadDate
               && parseAgendaStartMinutes(row.time) === leadStart) {
             row._status = "upnext";
           }
@@ -786,26 +872,40 @@
       `;
 
       const eastern = getEasternNow();
-      const todayName = eastern.weekdayName.toLowerCase();
-      const todayWeek = weekIndexFromDay(eastern.dayIndex);
+      const displayWindow = displayWindowFor(eastern.isoDate);
       const visibleRows = data.rows
-        .filter(row => !isBiweeklyOffWeek(row) && !hasAgendaItemPassed(row, eastern))
+        .filter(row => !isBiweeklyOffWeek(row))
+        .map(row => {
+          const occurrenceDate = occurrenceDateForRow(row, displayWindow);
+          if (!occurrenceDate) return null;
+          return {
+            ...row,
+            day: weekdayNameFromIso(occurrenceDate),
+            _occurrenceDate: occurrenceDate
+          };
+        })
+        // The weekly sign is open Monday through Saturday. Earlier one-time
+        // events disappear after their date rolls over at Eastern midnight;
+        // future weeks remain stored but are not shown yet.
+        .filter(row => row
+          && row._occurrenceDate >= displayWindow.start
+          && row._occurrenceDate < displayWindow.endExclusive
+          && row._occurrenceDate >= eastern.isoDate)
         .sort(compareAgendaRows);
 
-      assignAgendaStatus(visibleRows, eastern, todayWeek);
+      assignAgendaStatus(visibleRows, eastern);
 
       const groupedRows = [];
 
       visibleRows.forEach(row => {
-        const normalizedDay = String(row.day || "").trim().toLowerCase();
-        const existingGroup = groupedRows.find(group => group.normalizedDay === normalizedDay && normalizedDay);
+        const existingGroup = groupedRows.find(group => group.occurrenceDate === row._occurrenceDate);
 
         if (existingGroup) {
           existingGroup.items.push(row);
         } else {
           groupedRows.push({
             day: row.day,
-            normalizedDay,
+            occurrenceDate: row._occurrenceDate,
             items: [row]
           });
         }
@@ -821,7 +921,7 @@
 
       groupedRows.forEach(group => {
         const rowElement = document.createElement("div");
-        rowElement.className = group.normalizedDay === todayName ? "schedule-row today-row" : "schedule-row";
+        rowElement.className = group.occurrenceDate === eastern.isoDate ? "schedule-row today-row" : "schedule-row";
 
         const rowSpan = Math.max(group.items.length, 1);
         const cells = [`<div class="schedule-column day" style="grid-row: 1 / span ${rowSpan};">${escapeHtml(group.day)}</div>`];
@@ -834,7 +934,7 @@
             ? `<span class="status-badge ${status}">${badgeLabels[status]}</span>`
             : "";
           const dim = status === "ended" ? " ended" : "";
-          cells.push(`<div class="schedule-column time${dim}" style="grid-row: ${gridRow};">${escapeHtml(item.time)}</div>`);
+          cells.push(`<div class="schedule-column time${dim}" style="grid-row: ${gridRow};">${escapeHtml(formatAgendaTimeRange(item.time))}</div>`);
           cells.push(`<div class="schedule-column event${dim}" style="grid-row: ${gridRow};">${badge}<strong>${escapeHtml(item.event)}</strong></div>`);
           // Each space on its own line: a row can list several
           // comma-separated spaces, and one long comma string wraps badly.
@@ -1069,30 +1169,34 @@
         clock.innerHTML = `
           <div id="clock-date"></div>
           <div id="clock-time" aria-live="off">
-            <span id="clock-hour"></span><span id="clock-colon">:</span><span id="clock-minute"></span>
+            <span id="clock-hour"></span><span id="clock-colon">:</span><span id="clock-minute"></span><span id="clock-period"></span>
           </div>
         `;
       }
 
       const dateText = now.toLocaleDateString("en-US", {
-        timeZone: "America/New_York",
+        timeZone: TIME_ZONE,
         weekday: "long",
         year: "numeric",
         month: "long",
         day: "numeric"
       });
       const eastern = getEasternNow(now);
-      const hours = String(Math.floor(eastern.minutes / 60)).padStart(2, "0");
+      const hours24 = Math.floor(eastern.minutes / 60);
+      const hours = String(hours24 % 12 || 12);
       const minutes = String(eastern.minutes % 60).padStart(2, "0");
+      const period = hours24 >= 12 ? "PM" : "AM";
 
       const dateEl = document.getElementById("clock-date");
       const hourEl = document.getElementById("clock-hour");
       const minuteEl = document.getElementById("clock-minute");
+      const periodEl = document.getElementById("clock-period");
       const colonEl = document.getElementById("clock-colon");
 
       if (dateEl.textContent !== dateText) dateEl.textContent = dateText;
       if (hourEl.textContent !== hours) hourEl.textContent = hours;
       if (minuteEl.textContent !== minutes) minuteEl.textContent = minutes;
+      if (periodEl.textContent !== period) periodEl.textContent = period;
       colonEl.classList.toggle("colon-off", now.getSeconds() % 2 === 1);
     }
 
@@ -1109,10 +1213,12 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       scheduleNightlyReload();
-      // The sign renders at 75% zoom by default (sized for a TV panel).
+      // Samsung's TV browser applies its own 125% scale. A 60% page zoom
+      // produces the same effective size as the former 75% page at a manual
+      // 100% browser scale (1.25 x 0.60 = 0.75).
       // Preview at another size with ?zoom=100 (accepted range 25-200).
       const zoomOverride = Number(new URLSearchParams(window.location.search).get("zoom"));
-      document.documentElement.style.zoom = `${zoomOverride >= 25 && zoomOverride <= 200 ? zoomOverride : 75}%`;
+      document.documentElement.style.zoom = `${zoomOverride >= 25 && zoomOverride <= 200 ? zoomOverride : 60}%`;
 
       updateClock();
       updateWeather();
