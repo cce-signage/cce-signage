@@ -10,27 +10,6 @@
   "footerSecurity": "(813) 615-7922",
   "rows": [
     {
-      "day": "Monday",
-      "time": "0700 - 1530",
-      "event": "Surgical Technologist Training Program Simulation Day 9",
-      "location": "Skills Lab Room 116",
-      "eventDate": "2026-08-17"
-    },
-    {
-      "day": "Monday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 108, Debrief Room 111, Debrief Room 112, Debrief Room 113",
-      "eventDate": "2026-08-17"
-    },
-    {
-      "day": "Monday",
-      "time": "0900 - 1630",
-      "event": "Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-08-17"
-    },
-    {
       "day": "Tuesday",
       "time": "0745 - 1600",
       "event": "Clinical Orientation",
@@ -39,61 +18,12 @@
       "repeatAnchor": "2026-07-14"
     },
     {
-      "day": "Tuesday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 108, Debrief Room 111, Debrief Room 112, Debrief Room 113",
-      "eventDate": "2026-08-18"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0830 - 1030",
-      "event": "Think Twice",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-18"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0900 - 1630",
-      "event": "Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-08-18"
-    },
-    {
-      "day": "Tuesday",
-      "time": "1200 - 1400",
-      "event": "Code Blue Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-18"
-    },
-    {
       "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-15"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 108, Debrief Room 111, Debrief Room 112, Debrief Room 113",
-      "eventDate": "2026-08-19"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1000 - 1230",
-      "event": "Defensive Documentation",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-19"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1300 - 1600",
-      "event": "Cardiac Drip",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-19"
     },
     {
       "day": "Thursday",
@@ -112,46 +42,39 @@
       "repeatAnchor": "2026-07-30"
     },
     {
-      "day": "Thursday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 108, Debrief Room 111, Debrief Room 112, Debrief Room 113",
-      "eventDate": "2026-08-20"
+      "day": "Monday",
+      "time": "0730 - 1630",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-08-24"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0730 - 1630",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-08-25"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0730 - 1630",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-08-26"
     },
     {
       "day": "Thursday",
-      "time": "0800 - 1430",
-      "event": "Labor and Delivery Intern Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-20"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 1",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-08-20"
+      "time": "0730 - 1630",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-08-27"
     },
     {
       "day": "Friday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Simulation Room 105, Simulation Room 106, Simulation Room 108, Debrief Room 111, Debrief Room 112, Debrief Room 113",
-      "eventDate": "2026-08-21"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1500",
-      "event": "Private Room Reservation",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-21"
-    },
-    {
-      "day": "Friday",
-      "time": "0900 - 1200",
-      "event": "Basic Rhythm Interpretation Test Out",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-08-21"
+      "time": "0730 - 1630",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-08-28"
     }
   ]
 }
