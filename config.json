@@ -75,6 +75,27 @@
       "event": "Tampa Metro CDI Education",
       "location": "Auditorium Room 115",
       "eventDate": "2026-08-28"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Wound Care Workshop",
+      "location": "Classroom 121",
+      "eventDate": "2026-08-26"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1230 - 1630",
+      "event": "Preceptor Reboot",
+      "location": "Classroom 121",
+      "eventDate": "2026-08-26"
+    },
+    {
+      "day": "Monday",
+      "time": "0900 - 1630",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-08-31"
     }
   ]
 }
