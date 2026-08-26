@@ -37,23 +37,9 @@
       "day": "Thursday",
       "time": "0800 - 1130",
       "event": "New Hire Orientation Skills",
-      "location": "Skills Lab Room 116, Classroom 118, Classroom 120",
+      "location": "Debrief Room 111, Debrief Room 112, Debrief Room 113",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-30"
-    },
-    {
-      "day": "Monday",
-      "time": "0730 - 1630",
-      "event": "Tampa Metro CDI Education",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-08-24"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0730 - 1630",
-      "event": "Tampa Metro CDI Education",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-08-25"
     },
     {
       "day": "Wednesday",
@@ -96,6 +82,20 @@
       "event": "WFD Basic Rhythm Interpretation",
       "location": "Auditorium Room 134",
       "eventDate": "2026-08-31"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1530",
+      "event": "Surgical Technologist Training Program Simulation Day 10",
+      "location": "Classroom 118",
+      "eventDate": "2026-08-26"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 1430",
+      "event": "GME Emergency Medicine Conference",
+      "location": "Classroom 118",
+      "eventDate": "2026-08-27"
     }
   ]
 }
