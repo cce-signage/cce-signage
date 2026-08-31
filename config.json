@@ -56,12 +56,11 @@
       "eventDate": "2026-09-01"
     },
     {
-      "day": "Monday",
+      "day": "Tuesday",
       "time": "0730 - 1630",
       "event": "Tampa Metro CDI Education",
       "location": "Auditorium Room 115",
-      "repeat": true,
-      "repeatAnchor": "2026-08-31"
+      "eventDate": "2026-09-01"
     },
     {
       "day": "Thursday",
