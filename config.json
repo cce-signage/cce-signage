@@ -97,6 +97,34 @@
       "event": "Glucommander Class",
       "location": "Classroom 120",
       "eventDate": "2026-09-03"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1200",
+      "event": "Cardiac Drip Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-08"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-09"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "ED ESI Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-09"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1500",
+      "event": "Nurse Residency Body System Workshop",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-10"
     }
   ]
 }
