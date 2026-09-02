@@ -42,27 +42,6 @@
       "repeatAnchor": "2026-07-30"
     },
     {
-      "day": "Monday",
-      "time": "0900 - 1630",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Classroom 121",
-      "eventDate": "2026-08-31"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0900 - 1900",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-01"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0730 - 1630",
-      "event": "Tampa Metro CDI Education",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-09-01"
-    },
-    {
       "day": "Thursday",
       "time": "0830 - 1700",
       "event": "Nurse Residency Workshop 2",
@@ -75,13 +54,6 @@
       "event": "WFD Basic Rhythm Interpretation Test-Out",
       "location": "Classroom 121",
       "eventDate": "2026-09-04"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0730 - 1330",
-      "event": "PCU Bootcamp",
-      "location": "Classroom 120",
-      "eventDate": "2026-09-01"
     },
     {
       "day": "Thursday",
@@ -124,6 +96,13 @@
       "event": "Nurse Residency Body System Workshop",
       "location": "Classroom 121",
       "eventDate": "2026-09-10"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1630",
+      "event": "Newly Licensed Nurse Skills Day 1",
+      "location": "Skills Lab Room 116",
+      "eventDate": "2026-09-02"
     }
   ]
 }
