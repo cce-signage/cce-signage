@@ -131,6 +131,13 @@
       "event": "Tampa Metro CDI Education",
       "location": "Auditorium Room 115",
       "eventDate": "2026-09-03"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1700",
+      "event": "Comeback Day",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-04"
     }
   ]
 }
