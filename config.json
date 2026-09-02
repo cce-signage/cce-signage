@@ -103,6 +103,13 @@
       "event": "Newly Licensed Nurse Skills Day 1",
       "location": "Skills Lab Room 116",
       "eventDate": "2026-09-02"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1630",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-02"
     }
   ]
 }
