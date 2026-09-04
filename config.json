@@ -42,32 +42,11 @@
       "repeatAnchor": "2026-07-30"
     },
     {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 2",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-03"
-    },
-    {
       "day": "Friday",
       "time": "0900 - 1200",
       "event": "WFD Basic Rhythm Interpretation Test-Out",
       "location": "Classroom 121",
       "eventDate": "2026-09-04"
-    },
-    {
-      "day": "Thursday",
-      "time": "0900 - 1200",
-      "event": "Wound Care Workshop",
-      "location": "Classroom 120",
-      "eventDate": "2026-09-03"
-    },
-    {
-      "day": "Thursday",
-      "time": "1300 - 1600",
-      "event": "Glucommander Class",
-      "location": "Classroom 120",
-      "eventDate": "2026-09-03"
     },
     {
       "day": "Tuesday",
@@ -98,25 +77,11 @@
       "eventDate": "2026-09-10"
     },
     {
-      "day": "Thursday",
-      "time": "0800 - 1630",
-      "event": "Newly Licensed Nurse Skills Day 2",
-      "location": "Skills Lab Room 116",
-      "eventDate": "2026-09-03"
-    },
-    {
       "day": "Friday",
       "time": "0800 - 1200",
       "event": "Newly Licensed Nurse Skills Day 3",
       "location": "Skills Lab Room 116",
       "eventDate": "2026-09-04"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1630",
-      "event": "Tampa Metro CDI Education",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-09-03"
     },
     {
       "day": "Friday",
@@ -131,6 +96,34 @@
       "event": "Closed | Labor Day",
       "location": "",
       "eventDate": "2026-09-07"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1200",
+      "event": "Cardiac Drip Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-08"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-09"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "ED ESI Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-09"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1500",
+      "event": "Nurse Residency Body System Workshop",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-10"
     }
   ]
 }
