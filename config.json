@@ -42,13 +42,6 @@
       "repeatAnchor": "2026-07-30"
     },
     {
-      "day": "Friday",
-      "time": "0900 - 1200",
-      "event": "WFD Basic Rhythm Interpretation Test-Out",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-04"
-    },
-    {
       "day": "Tuesday",
       "time": "0800 - 1200",
       "event": "Cardiac Drip Class",
@@ -75,27 +68,6 @@
       "event": "Nurse Residency Body System Workshop",
       "location": "Classroom 121",
       "eventDate": "2026-09-10"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1200",
-      "event": "Newly Licensed Nurse Skills Day 3",
-      "location": "Skills Lab Room 116",
-      "eventDate": "2026-09-04"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1700",
-      "event": "Comeback Day",
-      "location": "Auditorium Room 115, Debrief Room 112, Debrief Room 113",
-      "eventDate": "2026-09-04"
-    },
-    {
-      "day": "Monday",
-      "time": "0000 - 2359",
-      "event": "Closed | Labor Day",
-      "location": "",
-      "eventDate": "2026-09-07"
     },
     {
       "day": "Tuesday",
@@ -215,6 +187,13 @@
       "event": "GME Conference",
       "location": "Classroom 118",
       "eventDate": "2026-09-10"
+    },
+    {
+      "day": "Friday",
+      "time": "1200 - 1330",
+      "event": "Mastisol Lunch N Learn",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-11"
     }
   ]
 }
