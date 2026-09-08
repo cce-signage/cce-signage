@@ -11,14 +11,6 @@
   "rows": [
     {
       "day": "Tuesday",
-      "time": "0745 - 1600",
-      "event": "Clinical Orientation",
-      "location": "Auditorium Room 134",
-      "repeat": "biweekly",
-      "repeatAnchor": "2026-07-14"
-    },
-    {
-      "day": "Tuesday",
       "time": "0900 - 1200",
       "event": "Cardiac Drip Class",
       "location": "Classroom 121",
@@ -34,10 +26,10 @@
     {
       "day": "Wednesday",
       "time": "0745 - 1600",
-      "event": "Nursing Orientation",
+      "event": "Clinical New Hire Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
-      "repeatAnchor": "2026-07-15"
+      "repeatAnchor": "2026-09-09"
     },
     {
       "day": "Wednesday",
@@ -63,18 +55,10 @@
     {
       "day": "Thursday",
       "time": "0745 - 1600",
-      "event": "Nursing Orientation",
+      "event": "New Hire Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
-      "repeatAnchor": "2026-07-16"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1130",
-      "event": "New Hire Orientation Skills",
-      "location": "Debrief Room 111, Debrief Room 112, Debrief Room 113",
-      "repeat": "biweekly",
-      "repeatAnchor": "2026-07-30"
+      "repeatAnchor": "2026-09-10"
     },
     {
       "day": "Thursday",
@@ -82,6 +66,14 @@
       "event": "Nurse Residency Body System Workshop",
       "location": "Classroom 121",
       "eventDate": "2026-09-10"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1130",
+      "event": "New Hire Orientation Skills",
+      "location": "Auditorium Room 134, Debrief Room 111, Debrief Room 112, Debrief Room 113",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-09-11"
     },
     {
       "day": "Friday",
