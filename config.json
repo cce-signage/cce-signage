@@ -18,12 +18,47 @@
       "repeatAnchor": "2026-07-14"
     },
     {
+      "day": "Tuesday",
+      "time": "0900 - 1200",
+      "event": "Cardiac Drip Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-08"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0730 - 1530",
+      "event": "Surgical Tech Training Program Simulation",
+      "location": "Classroom 118, Classroom 119",
+      "eventDate": "2026-09-09"
+    },
+    {
       "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
       "repeatAnchor": "2026-07-15"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-09"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "ED ESI Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-09"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 1430",
+      "event": "GME Emergency Medicine Conference",
+      "location": "Classroom 118",
+      "eventDate": "2026-09-10"
     },
     {
       "day": "Thursday",
@@ -42,27 +77,6 @@
       "repeatAnchor": "2026-07-30"
     },
     {
-      "day": "Tuesday",
-      "time": "0800 - 1200",
-      "event": "Cardiac Drip Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-08"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0900 - 1200",
-      "event": "Heparin Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-09"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1200 - 1700",
-      "event": "ED ESI Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-09"
-    },
-    {
       "day": "Thursday",
       "time": "0900 - 1500",
       "event": "Nurse Residency Body System Workshop",
@@ -70,32 +84,11 @@
       "eventDate": "2026-09-10"
     },
     {
-      "day": "Tuesday",
-      "time": "0900 - 1200",
-      "event": "Cardiac Drip Class",
+      "day": "Friday",
+      "time": "1200 - 1330",
+      "event": "Mastisol Lunch N Learn",
       "location": "Classroom 121",
-      "eventDate": "2026-09-08"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0900 - 1200",
-      "event": "Heparin Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-09"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1200 - 1700",
-      "event": "ED ESI Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-09"
-    },
-    {
-      "day": "Thursday",
-      "time": "0900 - 1500",
-      "event": "Nurse Residency Body System Workshop",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-10"
+      "eventDate": "2026-09-11"
     },
     {
       "day": "Monday",
@@ -103,27 +96,6 @@
       "event": "WFD Basic Rhythm Interpretation",
       "location": "Auditorium Room 134",
       "eventDate": "2026-09-14"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0900 - 1900",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-09-15"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0900 - 1200",
-      "event": "WFD Basic Rhythm Interpretation Test Out",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-09-16"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 1",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-09-17"
     },
     {
       "day": "Monday",
@@ -141,10 +113,31 @@
     },
     {
       "day": "Tuesday",
+      "time": "0900 - 1900",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-09-15"
+    },
+    {
+      "day": "Tuesday",
       "time": "1200 - 1400",
       "event": "Code Blue Class",
       "location": "Classroom 120",
       "eventDate": "2026-09-15"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1630",
+      "event": "Newly Licensed Nurse Clinical Immersion Day 1",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-16"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "WFD Basic Rhythm Interpretation Test Out",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-09-16"
     },
     {
       "day": "Wednesday",
@@ -161,13 +154,6 @@
       "eventDate": "2026-09-16"
     },
     {
-      "day": "Wednesday",
-      "time": "0800 - 1630",
-      "event": "Newly Licensed Nurse Clinical Immersion Day 1",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-09-16"
-    },
-    {
       "day": "Thursday",
       "time": "0800 - 1630",
       "event": "Newly Licensed Nurse Clinical Immersion Day 2",
@@ -175,25 +161,11 @@
       "eventDate": "2026-09-17"
     },
     {
-      "day": "Wednesday",
-      "time": "0730 - 1530",
-      "event": "Surgical Tech Training Program Simulation",
-      "location": "Classroom 118, Classroom 119",
-      "eventDate": "2026-09-09"
-    },
-    {
       "day": "Thursday",
-      "time": "0700 - 1430",
-      "event": "GME Conference",
-      "location": "Classroom 118",
-      "eventDate": "2026-09-10"
-    },
-    {
-      "day": "Friday",
-      "time": "1200 - 1330",
-      "event": "Mastisol Lunch N Learn",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-11"
+      "time": "0830 - 1700",
+      "event": "Nurse Residency Workshop 1",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-09-17"
     }
   ]
 }
