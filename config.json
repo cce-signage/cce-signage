@@ -10,20 +10,6 @@
   "footerSecurity": "(813) 615-7922",
   "rows": [
     {
-      "day": "Tuesday",
-      "time": "0900 - 1200",
-      "event": "Cardiac Drip Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-08"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0730 - 1530",
-      "event": "Surgical Technologist Training Program",
-      "location": "Classroom 118, Skills Lab Room 116",
-      "eventDate": "2026-09-09"
-    },
-    {
       "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "Clinical New Hire Orientation",
@@ -32,24 +18,10 @@
       "repeatAnchor": "2026-09-09"
     },
     {
-      "day": "Wednesday",
-      "time": "0900 - 1200",
-      "event": "Heparin Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-09"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1200 - 1700",
-      "event": "ED ESI Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-09"
-    },
-    {
       "day": "Thursday",
       "time": "0700 - 1430",
       "event": "GME Emergency Medicine Conference",
-      "location": "Classroom 118",
+      "location": "Classroom 118, Skills Lab Room 116",
       "eventDate": "2026-09-10"
     },
     {
