@@ -144,6 +144,13 @@
       "event": "Glucommander Class",
       "location": "Classroom 121",
       "eventDate": "2026-09-25"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 1400",
+      "event": "EM GME Conference",
+      "location": "Classroom 118",
+      "eventDate": "2026-09-24"
     }
   ]
 }
