@@ -19,25 +19,11 @@
     },
     {
       "day": "Thursday",
-      "time": "0700 - 1430",
-      "event": "GME Emergency Medicine Conference",
-      "location": "Classroom 118, Skills Lab Room 116",
-      "eventDate": "2026-09-10"
-    },
-    {
-      "day": "Thursday",
       "time": "0745 - 1600",
       "event": "New Hire Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
       "repeatAnchor": "2026-09-10"
-    },
-    {
-      "day": "Thursday",
-      "time": "0900 - 1500",
-      "event": "Nurse Residency Body System Workshop",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-10"
     },
     {
       "day": "Friday",
@@ -130,6 +116,34 @@
       "event": "Nurse Residency Workshop 1",
       "location": "Auditorium Room 134",
       "eventDate": "2026-09-17"
+    },
+    {
+      "day": "Tuesday",
+      "time": "1300 - 1600",
+      "event": "WFD Basic Rhythm Interpretation Test Out",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-22"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0830 - 1130",
+      "event": "Nurse Residency PREP Room 1",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-23"
+    },
+    {
+      "day": "Thursday",
+      "time": "0830 - 1430",
+      "event": "Nurse Residency PREP Room 1",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-24"
+    },
+    {
+      "day": "Friday",
+      "time": "0900 - 1200",
+      "event": "Glucommander Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-25"
     }
   ]
 }
