@@ -10,27 +10,6 @@
   "footerSecurity": "(813) 615-7922",
   "rows": [
     {
-      "day": "Tuesday",
-      "time": "0830 - 1030",
-      "event": "Think Twice Class",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-09-15"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0900 - 1900",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-09-15"
-    },
-    {
-      "day": "Tuesday",
-      "time": "1200 - 1400",
-      "event": "Code Blue Class",
-      "location": "Classroom 120",
-      "eventDate": "2026-09-15"
-    },
-    {
       "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "Clinical New Hire Orientation",
@@ -49,14 +28,14 @@
       "day": "Wednesday",
       "time": "0900 - 1200",
       "event": "WFD Basic Rhythm Interpretation Test Out",
-      "location": "Auditorium Room 134",
+      "location": "Classroom 120",
       "eventDate": "2026-09-16"
     },
     {
       "day": "Wednesday",
       "time": "1000 - 1230",
       "event": "Defensive Documentation Class",
-      "location": "Classroom 120",
+      "location": "Auditorium Room 134",
       "eventDate": "2026-09-16"
     },
     {
