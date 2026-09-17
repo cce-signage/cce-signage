@@ -10,64 +10,56 @@
   "footerSecurity": "(813) 615-7922",
   "rows": [
     {
-      "day": "Wednesday",
+      "day": "Tuesday",
       "time": "0745 - 1600",
       "event": "Clinical New Hire Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
-      "repeatAnchor": "2026-09-09"
+      "repeatAnchor": "2026-09-22"
     },
     {
-      "day": "Thursday",
+      "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "New Hire Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
-      "repeatAnchor": "2026-09-10"
+      "repeatAnchor": "2026-09-23"
     },
     {
       "day": "Thursday",
       "time": "0800 - 1630",
       "event": "Newly Licensed Nurse Clinical Immersions",
-      "location": "Auditorium Room 115"
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-17"
     },
     {
       "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 1",
-      "location": "Auditorium Room 134"
-    },
-    {
-      "day": "Friday",
       "time": "0800 - 1130",
       "event": "New Hire Orientation Skills",
       "location": "Auditorium Room 134, Debrief Room 111, Debrief Room 112, Debrief Room 113",
       "repeat": "biweekly",
-      "repeatAnchor": "2026-09-11"
-    },
-    {
-      "day": "Thursday",
-      "time": "0700 - 1430",
-      "event": "EM GME Conference",
-      "location": "Classroom 118"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1430",
-      "event": "Nurse Residency PREP Room 1",
-      "location": "Classroom 121"
+      "repeatAnchor": "2026-09-24"
     },
     {
       "day": "Friday",
       "time": "0900 - 1200",
       "event": "Glucommander Class",
-      "location": "Classroom 121"
+      "location": "Classroom 121",
+      "eventDate": "2026-09-25"
     },
     {
-      "day": "Thursday",
-      "time": "0800 - 1630",
-      "event": "Newly Licensed Nurse Clinical Immersions",
-      "location": ""
+      "day": "Wednesday",
+      "time": "0830 - 1130",
+      "event": "Nurse Residency PREP",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-23"
+    },
+    {
+      "day": "Tuesday",
+      "time": "1300 - 1600",
+      "event": "Basic Rhythm Interpretation Test Out",
+      "location": "Classroom 121",
+      "eventDate": "2026-09-22"
     }
   ]
 }
