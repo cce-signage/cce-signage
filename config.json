@@ -67,6 +67,13 @@
       "event": "Nurse Residency Workshop",
       "location": "Auditorium Room 134",
       "eventDate": "2026-09-17"
+    },
+    {
+      "day": "Friday",
+      "time": "1200 - 1400",
+      "event": "Introduction to Simulation: Sim 101- Part 2",
+      "location": "Debrief Room 112, Simulation Room 106",
+      "eventDate": "2026-09-18"
     }
   ]
 }
