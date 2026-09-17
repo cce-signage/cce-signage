@@ -62,6 +62,12 @@
       "time": "0900 - 1200",
       "event": "Glucommander Class",
       "location": "Classroom 121"
+    },
+    {
+      "day": "Thursday",
+      "time": "0800 - 1630",
+      "event": "Newly Licensed Nurse Clinical Immersions",
+      "location": ""
     }
   ]
 }
