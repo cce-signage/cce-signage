@@ -10,13 +10,6 @@
   "footerSecurity": "(813) 615-7922",
   "rows": [
     {
-      "day": "Friday",
-      "time": "1200 - 1400",
-      "event": "Introduction to Simulation: Sim 101- Part 2",
-      "location": "Debrief Room 112, Simulation Room 106",
-      "eventDate": "2026-09-18"
-    },
-    {
       "day": "Tuesday",
       "time": "0745 - 1600",
       "event": "Clinical New Hire Orientation",
@@ -25,26 +18,12 @@
       "repeatAnchor": "2026-09-22"
     },
     {
-      "day": "Tuesday",
-      "time": "1300 - 1600",
-      "event": "Basic Rhythm Interpretation Test Out",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-22"
-    },
-    {
       "day": "Wednesday",
       "time": "0745 - 1600",
       "event": "New Hire Nursing Orientation",
       "location": "Auditorium Room 134",
       "repeat": "biweekly",
       "repeatAnchor": "2026-09-23"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0830 - 1130",
-      "event": "Nurse Residency PREP",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-23"
     },
     {
       "day": "Thursday",
@@ -67,6 +46,13 @@
       "event": "Glucommander Class",
       "location": "Classroom 121",
       "eventDate": "2026-09-25"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 0230",
+      "event": "EM GME Conference",
+      "location": "Classroom 118",
+      "eventDate": "2026-09-24"
     }
   ]
 }
