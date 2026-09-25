@@ -27,13 +27,6 @@
     },
     {
       "day": "Thursday",
-      "time": "0830 - 1430",
-      "event": "Nurse Residency PREP",
-      "location": "Classroom 121",
-      "eventDate": "2026-09-24"
-    },
-    {
-      "day": "Thursday",
       "time": "0800 - 1130",
       "event": "New Hire Orientation Skills",
       "location": "Auditorium Room 134, Debrief Room 111, Debrief Room 112, Debrief Room 113",
@@ -48,11 +41,109 @@
       "eventDate": "2026-09-25"
     },
     {
+      "day": "Friday",
+      "time": "1230 - 1530",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-02"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1700",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Classroom 120, Classroom 118",
+      "eventDate": "2026-09-29"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1700",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Classroom 120, Classroom 118",
+      "eventDate": "2026-09-30"
+    },
+    {
       "day": "Thursday",
-      "time": "0700 - 1430",
-      "event": "EM GME Conference",
+      "time": "0700 - 1600",
+      "event": "GME Emergency Medicine Conference",
+      "location": "Classroom 120",
+      "eventDate": "2026-10-01"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1600",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-09-29"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1900",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-09-30"
+    },
+    {
+      "day": "Thursday",
+      "time": "0830 - 1700",
+      "event": "Nurse Residency Workshop 2",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-01"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1700",
+      "event": "Comeback Day",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-02"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1700",
+      "event": "Newly Licensed Nurse Skills",
       "location": "Classroom 118",
-      "eventDate": "2026-09-24"
+      "eventDate": "2026-10-01"
+    },
+    {
+      "day": "Friday",
+      "time": "0900 - 1700",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Classroom 118",
+      "eventDate": "2026-10-02"
+    },
+    {
+      "day": "Monday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-28"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-29"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-09-30"
+    },
+    {
+      "day": "Thursday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-01"
+    },
+    {
+      "day": "Friday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-02"
     }
   ]
 }
