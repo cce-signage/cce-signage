@@ -41,20 +41,6 @@
       "eventDate": "2026-10-02"
     },
     {
-      "day": "Thursday",
-      "time": "0700 - 1600",
-      "event": "GME Emergency Medicine Conference",
-      "location": "Classroom 121, Classroom 120",
-      "eventDate": "2026-10-01"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 2",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-01"
-    },
-    {
       "day": "Friday",
       "time": "0800 - 1700",
       "event": "Comeback Day",
@@ -62,25 +48,11 @@
       "eventDate": "2026-10-02"
     },
     {
-      "day": "Thursday",
-      "time": "0900 - 1700",
-      "event": "Newly Licensed Nurse Skills",
-      "location": "Classroom 118",
-      "eventDate": "2026-10-01"
-    },
-    {
       "day": "Friday",
       "time": "0900 - 1700",
       "event": "Newly Licensed Nurse Skills",
       "location": "Classroom 118",
       "eventDate": "2026-10-02"
-    },
-    {
-      "day": "Thursday",
-      "time": "0730 - 1700",
-      "event": "Tampa Metro CDI Education",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-10-01"
     },
     {
       "day": "Friday",
@@ -95,6 +67,69 @@
       "event": "Fall Prevention Bootcamp",
       "location": "Classroom 120",
       "eventDate": "2026-10-02"
+    },
+    {
+      "day": "Monday",
+      "time": "0900 - 1200",
+      "event": "Glucommander Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-05"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-07"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "ED ESI Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-07"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1500",
+      "event": "Nurse Residency Body System Workshop",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-08"
+    },
+    {
+      "day": "Monday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-05"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-06"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-07"
+    },
+    {
+      "day": "Thursday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-08"
+    },
+    {
+      "day": "Friday",
+      "time": "0730 - 1700",
+      "event": "Tampa Metro CDI Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-09"
     }
   ]
 }
