@@ -34,24 +34,10 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Thursday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Auditorium Room 115, Classroom 120",
-      "eventDate": "2026-10-15"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 1",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-15"
-    },
-    {
       "day": "Friday",
       "time": "0900 - 1200",
       "event": "WFD Basic Rhythm Interpretation",
-      "location": "Classroom 121",
+      "location": "Auditorium Room 134",
       "eventDate": "2026-10-16"
     },
     {
