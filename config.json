@@ -123,6 +123,13 @@
       "event": "Surgical Tech Class",
       "location": "",
       "eventDate": "2026-10-21"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0830 - 1130",
+      "event": "Nurse Residency Prep Room 2",
+      "location": "",
+      "eventDate": "2026-10-21"
     }
   ]
 }
