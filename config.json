@@ -34,20 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Friday",
-      "time": "0900 - 1200",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-16"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1100",
-      "event": "Skills Fair",
-      "location": "Classroom 120, Auditorium Room 115",
-      "eventDate": "2026-10-16"
-    },
-    {
       "day": "Wednesday",
       "time": "0900 - 1200",
       "event": "Glucommander Class",
@@ -128,7 +114,7 @@
       "day": "Wednesday",
       "time": "0830 - 1130",
       "event": "Nurse Residency Prep Room 2",
-      "location": "",
+      "location": "Classroom 118",
       "eventDate": "2026-10-21"
     }
   ]
