@@ -46,6 +46,153 @@
       "event": "WFD Leadership Meeting",
       "location": "Auditorium Room 134",
       "eventDate": "2026-10-23"
+    },
+    {
+      "day": "Monday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-10-26"
+    },
+    {
+      "day": "Monday",
+      "time": "0900 - 1430",
+      "event": "NPD Department Meeting",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-26"
+    },
+    {
+      "day": "Monday",
+      "time": "1600 - 1800",
+      "event": "Surgical Tech Graduation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-26"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1100",
+      "event": "Advanced Code Blue Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-27"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1700",
+      "event": "Surgical Tech Class",
+      "location": "",
+      "eventDate": "2026-10-27"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-10-27"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1200",
+      "event": "GME General Surgery Ethicon Education",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-27"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1600",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-27"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1230 - 1630",
+      "event": "Champion of Change: Preceptor 2.0",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-28"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1700",
+      "event": "Surgical Tech Class",
+      "location": "",
+      "eventDate": "2026-10-28"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-10-28"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1630",
+      "event": "WFD Simulation Education",
+      "location": "Auditorium Room 115, Classroom 118",
+      "eventDate": "2026-10-28"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1900",
+      "event": "WFD Basic Rhythm Interpretation",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-28"
+    },
+    {
+      "day": "Thursday",
+      "time": "0830 - 1700",
+      "event": "Nurse Residency Workshop 2",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-29"
+    },
+    {
+      "day": "Thursday",
+      "time": "0800 - 1700",
+      "event": "Surgical Tech Class",
+      "location": "",
+      "eventDate": "2026-10-29"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 1400",
+      "event": "EM GME",
+      "location": "Classroom 118, Classroom 119, Classroom 120",
+      "eventDate": "2026-10-29"
+    },
+    {
+      "day": "Thursday",
+      "time": "0800 - 1630",
+      "event": "Newly Licensed Nurses",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-10-29"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1200",
+      "event": "Wound Care Workshop",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-29"
+    },
+    {
+      "day": "Friday",
+      "time": "0900 - 1200",
+      "event": "WFD Basic Rhythm Interpretation Test Out",
+      "location": "Classroom 121",
+      "eventDate": "2026-10-30"
+    },
+    {
+      "day": "Friday",
+      "time": "0700 - 1300",
+      "event": "Newly Licensed Nurse Skills",
+      "location": "Classroom 120, Auditorium Room 115, Classroom 118",
+      "eventDate": "2026-10-30"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1200",
+      "event": "Comeback Day",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-10-30"
     }
   ]
 }
