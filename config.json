@@ -34,20 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Wednesday",
-      "time": "0900 - 1200",
-      "event": "Glucommander Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-10-21"
-    },
-    {
-      "day": "Thursday",
-      "time": "1130 - 1430",
-      "event": "Nurse Residency Prep Room 1",
-      "location": "Classroom 121",
-      "eventDate": "2026-10-22"
-    },
-    {
       "day": "Friday",
       "time": "0900 - 1200",
       "event": "Cardiac Drip Class",
@@ -55,67 +41,11 @@
       "eventDate": "2026-10-23"
     },
     {
-      "day": "Thursday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "",
-      "eventDate": "2026-10-22"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0830 - 1130",
-      "event": "Nurse Residency Prep Room 1",
-      "location": "Classroom 120",
-      "eventDate": "2026-10-21"
-    },
-    {
-      "day": "Thursday",
-      "time": "1130 - 1430",
-      "event": "Nurse Residency Prep Room 2",
-      "location": "Classroom 120",
-      "eventDate": "2026-10-22"
-    },
-    {
-      "day": "Thursday",
-      "time": "0700 - 1400",
-      "event": "EM GME",
-      "location": "Classroom 119, Classroom 118",
-      "eventDate": "2026-10-22"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1300",
-      "event": "Nurse Residency Orientation",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-10-22"
-    },
-    {
       "day": "Friday",
       "time": "0900 - 1400",
       "event": "WFD Leadership Meeting",
-      "location": "Auditorium Room 115",
+      "location": "Auditorium Room 134",
       "eventDate": "2026-10-23"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "Classroom 118",
-      "eventDate": "2026-10-20"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "Classroom 119",
-      "eventDate": "2026-10-21"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0830 - 1130",
-      "event": "Nurse Residency Prep Room 2",
-      "location": "Classroom 118",
-      "eventDate": "2026-10-21"
     }
   ]
 }
