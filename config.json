@@ -34,20 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Monday",
-      "time": "0900 - 1430",
-      "event": "NPD Department Meeting",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-26"
-    },
-    {
-      "day": "Monday",
-      "time": "1600 - 1800",
-      "event": "Surgical Tech Graduation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-26"
-    },
-    {
       "day": "Tuesday",
       "time": "0900 - 1100",
       "event": "Advanced Code Blue Class",
@@ -59,13 +45,6 @@
       "time": "0800 - 1700",
       "event": "Surgical Tech Class",
       "location": "Conference Room 142",
-      "eventDate": "2026-10-27"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
       "eventDate": "2026-10-27"
     },
     {
