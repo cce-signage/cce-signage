@@ -34,97 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Tuesday",
-      "time": "0900 - 1100",
-      "event": "Advanced Code Blue Class",
-      "location": "Classroom 121, Classroom 118",
-      "eventDate": "2026-10-27"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "Conference Room 142",
-      "eventDate": "2026-10-27"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1200",
-      "event": "GME General Surgery Ethicon Education",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-10-27"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0900 - 1600",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-27"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1230 - 1630",
-      "event": "Champion of Change: Preceptor 2.0",
-      "location": "Classroom 121",
-      "eventDate": "2026-10-28"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "Conference Room 142",
-      "eventDate": "2026-10-28"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-10-28"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1630",
-      "event": "WFD Simulation Education",
-      "location": "Auditorium Room 115, Classroom 118",
-      "eventDate": "2026-10-28"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0900 - 1900",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-28"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Nurse Residency Workshop 2",
-      "location": "Classroom 121",
-      "eventDate": "2026-10-29"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "Conference Room 142",
-      "eventDate": "2026-10-29"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1630",
-      "event": "Newly Licensed Nurses",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-10-29"
-    },
-    {
-      "day": "Thursday",
-      "time": "0900 - 1200",
-      "event": "Wound Care Workshop",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-29"
-    },
-    {
       "day": "Friday",
       "time": "0900 - 1200",
       "event": "WFD Basic Rhythm Interpretation Test Out",
@@ -144,6 +53,118 @@
       "event": "Comeback Day",
       "location": "Auditorium Room 134",
       "eventDate": "2026-10-30"
+    },
+    {
+      "day": "Monday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-02"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-03"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1200",
+      "event": "Cardiac Drip Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-03"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1700",
+      "event": "Work Force Decelopment",
+      "location": "Conference Room 142",
+      "eventDate": "2026-11-03"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1700",
+      "event": "Surgical Tech Class",
+      "location": "Classroom 118",
+      "eventDate": "2026-11-03"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-04"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "ED ESI Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-04"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1700",
+      "event": "Work Force Development",
+      "location": "Conference Room 142",
+      "eventDate": "2026-11-04"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-04"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1500",
+      "event": "Preceptor Bootcamp",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-11-04"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1700",
+      "event": "Surgical Tech Class",
+      "location": "Classroom 118",
+      "eventDate": "2026-11-04"
+    },
+    {
+      "day": "Thursday",
+      "time": "0900 - 1500",
+      "event": "Nurse Residency Body System Workshop",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-05"
+    },
+    {
+      "day": "Thursday",
+      "time": "0800 - 1700",
+      "event": "Surgical Tech Class",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-05"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 1400",
+      "event": "EM GME",
+      "location": "Auditorium Room 115, Classroom 119, Classroom 118",
+      "eventDate": "2026-11-05"
+    },
+    {
+      "day": "Friday",
+      "time": "0800 - 1700",
+      "event": "Work Force Development",
+      "location": "Conference Room 142",
+      "eventDate": "2026-11-06"
+    },
+    {
+      "day": "Friday",
+      "time": "0730 - 1530",
+      "event": "SCRN Review",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-11-06"
     }
   ]
 }
