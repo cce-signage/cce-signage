@@ -34,34 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Friday",
-      "time": "0900 - 1200",
-      "event": "WFD Basic Rhythm Interpretation Test Out",
-      "location": "Classroom 121",
-      "eventDate": "2026-10-30"
-    },
-    {
-      "day": "Friday",
-      "time": "0700 - 1300",
-      "event": "Newly Licensed Nurse Skills",
-      "location": "Classroom 120, Auditorium Room 115, Classroom 118",
-      "eventDate": "2026-10-30"
-    },
-    {
-      "day": "Friday",
-      "time": "0800 - 1500",
-      "event": "Comeback Day",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-10-30"
-    },
-    {
-      "day": "Monday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-11-02"
-    },
-    {
       "day": "Tuesday",
       "time": "0800 - 1600",
       "event": "Intern Education",
@@ -121,7 +93,7 @@
       "day": "Wednesday",
       "time": "0900 - 1500",
       "event": "Preceptor Bootcamp",
-      "location": "Auditorium Room 115",
+      "location": "Classroom 121",
       "eventDate": "2026-11-04"
     },
     {
