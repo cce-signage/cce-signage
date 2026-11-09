@@ -34,20 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Friday",
-      "time": "0800 - 1700",
-      "event": "Work Force Development",
-      "location": "Conference Room 142",
-      "eventDate": "2026-11-06"
-    },
-    {
-      "day": "Friday",
-      "time": "0730 - 1530",
-      "event": "SCRN Review",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-06"
-    },
-    {
       "day": "Monday",
       "time": "0800 - 1100",
       "event": "Nurse Residency Wrap Up",
@@ -206,6 +192,13 @@
       "time": "0700 - 1600",
       "event": "Surgical Technology Training Program",
       "location": "Classroom 118",
+      "eventDate": "2026-11-09"
+    },
+    {
+      "day": "Monday",
+      "time": "1200 - 1300",
+      "event": "GME EM Simulation Meeting",
+      "location": "Conference Room 142",
       "eventDate": "2026-11-09"
     }
   ]
