@@ -34,34 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Monday",
-      "time": "0800 - 1100",
-      "event": "Nurse Residency Wrap Up",
-      "location": "Classroom 121",
-      "eventDate": "2026-11-09"
-    },
-    {
-      "day": "Monday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-11-09"
-    },
-    {
-      "day": "Monday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-11-09"
-    },
-    {
-      "day": "Monday",
-      "time": "0830 - 1600",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-09"
-    },
-    {
       "day": "Tuesday",
       "time": "1200 - 1400",
       "event": "Code Blue Class",
@@ -163,7 +135,7 @@
       "day": "Thursday",
       "time": "0700 - 1400",
       "event": "GME",
-      "location": "Auditorium Room 115, Classroom 118, Classroom 119",
+      "location": "Auditorium Room 115",
       "eventDate": "2026-11-12"
     },
     {
@@ -186,20 +158,6 @@
       "event": "WFD Basic Rhythm Interpretation Testing",
       "location": "Auditorium Room 134",
       "eventDate": "2026-11-13"
-    },
-    {
-      "day": "Monday",
-      "time": "0700 - 1600",
-      "event": "Surgical Technology Training Program",
-      "location": "Classroom 118",
-      "eventDate": "2026-11-09"
-    },
-    {
-      "day": "Monday",
-      "time": "1200 - 1300",
-      "event": "GME EM Simulation Meeting",
-      "location": "Conference Room 142",
-      "eventDate": "2026-11-09"
     }
   ]
 }
