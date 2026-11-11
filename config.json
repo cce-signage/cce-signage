@@ -34,41 +34,6 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Tuesday",
-      "time": "1200 - 1400",
-      "event": "Code Blue Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-11-10"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-11-10"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-11-10"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0830 - 1900",
-      "event": "WFD Basic Rhythm Interpretation",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-10"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
-      "location": "Classroom 118",
-      "eventDate": "2026-11-10"
-    },
-    {
       "day": "Wednesday",
       "time": "1000 - 1230",
       "event": "Defensive Documentation",
@@ -91,16 +56,9 @@
     },
     {
       "day": "Wednesday",
-      "time": "0800 - 1630",
-      "event": "Newly Licensed Nurse Clinical Immersions Day 1",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-11-11"
-    },
-    {
-      "day": "Wednesday",
       "time": "0800 - 1700",
       "event": "Skills Fair",
-      "location": "Auditorium Room 134",
+      "location": "Auditorium Room 115",
       "eventDate": "2026-11-11"
     },
     {
