@@ -34,74 +34,95 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Wednesday",
-      "time": "1000 - 1230",
-      "event": "Defensive Documentation",
+      "day": "Friday",
+      "time": "0830 - 1200",
+      "event": "WFD Basic Rhythm Interpretation Testing",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-11-13"
+    },
+    {
+      "day": "Monday",
+      "time": "1300 - 1600",
+      "event": "Glucommander Class",
       "location": "Classroom 121",
-      "eventDate": "2026-11-11"
+      "eventDate": "2026-11-16"
+    },
+    {
+      "day": "Monday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-16"
+    },
+    {
+      "day": "Monday",
+      "time": "0900 - 1300",
+      "event": "Nurse Residency EBP Workshop",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-11-16"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-17"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1200",
+      "event": "Tampa GME General Surgery Teleflex Training",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-11-17"
     },
     {
       "day": "Wednesday",
-      "time": "1300 - 1600",
-      "event": "Cardiac Drip",
+      "time": "0830 - 1130",
+      "event": "Nurse Residency PREP Room 1",
       "location": "Classroom 121",
-      "eventDate": "2026-11-11"
+      "eventDate": "2026-11-18"
     },
     {
       "day": "Wednesday",
       "time": "0800 - 1600",
       "event": "Intern Education",
       "location": "Classroom 120",
-      "eventDate": "2026-11-11"
+      "eventDate": "2026-11-18"
     },
     {
       "day": "Wednesday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
+      "time": "0930 - 1130",
+      "event": "Heparin Class",
       "location": "Auditorium Room 115",
-      "eventDate": "2026-11-11"
+      "eventDate": "2026-11-18"
     },
     {
       "day": "Wednesday",
-      "time": "0800 - 1700",
-      "event": "Surgical Tech Class",
+      "time": "1200 - 1330",
+      "event": "GME IM Conference",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-11-18"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1530",
+      "event": "PCU Bootcamp",
       "location": "Classroom 118",
-      "eventDate": "2026-11-11"
+      "eventDate": "2026-11-18"
     },
     {
       "day": "Thursday",
-      "time": "0800 - 1700",
-      "event": "Skills Fair",
+      "time": "0830 - 1430",
+      "event": "Nurse Residency PREP Room 1",
       "location": "Classroom 121",
-      "eventDate": "2026-11-12"
-    },
-    {
-      "day": "Thursday",
-      "time": "0800 - 1200",
-      "event": "Surgical Tech Testing",
-      "location": "Classroom 118",
-      "eventDate": "2026-11-12"
+      "eventDate": "2026-11-19"
     },
     {
       "day": "Thursday",
       "time": "0700 - 1400",
-      "event": "GME",
+      "event": "EM GME",
       "location": "Auditorium Room 115",
-      "eventDate": "2026-11-12"
-    },
-    {
-      "day": "Thursday",
-      "time": "0830 - 1700",
-      "event": "Newly Licensed Nurse Clinical Immersions Day 1",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-12"
-    },
-    {
-      "day": "Friday",
-      "time": "0830 - 1200",
-      "event": "WFD Basic Rhythm Interpretation Testing",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-13"
+      "eventDate": "2026-11-19"
     }
   ]
 }
