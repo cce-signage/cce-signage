@@ -34,59 +34,10 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Friday",
-      "time": "0830 - 1200",
-      "event": "WFD Basic Rhythm Interpretation Testing",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-13"
-    },
-    {
-      "day": "Monday",
-      "time": "1300 - 1600",
-      "event": "Glucommander Class",
-      "location": "Classroom 121",
-      "eventDate": "2026-11-16"
-    },
-    {
-      "day": "Monday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-11-16"
-    },
-    {
-      "day": "Monday",
-      "time": "0900 - 1300",
-      "event": "Nurse Residency EBP Workshop",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-16"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-11-17"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1200",
-      "event": "Tampa GME General Surgery Teleflex Training",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-11-17"
-    },
-    {
       "day": "Wednesday",
       "time": "0830 - 1130",
       "event": "Nurse Residency PREP Room 1",
-      "location": "Classroom 121",
-      "eventDate": "2026-11-18"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
+      "location": "Classroom 121, Classroom 120",
       "eventDate": "2026-11-18"
     },
     {
