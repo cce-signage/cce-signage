@@ -34,45 +34,10 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Wednesday",
-      "time": "0830 - 1130",
-      "event": "Nurse Residency PREP Room 1",
-      "location": "Classroom 121, Classroom 120",
-      "eventDate": "2026-11-18"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0930 - 1130",
-      "event": "Heparin Class",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-11-18"
-    },
-    {
-      "day": "Wednesday",
-      "time": "1200 - 1330",
-      "event": "GME IM Conference",
-      "location": "Auditorium Room 115",
-      "eventDate": "2026-11-18"
-    },
-    {
-      "day": "Wednesday",
-      "time": "0800 - 1530",
-      "event": "PCU Bootcamp",
-      "location": "Classroom 118",
-      "eventDate": "2026-11-18"
-    },
-    {
       "day": "Thursday",
       "time": "0830 - 1430",
       "event": "Nurse Residency PREP Room 1",
       "location": "Classroom 121",
-      "eventDate": "2026-11-19"
-    },
-    {
-      "day": "Thursday",
-      "time": "0700 - 1400",
-      "event": "EM GME",
-      "location": "Auditorium Room 115",
       "eventDate": "2026-11-19"
     }
   ]
