@@ -32,6 +32,13 @@
       "location": "Auditorium Room 134, Debrief Room 111, Debrief Room 112, Debrief Room 113",
       "repeat": "biweekly",
       "repeatAnchor": "2026-09-24"
+    },
+    {
+      "day": "Thursday",
+      "time": "0830 - 1430",
+      "event": "Nurse Residency- PREP Room 1",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-19"
     }
   ]
 }
