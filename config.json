@@ -34,11 +34,69 @@
       "repeatAnchor": "2026-09-24"
     },
     {
-      "day": "Thursday",
-      "time": "0830 - 1430",
-      "event": "Nurse Residency- PREP Room 1",
+      "day": "Monday",
+      "time": "0900 - 1600",
+      "event": "Basic Rhythm Interpretation",
       "location": "Classroom 121",
-      "eventDate": "2026-11-19"
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-11-23"
+    },
+    {
+      "day": "Monday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-23"
+    },
+    {
+      "day": "Monday",
+      "time": "0900 - 1600",
+      "event": "Education Meeting",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-11-23"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1900",
+      "event": "Basic Rhythm Interpretation",
+      "location": "Classroom 121",
+      "repeat": "biweekly",
+      "repeatAnchor": "2026-11-24"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1000",
+      "event": "In Person Comp Committee",
+      "location": "Conference Room 142",
+      "eventDate": "2026-11-24"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-24"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1700",
+      "event": "Comeback Day",
+      "location": "Auditorium Room 134",
+      "eventDate": "2026-11-24"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Basic Rhythm Interpretation Test",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-25"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "eventDate": "2026-11-25"
     }
   ]
 }
