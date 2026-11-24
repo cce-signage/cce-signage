@@ -42,20 +42,6 @@
       "repeatAnchor": "2026-11-23"
     },
     {
-      "day": "Monday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
-      "eventDate": "2026-11-23"
-    },
-    {
-      "day": "Monday",
-      "time": "0900 - 1600",
-      "event": "Education Meeting",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-23"
-    },
-    {
       "day": "Tuesday",
       "time": "0900 - 1900",
       "event": "Basic Rhythm Interpretation",
@@ -68,13 +54,6 @@
       "time": "0800 - 1000",
       "event": "In Person Comp Committee",
       "location": "Conference Room 142",
-      "eventDate": "2026-11-24"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1600",
-      "event": "Intern Education",
-      "location": "Classroom 120",
       "eventDate": "2026-11-24"
     },
     {
