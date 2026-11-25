@@ -50,23 +50,9 @@
       "repeatAnchor": "2026-11-24"
     },
     {
-      "day": "Tuesday",
-      "time": "0800 - 1000",
-      "event": "In Person Comp Committee",
-      "location": "Conference Room 142",
-      "eventDate": "2026-11-24"
-    },
-    {
-      "day": "Tuesday",
-      "time": "0800 - 1700",
-      "event": "Comeback Day",
-      "location": "Auditorium Room 134",
-      "eventDate": "2026-11-24"
-    },
-    {
       "day": "Wednesday",
       "time": "0900 - 1200",
-      "event": "Basic Rhythm Interpretation Test",
+      "event": "Basic Rhythm Interpretation Test Out",
       "location": "Classroom 121",
       "eventDate": "2026-11-25"
     },
@@ -76,6 +62,86 @@
       "event": "Intern Education",
       "location": "Classroom 120",
       "eventDate": "2026-11-25"
+    },
+    {
+      "day": "Monday",
+      "time": "0900 - 1200",
+      "event": "Glucommander Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-30"
+    },
+    {
+      "day": "Monday",
+      "time": "1230 - 1630",
+      "event": "Champion of Change: Preceptor Bootcamp 2.0",
+      "location": "Classroom 121",
+      "eventDate": "2026-11-30"
+    },
+    {
+      "day": "Monday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "repeat": true,
+      "repeatAnchor": "2026-11-30"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0900 - 1200",
+      "event": "Basic Rhythm Interpretation Test Out",
+      "location": "Classroom 121",
+      "eventDate": "2026-12-01"
+    },
+    {
+      "day": "Tuesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "repeat": true,
+      "repeatAnchor": "2026-12-01"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1200",
+      "event": "Heparin Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-12-02"
+    },
+    {
+      "day": "Wednesday",
+      "time": "1200 - 1700",
+      "event": "ED ESI Class",
+      "location": "Classroom 121",
+      "eventDate": "2026-12-02"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0800 - 1600",
+      "event": "Intern Education",
+      "location": "Classroom 120",
+      "repeat": true,
+      "repeatAnchor": "2026-12-02"
+    },
+    {
+      "day": "Wednesday",
+      "time": "0900 - 1500",
+      "event": "WFD Learning Operations Video Service Awards",
+      "location": "Classroom 118",
+      "eventDate": "2026-12-02"
+    },
+    {
+      "day": "Thursday",
+      "time": "1000 - 1400",
+      "event": "Nurse Residency Orientation",
+      "location": "Classroom 121",
+      "eventDate": "2026-12-03"
+    },
+    {
+      "day": "Thursday",
+      "time": "0700 - 1400",
+      "event": "EM GME",
+      "location": "Auditorium Room 115",
+      "eventDate": "2026-12-03"
     }
   ]
 }
